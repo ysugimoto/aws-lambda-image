@@ -1,0 +1,102 @@
+#!/usr/bin/env node
+
+var path       = require("path");
+var fs         = require("fs");
+var configPath = path.resolve(__dirname, "../config.json");
+var projectDir = path.resolve(__dirname, "..");
+var warning    = [];
+var fatals     = [];
+var stdout     = process.stdout;
+var config;
+var buffer;
+
+var red     = '\u001b[31m';
+var green   = '\u001b[32m';
+var magenta = '\u001b[35m';
+var reset   = '\u001b[0m';
+
+(function() {
+
+console.log(green + "==========================================" + reset);
+console.log(green + "  AWS-Lanbda-Image Configuration Checker"   + reset);
+console.log(green + "==========================================" + reset);
+stdout.write("\r\n");
+
+if ( ! fs.existsSync(configPath) ) {
+    stdout.write(red + "[Error] Config file not exists.\r\n" + reset);
+    stdout.write(red + "Did you put a config file at " + projectDir + "/config.json?\r\n" + reset);
+    return;
+}
+
+buffer = fs.readFileSync(configPath, {encoding: "utf8"});
+
+stdout.write(magenta + "Checking configuration format...  " + reset);
+try {
+    config = JSON.parse(buffer);
+    stdout.write("OK\r\n");
+} catch ( e ) {
+    stdout.write(red + "Error!\r\n" + reset);
+    console.log(e.message);
+}
+
+var bucket = ( config.bucket ) ? config.bucket : "";
+stdout.write(magenta + "Checking destination bucket...    " + reset);
+stdout.write(( bucket ) ? bucket : "[Same bucket]");
+stdout.write("\r\n");
+stdout.write("\r\n");
+
+stdout.write("Reduce image configration\r\n");
+stdout.write("--------------------------------\r\n");
+var reduce = config.reduce || {};
+stdout.write(magenta + "    Save bucket:    " + reset);
+stdout.write(( reduce.bucket ) ? reduce.bucket : bucket ? bucket : "[Same bucket]");
+stdout.write("\r\n");
+stdout.write(magenta + "    Save directory: " + reset);
+stdout.write(( reduce.directory ) ? reduce.directory : "[Same directory]");
+stdout.write("\r\n");
+if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
+    warning.push("Reduced image may save same bucekt and directory. This causes infinite process AWS-Lambda.");
+}
+
+stdout.write("\r\n");
+stdout.write("Resize image confgiuration\r\n");
+stdout.write("--------------------------------\r\n");
+var resizes = config.resizes || [];
+stdout.write(magenta + "    Number of resize images: " + reset + resizes.length + "\r\n");
+stdout.write("\r\n");
+resizes.forEach(function(resize, index) {
+    stdout.write("    Resize image " + (index + 1) + " ( of " + resizes.length + " )\r\n");
+    stdout.write("    --------------------------------\r\n");
+    stdout.write(magenta + "    Size:           " + reset + resize.size + "\r\n");
+    if ( ! resize.size ) {
+        fatals.push("Resize destination size must be supplied ( at index " + index + " )");
+    } else if ( isNaN(parseInt(resize.size, 10)) ) {
+        fatals.push("Resize destination size must be a number ( at index " + index + " )");
+    }
+    stdout.write(magenta + "    Save bucket:    " + reset);
+    stdout.write(( resize.bucket ) ? resize.bucket : bucket ? bucket : "[Same bucket]");
+    stdout.write("\r\n");
+    stdout.write(magenta + "    Save directory: " + reset);
+    stdout.write(( resize.directory ) ? resize.directory : "[Same directory]");
+    stdout.write("\r\n");
+    stdout.write("\r\n");
+    if ( ! resize.directory && ! resize.bucket && ! bucket ) {
+        warning.push(" Image will saving same directory. This may cause infinite process loop at AWS-Lambda.");
+    }
+});
+
+stdout.write("\r\n");
+stdout.write(green + "Configration check finished.\r\n" + reset);
+stdout.write("\r\n");
+if ( fatals.length === 0 && warning.length === 0 ) {
+    stdout.write(green + "Your configuration is green!\r\n" + reset);
+} else {
+    fatals.forEach(function(f) {
+        stdout.write(red + "[Fatal] " + f + "\r\n" + reset);
+    });
+    warning.forEach(function(n) {
+        stdout.write(yellow + "[Warning] " + n + "\r\n" + reset);
+    });
+}
+
+})();
