@@ -18,7 +18,7 @@ var reset   = '\u001b[0m';
 (function() {
 
 console.log(green + "==========================================" + reset);
-console.log(green + "  AWS-Lanbda-Image Configuration Checker"   + reset);
+console.log(green + "  AWS-Lambda-Image Configuration Checker"   + reset);
 console.log(green + "==========================================" + reset);
 stdout.write("\r\n");
 
