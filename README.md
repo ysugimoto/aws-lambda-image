@@ -1,5 +1,7 @@
 ## aws-lambda-image
 
+[![Build Status](https://travis-ci.org/ysugimoto/aws-lambda-image.svg?branch=master)](https://travis-ci.org/ysugimoto/aws-lambda-image)
+
 Automatic image resize/reduce on AWS Lambda. When new images have put on AWS S3 bucket, this package will resize/reduce that image, and put S3.
 
 ### Requirements
