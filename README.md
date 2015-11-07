@@ -4,7 +4,7 @@ Automatic image resize/reduce on AWS Lambda. When new images have put on AWS S3 
 
 ### Requirements
 
-- `nodejs` (AWS Lambda uses v0.10.26)
+- `node.js` ( AWS Lambda working version is 0.10.26 )
 - `make`
 
 ### Installation
@@ -19,7 +19,7 @@ $ npm install .
 
 ### Packaging
 
-AWS Lambda accepts ZIP archived package. To create it, simply `make lambda`.
+AWS Lambda accepts zip archived package. To create it, run `make lambda` task simply.
 
 ```
 $ make lambda
@@ -35,7 +35,7 @@ This package works follow the configuration that written in `config.json` on pro
 $ cp config.json.sample config.json
 ```
 
-Configuration is very simple, see below:
+Configuration is simple, see below:
 
 ```
 {
