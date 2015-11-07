@@ -6,7 +6,6 @@ var ReadableStream = require("./ReadableImageStream");
 var WritableStream = require("./WritableImageStream");
 
 var Promise = require("es6-promise").Promise;
-var Path    = require("path");
 
 /**
  * Image Reducer
