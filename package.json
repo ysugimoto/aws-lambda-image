@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-image",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Automatic image resize/reduce on AWS Lambda",
   "main": "index.js",
   "scripts": {
