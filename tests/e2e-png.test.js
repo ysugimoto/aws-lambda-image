@@ -34,7 +34,7 @@ describe("Optimize PNG Test", function() {
     });
 
     beforeEach(function() {
-        processor = new ImageProcessor(setting, {
+        processor = new ImageProcessor(setting.Records[0].s3, {
             done: function() {},
             fail: function() {}
         });

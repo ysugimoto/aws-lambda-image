@@ -26,104 +26,67 @@ function ImageReducer(option) {
  * @return Promise
  */
 ImageReducer.prototype.exec = function ImageReducer_exec(image) {
+    var option = this.option;
+
+    return new Promise(function(resolve, reject) {
+        this.streamPipeProcess.apply(this, this.createReduceStreams(image))
+        .then(function(buffer) {
+            var dir = option.directory || image.getDirName();
+
+            if ( dir ) {
+                dir = dir.replace(/\/$/, "") + "/";
+            }
+
+            resolve(new ImageData(
+                dir + image.getBaseName(),
+                option.bucket || image.bucketName,
+                buffer
+            ));
+        })
+        .catch(function(message) {
+            reject(message);
+        });
+    }.bind(this));
+};
+
+/**
+ * Create reduce image streams
+ *
+ * @protected
+ * @param ImageData image
+ * @return Array<ReadableStream|ChildProcess>
+ * @thorws Error
+ */
+ImageReducer.prototype.createReduceStreams = function ImageReducer_createReduceStreams(image) {
+    var streams = [new ReadableStream(image.getData())];
+
     switch ( image.getType() ) {
         case "png":
-            return this.reducePngImage(image);
+            streams.push((new Pngquant()).spawnProcess());
+            streams.push((new Pngout()).spawnProcess());
+            break;
         case "jpg":
         case "jpeg":
-            return this.reduceJpegImage(image);
+            streams.push((new Mozjpeg()).spawnProcess());
+            break;
         default:
             throw new Error("Unexcepted file type.");
     }
+
+    return streams;
 };
 
 /**
- * Reduce image for PNG
- *
- * @protected
- * @param ImageData image
- * @return Promise
- */
-ImageReducer.prototype.reducePngImage = function ImageReducer_reducePngImage(image) {
-    var option = this.option;
-
-    return new Promise(function(resolve, reject) {
-        var pngquant = new Pngquant();
-        var pngout   = new Pngout();
-
-        this.streamPipeProcess(
-            image.getData(),
-            pngquant.spawnProcess(),
-            pngout.spawnProcess()
-        )
-        .then(function(buffer) {
-            var dir = option.directory || image.getDirName();
-
-            if ( dir ) {
-                dir = dir.replace(/\/$/, "") + "/";
-            }
-
-            resolve(new ImageData(
-                dir + image.getBaseName(),
-                option.bucket || image.bucketName,
-                buffer
-            ));
-        })
-        .catch(function(message) {
-            reject(message);
-        });
-    }.bind(this));
-};
-
-/**
- * Reduce image for JPEG
- *
- * @protected
- * @param ImageData image
- * @return Promise
- */
-ImageReducer.prototype.reduceJpegImage = function ImageReducer_reduceJpegImage(image) {
-    var option = this.option;
-
-    return new Promise(function(resolve, reject) {
-        var mozJpeg = new Mozjpeg();
-
-        this.streamPipeProcess(
-            image.getData(),
-            mozJpeg.spawnProcess()
-        )
-        .then(function(buffer) {
-            var dir = option.directory || image.getDirName();
-
-            if ( dir ) {
-                dir = dir.replace(/\/$/, "") + "/";
-            }
-
-            resolve(new ImageData(
-                dir + image.getBaseName(),
-                option.bucket || image.bucketName,
-                buffer
-            ));
-        })
-        .catch(function(message) {
-            reject(message);
-        });
-
-    }.bind(this));
-};
-
-/**
- * Pipe streams and call calback
+ * Pipe streams and get result
  *
  * @private
- * @param Buffer buffer
+ * @param ReadableStream input
  * @param ChildProcess first
  * @param ChildProcess|undefined second
  * @return Promise
  */
-ImageReducer.prototype.streamPipeProcess = function ImageReducer_streamPipeProcess(buffer, first, second) {
+ImageReducer.prototype.streamPipeProcess = function ImageReducer_streamPipeProcess(input, first, second) {
     return new Promise(function(resolve, reject) {
-        var input  = new ReadableStream(buffer);
         var output = new WritableStream();
         input.pause();
 
