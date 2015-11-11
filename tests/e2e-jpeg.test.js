@@ -13,7 +13,6 @@ var setting    = JSON.parse(fs.readFileSync(sourceFile));
 
 describe("Optimize JPEG Test", function() {
     var processor;
-    var stub;
 
     before(function() {
         sinon.stub(S3, "getObject", function() {
@@ -31,10 +30,16 @@ describe("Optimize JPEG Test", function() {
                 });
             });
         });
+        sinon.stub(S3, "putObjects", function(images) {
+            return Promise.all(images.map(function(image) {
+                return image;
+            }));
+        });
     });
 
     after(function() {
         S3.getObject.restore();
+        S3.putObjects.restore();
     });
 
     beforeEach(function() {
@@ -42,50 +47,48 @@ describe("Optimize JPEG Test", function() {
             done: function() {},
             fail: function() {}
         });
-        if ( stub ) {
-            stub.restore();
-            stub = null;
-        }
     });
 
     it("Reduce JPEG with no configuration", function(done) {
-        stub = sinon.stub(S3, "putObject", function(bucket, name, data) {
-            return new Promise(function(resolve) {
-                var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
+        processor.run(new Config())
+        .then(function(images) {
+            expect(images).to.have.length(1);
+            var image = images.shift();
+            var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
 
-                expect(bucket).to.equal("sourcebucket");
-                expect(name).to.equal("HappyFace.jpg");
-                expect(data.length > 0).to.be.true;
-                expect(data.length).to.be.below(buf.length);
-                stub.restore();
-                stub = null;
-                resolve(true);
-                done();
-            });
+            expect(image.getBucketName()).to.equal("sourcebucket");
+            expect(image.getFileName()).to.equal("HappyFace.jpg");
+            expect(image.getData().length).to.be.above(0)
+                                         .and.be.below(buf.length);
+            done();
+        })
+        .catch(function(messages) {
+            expect.fail(messages);
+            done();
         });
-        processor.run(new Config());
     });
 
     it("Reduce JPEG with bucket/directory configuration", function(done) {
-        var stub = sinon.stub(S3, "putObject", function(bucket, name, data) {
-            return new Promise(function(resolve) {
-                var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
-
-                expect(bucket).to.equal("foo");
-                expect(name).to.equal("some/HappyFace.jpg");
-                expect(data.length > 0).to.be.true;
-                expect(data.length).to.be.below(buf.length);
-                stub.restore();
-                stub = null;
-                resolve(true);
-                done();
-            });
-        });
         processor.run(new Config({
             "reduce": {
                 "bucket": "foo",
                 "directory": "some"
             }
-        }));
+        }))
+        .then(function(images) {
+            expect(images).to.have.length(1);
+            var image = images.shift();
+            var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
+
+            expect(image.getBucketName()).to.equal("foo");
+            expect(image.getFileName()).to.equal("some/HappyFace.jpg");
+            expect(image.getData().length).to.be.above(0)
+                                         .and.be.below(buf.length);
+            done();
+        })
+        .catch(function(messages) {
+            expect.fail(messages);
+            done();
+        });
     });
 });

@@ -6,7 +6,7 @@ var Promise      = require("es6-promise").Promise;
 /**
  * Image processor
  * management resize/reduce image list by configration,
- * and pile AWS Lambda's event/context
+ * and pipe AWS Lambda's event/context
  *
  * @constructor
  * @param Object s3Object
@@ -42,37 +42,40 @@ ImageProcessor.prototype.run = function ImageProcessor_run(config) {
             this.processImage(imageData, config)
             .then(function(results) {
                 S3.putObjects(results)
-                .then(function(results) {
-                    resolve(results);
+                .then(function(images) {
+                    resolve(images);
                 })
-                .catch(function(message) {
-                    reject(results);
-                })
+                .catch(function(messages) {
+                    reject(messages);
+                });
             })
             .catch(function(messages) {
                 reject(messages);
             });
-        }.bind(this));
+        }.bind(this))
+        .catch(function(error) {
+            reject(error);
+        });
     }.bind(this));
 };
 
 ImageProcessor.prototype.processImage = function ImageProcessor_processImage(imageData, config) {
     var reduce      = config.get("reduce", {});
     var promiseList = config.get("resizes", []).filter(function(option) {
-        return option.size && option.size > 0;
-    }).map(function(option) {
-        if ( ! option.bucket ) {
-            option.bucket = config.get("bucket");
-        }
-        return this.execResizeImage(option, imageData);
-    }.bind(this));
+            return option.size && option.size > 0;
+        }).map(function(option) {
+            if ( ! option.bucket ) {
+                option.bucket = config.get("bucket");
+            }
+            return this.execResizeImage(option, imageData);
+        }.bind(this));
 
     if ( ! reduce.bucket ) {
         reduce.bucket = config.get("bucket");
     }
     promiseList.unshift(this.execReduceImage(reduce, imageData));
 
-    return Promise.all(promiseList)
+    return Promise.all(promiseList);
 };
 
 /**
@@ -93,6 +96,7 @@ ImageProcessor.prototype.execResizeImage = function ImageProcessor_execResizeIma
 
             reducer.exec(resizedImage)
             .then(function(reducedImage) {
+                resolve(reducedImage);
             })
             .catch(function(message) {
                 reject(message);
@@ -118,17 +122,7 @@ ImageProcessor.prototype.execReduceImage = function(option, imageData) {
 
         reducer.exec(imageData)
         .then(function(reducedImage) {
-            S3.putObject(
-                reducedImage.getBucketName(),
-                reducedImage.getFileName(),
-                reducedImage.getData()
-            )
-            .then(function() {
-                resolve(reducedImage);
-            })
-            .catch(function(message) {
-                reject(message);
-            });
+            resolve(reducedImage);
         })
         .catch(function(message) {
             reject(message);

@@ -13,7 +13,6 @@ var setting    = JSON.parse(fs.readFileSync(sourceFile));
 
 describe("Optimize PNG Test", function() {
     var processor;
-    var stub;
 
     before(function() {
         sinon.stub(S3, "getObject", function() {
@@ -22,15 +21,25 @@ describe("Optimize PNG Test", function() {
                     if ( err ) {
                         reject(err);
                     } else {
-                        resolve(new ImageData("test.png", "test", data));
+                        resolve(new ImageData(
+                            "test.png",
+                            setting.Records[0].s3.bucket.name,
+                            data
+                        ));
                     }
                 });
             });
+        });
+        sinon.stub(S3, "putObjects", function(images) {
+            return Promise.all(images.map(function(image) {
+                return image;
+            }));
         });
     });
 
     after(function() {
         S3.getObject.restore();
+        S3.putObjects.restore();
     });
 
     beforeEach(function() {
@@ -38,48 +47,48 @@ describe("Optimize PNG Test", function() {
             done: function() {},
             fail: function() {}
         });
-        if ( stub ) {
-            stub.restore();
-            stub = null;
-        }
     });
 
     it("Reduce PNG with no configuration", function(done) {
-        stub = sinon.stub(S3, "putObject", function(bucket, name, data) {
-            return new Promise(function(resolve) {
-                var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"});
+        processor.run(new Config())
+        .then(function(images) {
+            expect(images).to.have.length(1);
+            var image = images.shift();
+            var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"});
 
-                expect(bucket).to.equal("sourcebucket");
-                expect(name).to.equal("test.png");
-                expect(data.length).to.be.below(buf.length);
-                stub.restore();
-                stub = null;
-                resolve(true);
-                done();
-            });
+            expect(image.getBucketName()).to.equal(setting.Records[0].s3.bucket.name);
+            expect(image.getFileName()).to.equal("test.png");
+            expect(image.getData().length).to.be.above(0)
+                                          .and.be.below(buf.length);
+            done();
+        })
+        .catch(function(messages) {
+            expect.fail(messages);
+            done();
         });
-        processor.run(new Config());
     });
 
     it("Reduce PNG with bucket/directory configuration", function(done) {
-        var stub = sinon.stub(S3, "putObject", function(bucket, name, data) {
-            return new Promise(function(resolve) {
-                var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"});
-
-                expect(bucket).to.equal("some");
-                expect(name).to.equal("resized/test.png");
-                expect(data.length).to.be.below(buf.length);
-                stub.restore();
-                stub = null;
-                resolve(true);
-                done();
-            });
-        });
         processor.run(new Config({
             "bucket": "some",
             "reduce": {
                 "directory": "resized"
             }
-        }));
+        }))
+        .then(function(images) {
+            expect(images).to.have.length(1);
+            var image = images.shift();
+            var buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"});
+
+            expect(image.getBucketName()).to.equal("some");
+            expect(image.getFileName()).to.equal("resized/test.png");
+            expect(image.getData().length).to.be.above(0)
+                                         .and.be.below(buf.length);
+            done();
+        })
+        .catch(function(messages) {
+            expect.fail(messages);
+            done();
+        });
     });
 });
