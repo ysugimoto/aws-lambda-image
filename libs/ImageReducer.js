@@ -29,7 +29,7 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
     var option = this.option;
 
     return new Promise(function(resolve, reject) {
-        this.streamPipeProcess.apply(this, this.createReduceStreams(image))
+        this.executeStream(image)
         .then(function(buffer) {
             var dir = option.directory || image.getDirName();
 
@@ -53,14 +53,14 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
  * Create reduce image streams
  *
  * @protected
- * @param ImageData image
- * @return Array<ReadableStream|ChildProcess>
+ * @param String type
+ * @return Array<ChildProcess>
  * @thorws Error
  */
-ImageReducer.prototype.createReduceStreams = function ImageReducer_createReduceStreams(image) {
-    var streams = [new ReadableStream(image.getData())];
+ImageReducer.prototype.createReduceStreams = function ImageReducer_createReduceStreams(type) {
+    var streams = [];
 
-    switch ( image.getType() ) {
+    switch ( type ) {
         case "png":
             streams.push((new Pngquant()).spawnProcess());
             streams.push((new Pngout()).spawnProcess());
@@ -80,16 +80,19 @@ ImageReducer.prototype.createReduceStreams = function ImageReducer_createReduceS
  * Pipe streams and get result
  *
  * @private
- * @param ReadableStream input
- * @param ChildProcess first
- * @param ChildProcess|undefined second
+ * @param ImageData image
  * @return Promise
  */
-ImageReducer.prototype.streamPipeProcess = function ImageReducer_streamPipeProcess(input, first, second) {
-    return new Promise(function(resolve, reject) {
-        var output = new WritableStream();
-        input.pause();
+ImageReducer.prototype.executeStream = function ImageReducer_executeStream(image) {
+    var processes = this.createReduceStreams(image.getType());
 
+    return new Promise(function(resolve, reject) {
+        var input  = new ReadableStream(image.getData());
+        var output = new WritableStream();
+        var first  = processes[0];
+        var second = processes[1] || null;
+
+        input.pause();
         input.pipe(first.stdin);
         if ( second ) {
             first.stdout.pipe(second.stdin);
