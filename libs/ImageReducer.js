@@ -117,22 +117,30 @@ ImageReducer.prototype.reduceJpegImage = function ImageReducer_reduceJpegImage(i
  *
  * @private
  * @param Buffer buffer
- * @param ChildProcess first
- * @param ChildProcess|undefined second
+ * @param Array<ChildProcess>
  * @return Promise
  */
-ImageReducer.prototype.streamPipeProcess = function ImageReducer_streamPipeProcess(buffer, first, second) {
+ImageReducer.prototype.streamPipeProcess = function ImageReducer_streamPipeProcess(buffer) {
+    var args = Array.prototype.slice.call(arguments);
+    var streams = args.splice(1, args.length - 1);
+
     return new Promise(function(resolve, reject) {
         var input  = new ReadableStream(buffer);
         var output = new WritableStream();
         input.pause();
 
-        input.pipe(first.stdin);
-        if ( second ) {
-            first.stdout.pipe(second.stdin);
-            second.stdout.pipe(output);
-        } else {
-            first.stdout.pipe(output);
+        for (var i = 0, l = streams.length; i < l; i++) {
+            streams[i].stdout.on("error", reject);
+            streams[i].stdout.on("error", reject);
+
+            if (i === 0) {
+                input.pipe(streams[i].stdin);
+            } else {
+                streams[i - 1].stdout.pipe(streams[i].stdin);
+            }
+            if (i === l - 1) {
+                streams[i].stdout.pipe(output);
+            }
         }
 
         output.on("finish", function() {
@@ -141,12 +149,6 @@ ImageReducer.prototype.streamPipeProcess = function ImageReducer_streamPipeProce
 
         input.on("error",  reject);
         output.on("error", reject);
-        first.stdout.on("error", reject);
-        first.stderr.on("error", reject);
-        if ( second ) {
-            second.stdout.on("error", reject);
-            second.stderr.on("error", reject);
-        }
 
         input.resume();
     });
