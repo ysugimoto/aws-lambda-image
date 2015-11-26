@@ -6,16 +6,14 @@ var Promise      = require("es6-promise").Promise;
 /**
  * Image processor
  * management resize/reduce image list by configration,
- * and pile AWS Lambda's event/context
+ * and pipe AWS Lambda's event/context
  *
  * @constructor
- * @param Object event
+ * @param Object s3Object
  * @param Object context
  */
-function ImageProcessor(event, context) {
-    this.event    = event;
-    this.context  = context;
-    this.s3Object = this.event.Records[0].s3;
+function ImageProcessor(s3Object) {
+    this.s3Object = s3Object;
 }
 
 /**
@@ -25,50 +23,59 @@ function ImageProcessor(event, context) {
  * @param Config config
  */
 ImageProcessor.prototype.run = function ImageProcessor_run(config) {
-    var that    = this;
-    var context = this.context;
+    return new Promise(function(resolve, reject) {
+        // If object.size equals 0, stop process
+        if ( this.s3Object.object.size === 0 ) {
+            reject("Object size equal zero. Nothing to process.");
+            return;
+        }
 
-    // If object.size equals 0, S3 will update image
-    if ( this.s3Object.object.size === 0 ) {
-        context.done("Object size equal zero. Nothing to process.");
-        return;
-    }
+        if ( ! config.get("bucket") ) {
+            config.set("bucket", this.s3Object.bucket.name);
+        }
 
-    if ( ! config.get("bucket") ) {
-        config.set("bucket", this.s3Object.bucket.name);
-    }
+        S3.getObject(
+            this.s3Object.bucket.name,
+            this.s3Object.object.key
+        )
+        .then(function(imageData) {
+            this.processImage(imageData, config)
+            .then(function(results) {
+                S3.putObjects(results)
+                .then(function(images) {
+                    resolve(images);
+                })
+                .catch(function(messages) {
+                    reject(messages);
+                });
+            })
+            .catch(function(messages) {
+                reject(messages);
+            });
+        }.bind(this))
+        .catch(function(error) {
+            reject(error);
+        });
+    }.bind(this));
+};
 
-    S3.getObject(
-        this.s3Object.bucket.name,
-        this.s3Object.object.key
-    )
-    .then(function(imageData) {
-        var promiseList = config.get("resizes", []).filter(function(option) {
+ImageProcessor.prototype.processImage = function ImageProcessor_processImage(imageData, config) {
+    var reduce      = config.get("reduce", {});
+    var promiseList = config.get("resizes", []).filter(function(option) {
             return option.size && option.size > 0;
         }).map(function(option) {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
             }
-            return that.execResizeImage(option, imageData);
-        });
+            return this.execResizeImage(option, imageData);
+        }.bind(this));
 
-        var reduce = config.get("reduce", {});
-        if ( ! reduce.bucket ) {
-            reduce.bucket = config.get("bucket");
-        }
-        promiseList.push(that.execReduceImage(reduce, imageData));
+    if ( ! reduce.bucket ) {
+        reduce.bucket = config.get("bucket");
+    }
+    promiseList.unshift(this.execReduceImage(reduce, imageData));
 
-        Promise.all(promiseList)
-        .then(function(result) {
-            context.succeed(result);
-        })
-        .catch(function(messages) {
-            context.fail(messages);
-        });
-    })
-    .catch(function(message) {
-        context.fail("S3 getObject failed: " + message);
-    });
+    return Promise.all(promiseList);
 };
 
 /**
@@ -89,17 +96,7 @@ ImageProcessor.prototype.execResizeImage = function ImageProcessor_execResizeIma
 
             reducer.exec(resizedImage)
             .then(function(reducedImage) {
-                S3.putObject(
-                    reducedImage.getBucketName(),
-                    reducedImage.getFileName(),
-                    reducedImage.getData()
-                )
-                .then(function() {
-                    resolve("Resized Image Reduce done.");
-                })
-                .catch(function(message) {
-                    reject("S3 putObject error: " + message);
-                });
+                resolve(reducedImage);
             })
             .catch(function(message) {
                 reject(message);
@@ -125,17 +122,7 @@ ImageProcessor.prototype.execReduceImage = function(option, imageData) {
 
         reducer.exec(imageData)
         .then(function(reducedImage) {
-            S3.putObject(
-                reducedImage.getBucketName(),
-                reducedImage.getFileName(),
-                reducedImage.getData()
-            )
-            .then(function() {
-                resolve("Original Image Reduce done.");
-            })
-            .catch(function(message) {
-                reject(message);
-            });
+            resolve(reducedImage);
         })
         .catch(function(message) {
             reject(message);

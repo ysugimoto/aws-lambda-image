@@ -43,9 +43,30 @@ function putObject(bucket, key, buffer) {
     });
 }
 
+/**
+ * Put objects data to S3 bucket
+ *
+ * @param Array<ImageData> images
+ * @return Promise.all
+ */
+function putObjects(images) {
+    return Promise.all(images.map(function(image) {
+        return new Promise(function(resolve, reject) {
+            putObject(image.getBucketName(), image.getFileName(), image.getData())
+            .then(function() {
+                resolve(image);
+            })
+            .catch(function(message) {
+                reject(message);
+            });
+        });
+    }));
+}
+
 module.exports = {
     getObject: getObject,
-    putObject: putObject
+    putObject: putObject,
+    putObjects: putObjects
 };
 
 
