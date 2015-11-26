@@ -79,6 +79,30 @@ If you check how package working by your configuration, you can use `configtest`
 $ make configtest
 ```
 
+### Complete / Failed hooks
+
+You can handle resie/redule process on success/error result on `index.js`. `ImageProcessor::run` will return `Promise` object, so, run your original process:
+
+```
+processor.run(config)
+.then(function(proceedImages)) {
+
+    // Your code here on success.
+    // proceedImages is list of ImageData instance on you configuration
+
+    // notify lambda
+    context.succeed("OK, numbers of " + proceedImages.length + " images has proceeded.");
+})
+.catch(function(messages) {
+
+    // Your code here on failed.
+    // messages is list of string on error messages
+
+    // notify lambda
+    context.fail("Woops, image process failed: " + messages);
+});
+```
+
 ### Image resize
 
 - `ImageMagick` (installed on AWS Lambda)
