@@ -3,7 +3,7 @@ var Mozjpeg        = require("./optimizers/Mozjpeg");
 var Pngquant       = require("./optimizers/Pngquant");
 var Pngout         = require("./optimizers/Pngout");
 var ReadableStream = require("./ReadableImageStream");
-var WritableStream = require("./WritableImageStream");
+var StreamChain    = require("./StreamChain");
 
 var Promise = require("es6-promise").Promise;
 
@@ -29,7 +29,11 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
     var option = this.option;
 
     return new Promise(function(resolve, reject) {
-        this.executeStream(image)
+        var input   = new ReadableStream(image.getData());
+        var streams = this.createReduceStreams(image.getType());
+        var chain   = new StreamChain(input);
+
+        chain.pipes(streams).run()
         .then(function(buffer) {
             var dir = option.directory || image.getDirName();
 
@@ -82,8 +86,13 @@ ImageReducer.prototype.createReduceStreams = function ImageReducer_createReduceS
  * @private
  * @param ImageData image
  * @return Promise
- */
 ImageReducer.prototype.executeStream = function ImageReducer_executeStream(image) {
+    var input = new ReadableStream(image.getData());
+    var chain = new StreamChain(input);
+
+    return chain.pipes(this.createReduceStreams(image.getType()).run();
+
+
     var processes = this.createReduceStreams(image.getType());
 
     return new Promise(function(resolve, reject) {
@@ -117,5 +126,6 @@ ImageReducer.prototype.executeStream = function ImageReducer_executeStream(image
         input.resume();
     });
 };
+ */
 
 module.exports = ImageReducer;
