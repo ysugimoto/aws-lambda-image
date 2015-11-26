@@ -81,22 +81,26 @@ $ make configtest
 
 ### Complete / Failed hooks
 
-You can handle resie/redule process on success/error result on `index.js`. `ImageProcessor::run` will return `Promise` object, so, run your original process:
+You can handle resize/reduce process on success/error result on `index.js`. `ImageProcessor::run` will return `Promise` object, run your original code:
 
 ```
 processor.run(config)
 .then(function(proceedImages)) {
 
-    // Your code here on success.
+    // Success case:
     // proceedImages is list of ImageData instance on you configuration
+
+    /* your code here */
 
     // notify lambda
     context.succeed("OK, numbers of " + proceedImages.length + " images has proceeded.");
 })
 .catch(function(messages) {
 
-    // Your code here on failed.
+    // Failed case:
     // messages is list of string on error messages
+
+    /* your code here */
 
     // notify lambda
     context.fail("Woops, image process failed: " + messages);
