@@ -4,16 +4,16 @@
 [![Code Climate](https://codeclimate.com/github/ysugimoto/aws-lambda-image/badges/gpa.svg)](https://codeclimate.com/github/ysugimoto/aws-lambda-image)
 [![npm version](https://badge.fury.io/js/aws-lambda-image.svg)](https://badge.fury.io/js/aws-lambda-image)
 
-Automatic image resize/reduce on AWS Lambda. When new images have put on AWS S3 bucket, this package will resize/reduce that image, and put S3.
+An AWS Lambda Function to resize/reduce images automatically. When an image is put on AWS S3 bucket, this package will resize/reduce it and put to S3.
 
 ### Requirements
 
-- `node.js` ( AWS Lambda working version is 0.10.26 )
+- `node.js` ( AWS Lambda working version is **0.10.26** )
 - `make`
 
 ### Installation
 
-This package written by node.js, clone this project and install depend packages:
+Clone this repository and install dependencies:
 
 ```
 $ git clone git@github.com:ysugimoto/aws-lambda-image.git
@@ -29,11 +29,11 @@ AWS Lambda accepts zip archived package. To create it, run `make lambda` task si
 $ make lambda
 ```
 
-It will create `aws-lambda-image.zip` at project root, and upload it.
+It will create `aws-lambda-image.zip` at project root. You can upload it.
 
 ### Configuration
 
-This package works follow the configuration that written in `config.json` on project root. Just example is `config.json.sample`, please copy and use it.
+This works with `config.json` put on project root. There is `config.json.sample` as example. You can copy to use it.
 
 ```
 $ cp config.json.sample config.json
@@ -41,7 +41,7 @@ $ cp config.json.sample config.json
 
 Configuration is simple, see below:
 
-```
+```json
 {
   "bucket": "your-destination-bucket",
   "reduce": {
@@ -64,16 +64,16 @@ Configuration is simple, see below:
 }
 ```
 
-- `bucket`: [String] Global setting, put reduced image destination bucket name at S3. If not suppiled, use same bukcet of event source.
-- `reduce`: [Object] Reduce image setting.
-  - `directory`: [String] Put image directory path.
-  - `bucket`: [Object] Override put destination bucket. if not supplied, use Global `bucket` setting.
-- `resizes`: [Array] Resize images setting.
-  - `size`: [Number] Resize width.
-  - `directory`: [String] Put image directory path.
-  - `bucket`: [Object] Override put destination bucket. if not supplied, use Global `bucket` setting.
+- `bucket`: [String] Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.
+- `reduce`: [Object] Reduce setting.
+  - `directory`: [String] Image directory path.
+  - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
+- `resizes`: [Array] Resize setting.
+  - `size`: [Number] Image width.
+  - `directory`: [String] Image directory path.
+  - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
 
-If you check how package working by your configuration, you can use `configtest`:
+If you want to check how this works with your configuration, you can use `configtest`:
 
 ```
 $ make configtest
