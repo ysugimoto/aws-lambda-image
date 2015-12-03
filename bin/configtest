@@ -45,7 +45,7 @@ stdout.write(( bucket ) ? bucket : "[Same bucket]");
 stdout.write("\r\n");
 stdout.write("\r\n");
 
-stdout.write("Reduce image configration\r\n");
+stdout.write("Reduce image configuration\r\n");
 stdout.write("--------------------------------\r\n");
 var reduce = config.reduce || {};
 stdout.write(magenta + "    Save bucket:    " + reset);
@@ -55,11 +55,11 @@ stdout.write(magenta + "    Save directory: " + reset);
 stdout.write(( reduce.directory ) ? reduce.directory : "[Same directory]");
 stdout.write("\r\n");
 if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
-    warning.push("Reduced image may save same bucekt and directory. This causes infinite process AWS-Lambda.");
+    warning.push("Reduced image may save same bucket and directory. This causes infinite process AWS-Lambda.");
 }
 
 stdout.write("\r\n");
-stdout.write("Resize image confgiuration\r\n");
+stdout.write("Resize image configuration\r\n");
 stdout.write("--------------------------------\r\n");
 var resizes = config.resizes || [];
 stdout.write(magenta + "    Number of resize images: " + reset + resizes.length + "\r\n");
@@ -86,7 +86,7 @@ resizes.forEach(function(resize, index) {
 });
 
 stdout.write("\r\n");
-stdout.write(green + "Configration check finished.\r\n" + reset);
+stdout.write(green + "Configuration check finished.\r\n" + reset);
 stdout.write("\r\n");
 if ( fatals.length === 0 && warning.length === 0 ) {
     stdout.write(green + "Your configuration is green!\r\n" + reset);
