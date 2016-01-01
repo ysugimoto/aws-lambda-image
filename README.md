@@ -55,7 +55,7 @@ Configuration is simple, see below:
     {
       "size": 600,
       "directory": "resized/middle"
-    }
+    },
     {
       "size": 900,
       "directory": "resized/large"
