@@ -17,7 +17,12 @@ function getObject(bucket, key) {
             if ( err ) {
                 reject("S3 getObject failed: " + err);
             } else {
-                resolve(new ImageData(key, bucket, data.Body));
+                if ("img-processed" in data.Metadata) {
+                    reject("Object was already processed.");
+                    return;
+                }
+
+                resolve(new ImageData(key, bucket, data.Body, { ContentType: data.ContentType, CacheControl: data.CacheControl }));
             }
         });
     });
@@ -31,9 +36,16 @@ function getObject(bucket, key) {
  * @param Buffer buffer
  * @return Promise
  */
-function putObject(bucket, key, buffer) {
+function putObject(bucket, key, buffer, headers) {
     return new Promise(function(resolve, reject) {
-        client.putObject({ Bucket: bucket, Key: key, Body: buffer }, function(err) {
+        client.putObject({
+            Bucket: bucket,
+            Key: key,
+            Body: buffer,
+            Metadata: {"img-processed": "true"},
+            ContentType: headers.ContentType,
+            CacheControl: headers.CacheControl
+        }, function(err) {
             if ( err ) {
                 reject(err);
             } else {
@@ -52,7 +64,7 @@ function putObject(bucket, key, buffer) {
 function putObjects(images) {
     return Promise.all(images.map(function(image) {
         return new Promise(function(resolve, reject) {
-            putObject(image.getBucketName(), image.getFileName(), image.getData())
+            putObject(image.getBucketName(), image.getFileName(), image.getData(), image.getHeaders())
             .then(function() {
                 resolve(image);
             })

@@ -37,7 +37,8 @@ ImageResizer.prototype.exec = function ImageResizer_exec(image) {
                 resolve(new ImageData(
                     image.fileName,
                     image.bucketName,
-                    stdout
+                    stdout,
+                    image.getHeaders()
                 ));
             }
         });
