@@ -7,11 +7,13 @@ var path = require("path");
  * @param String key
  * @param String name
  * @param String|Buffer data
+ * @param Object headers
  */
-function ImageData(key, name, data) {
+function ImageData(key, name, data, headers) {
     this.fileName   = key;
     this.bucketName = name;
     this.data       = ( Buffer.isBuffer(data) ) ? data : new Buffer(data, "binary");
+    this.headers    = headers;
 }
 
 /**
@@ -74,6 +76,16 @@ ImageData.prototype.getType = function ImageData_getType() {
  */
 ImageData.prototype.getData = function ImageData_getData() {
     return this.data;
+};
+
+/**
+ * Image headers getter
+ *
+ * @public
+ * @return Object
+ */
+ImageData.prototype.getHeaders = function ImageData_getHeaders() {
+    return this.headers;
 };
 
 module.exports = ImageData;

@@ -44,7 +44,8 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
             resolve(new ImageData(
                 dir + image.getBaseName(),
                 option.bucket || image.bucketName,
-                buffer
+                buffer,
+                image.getHeaders()
             ));
         })
         .catch(function(message) {
