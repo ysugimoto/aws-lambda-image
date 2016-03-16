@@ -62,7 +62,7 @@ ImageProcessor.prototype.run = function ImageProcessor_run(config) {
 ImageProcessor.prototype.processImage = function ImageProcessor_processImage(imageData, config) {
     var reduce      = config.get("reduce", {});
     var promiseList = config.get("resizes", []).filter(function(option) {
-            return option.size && option.size > 0;
+            return (option.size && option.size > 0) || (option.width && option.width > 0) || (option.height && option.height > 0);
         }).map(function(option) {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
@@ -88,7 +88,7 @@ ImageProcessor.prototype.processImage = function ImageProcessor_processImage(ima
  */
 ImageProcessor.prototype.execResizeImage = function ImageProcessor_execResizeImage(option, imageData) {
     return new Promise(function(resolve, reject) {
-        var resizer = new ImageResizer(option.size);
+        var resizer = new ImageResizer(option);
 
         resizer.exec(imageData)
         .then(function(resizedImage) {
