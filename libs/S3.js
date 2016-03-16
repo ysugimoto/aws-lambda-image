@@ -49,7 +49,7 @@ function putObject(bucket, key, buffer, headers) {
             if ( err ) {
                 reject(err);
             } else {
-                resolve("S3 putObject sucess");
+                resolve("S3 putObject success");
             }
         });
     });
