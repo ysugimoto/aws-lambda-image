@@ -3,3 +3,4 @@ aws-lambda-image.zip
 build/
 config.json
 npm-debug.log
+*.sw?
