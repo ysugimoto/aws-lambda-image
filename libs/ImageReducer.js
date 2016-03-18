@@ -32,6 +32,7 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
         var input   = new ReadableStream(image.getData());
         var streams = this.createReduceStreams(image.getType());
         var chain   = new StreamChain(input);
+        var acl = image.getACL();
 
         chain.pipes(streams).run()
         .then(function(buffer) {
@@ -45,7 +46,8 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
                 dir + image.getBaseName(),
                 option.bucket || image.bucketName,
                 buffer,
-                image.getHeaders()
+                image.getHeaders(),
+                acl
             ));
         })
         .catch(function(message) {

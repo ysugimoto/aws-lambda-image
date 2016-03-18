@@ -67,6 +67,9 @@ ImageProcessor.prototype.processImage = function ImageProcessor_processImage(ima
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
             }
+            if ( ! option.acl ){
+                option.acl = config.get("acl");
+            }
             return this.execResizeImage(option, imageData);
         }.bind(this));
 

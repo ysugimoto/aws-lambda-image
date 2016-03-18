@@ -29,6 +29,8 @@ ImageResizer.prototype.exec = function ImageResizer_exec(image) {
         format:    imagetype
     };
 
+    var acl = this.options.acl;
+
     if(this.options.size){
         params['width'] = this.options.size;
     }
@@ -50,7 +52,8 @@ ImageResizer.prototype.exec = function ImageResizer_exec(image) {
                     image.fileName,
                     image.bucketName,
                     stdout,
-                    image.getHeaders()
+                    image.getHeaders(),
+                    acl
                 ));
             }
         });
