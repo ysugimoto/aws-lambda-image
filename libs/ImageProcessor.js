@@ -1,7 +1,6 @@
 var ImageResizer = require("./ImageResizer");
 var ImageReducer = require("./ImageReducer");
 var S3           = require("./S3");
-var Promise      = require("es6-promise").Promise;
 
 /**
  * Image processor

@@ -10,7 +10,6 @@ lambda:
 	@if [ -d node_modules/xmlbuilder ] ;then cp -R node_modules/xmlbuilder build/node_modules/; fi
 	@if [ -d node_modules/sax ] ;then cp -R node_modules/sax build/node_modules/; fi
 	@if [ -d node_modules/xml2js ] ;then cp -R node_modules/xml2js build/node_modules/; fi
-	@cp -R node_modules/es6-promise build/node_modules/
 	@cp -R node_modules/imagemagick build/node_modules/
 	@cp -R libs build/
 	@cp -R bin build/
@@ -24,7 +23,7 @@ test:
 
 configtest:
 	@./bin/configtest
-	
+
 
 clean:
 	@echo "clean up package files"

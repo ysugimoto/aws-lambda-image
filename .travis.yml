@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - "0.10"
+  - "4.3"
 before_script:
-  - npm install
+  - "npm install"
 script:
   - "npm test"
