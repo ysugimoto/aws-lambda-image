@@ -5,8 +5,6 @@ var Pngout         = require("./optimizers/Pngout");
 var ReadableStream = require("./ReadableImageStream");
 var StreamChain    = require("./StreamChain");
 
-var Promise = require("es6-promise").Promise;
-
 /**
  * Image Reducer
  * Accept png/jpeg typed image

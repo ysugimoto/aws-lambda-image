@@ -1,7 +1,6 @@
 var ImageProcessor = require("../libs/ImageProcessor");
 var ImageData      = require("../libs/ImageData");
 var Config         = require("../libs/Config");
-var Promise        = require("es6-promise").Promise;
 var S3             = require("../libs/S3");
 
 var sinon      = require("sinon");

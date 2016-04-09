@@ -1,7 +1,6 @@
 var ImageData = require("./ImageData");
 
 var aws     = require("aws-sdk");
-var Promise = require("es6-promise").Promise;
 var client  = new aws.S3({apiVersion: "2006-03-01"});
 
 /**
@@ -80,6 +79,3 @@ module.exports = {
     putObject: putObject,
     putObjects: putObjects
 };
-
-
-

@@ -1,5 +1,4 @@
 var WritableStream = require("./WritableImageStream");
-var Promise        = require("es6-promise").Promise;
 
 /**
  * Strem Chain

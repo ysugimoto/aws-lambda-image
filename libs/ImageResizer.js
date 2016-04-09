@@ -1,6 +1,5 @@
 var ImageData   = require("./ImageData");
 
-var Promise     = require("es6-promise").Promise;
 var ImageMagick = require("imagemagick");
 
 /**
