@@ -94,13 +94,10 @@ ImageProcessor.prototype.execResizeImage = function ImageProcessor_execResizeIma
         .then(function(resizedImage) {
             var reducer = new ImageReducer(option);
 
-            reducer.exec(resizedImage)
-            .then(function(reducedImage) {
-                resolve(reducedImage);
-            })
-            .catch(function(message) {
-                reject(message);
-            });
+            return reducer.exec(resizedImage);
+        })
+        .then(function(reducedImage) {
+            resolve(reducedImage);
         })
         .catch(function(message) {
             reject(message);
