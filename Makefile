@@ -6,12 +6,7 @@ lambda:
 	@cp index.js build/index.js
 	@cp config.json build/config.json
 	@if [ ! -d build/node_modules ] ;then mkdir build/node_modules; fi
-	@cp -R node_modules/aws-sdk build/node_modules/
-	@if [ -d node_modules/xmlbuilder ] ;then cp -R node_modules/xmlbuilder build/node_modules/; fi
-	@if [ -d node_modules/sax ] ;then cp -R node_modules/sax build/node_modules/; fi
-	@if [ -d node_modules/xml2js ] ;then cp -R node_modules/xml2js build/node_modules/; fi
-	@cp -R node_modules/es6-promise build/node_modules/
-	@cp -R node_modules/imagemagick build/node_modules/
+	@cp -R node_modules/ build/node_modules/
 	@cp -R libs build/
 	@cp -R bin build/
 	@rm -rf build/bin/darwin
