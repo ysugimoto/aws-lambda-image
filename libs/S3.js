@@ -11,7 +11,7 @@ var client  = new aws.S3({apiVersion: "2006-03-01"});
  * @param String key
  * @return Promise
  */
-function getObject(bucket, key) {
+function getObject(bucket, key, acl) {
     return new Promise(function(resolve, reject) {
         client.getObject({ Bucket: bucket, Key: key }, function(err, data) {
             if ( err ) {
@@ -22,7 +22,7 @@ function getObject(bucket, key) {
                     return;
                 }
 
-                resolve(new ImageData(key, bucket, data.Body, { ContentType: data.ContentType, CacheControl: data.CacheControl }));
+                resolve(new ImageData(key, bucket, data.Body, { ContentType: data.ContentType, CacheControl: data.CacheControl }, acl));
             }
         });
     });
@@ -36,20 +36,24 @@ function getObject(bucket, key) {
  * @param Buffer buffer
  * @return Promise
  */
-function putObject(bucket, key, buffer, headers) {
+function putObject(bucket, key, buffer, headers, acl) {
     return new Promise(function(resolve, reject) {
-        client.putObject({
+        var params = {
             Bucket: bucket,
             Key: key,
             Body: buffer,
             Metadata: {"img-processed": "true"},
             ContentType: headers.ContentType,
             CacheControl: headers.CacheControl
-        }, function(err) {
+        };
+        if( acl ){
+            params['ACL'] = acl;
+        }
+        client.putObject(params, function(err) {
             if ( err ) {
                 reject(err);
             } else {
-                resolve("S3 putObject sucess");
+                resolve("S3 putObject success");
             }
         });
     });
@@ -64,7 +68,7 @@ function putObject(bucket, key, buffer, headers) {
 function putObjects(images) {
     return Promise.all(images.map(function(image) {
         return new Promise(function(resolve, reject) {
-            putObject(image.getBucketName(), image.getFileName(), image.getData(), image.getHeaders())
+            putObject(image.getBucketName(), image.getFileName(), image.getData(), image.getHeaders(), image.getACL())
             .then(function() {
                 resolve(image);
             })

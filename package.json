@@ -15,7 +15,8 @@
   "dependencies": {
     "aws-sdk": "^2.2.9",
     "es6-promise": "^3.0.2",
-    "imagemagick": "^0.1.3"
+    "imagemagick": "^0.1.3",
+    "lodash": "^4.6.1"
   },
   "devDependencies": {
     "chai": "^3.4.0",

@@ -23,9 +23,16 @@ exports.handler = function(event, context) {
     console.log(s3Object);
     processor.run(config)
     .then(function(proceedImages) {
+        console.log("OK, numbers of " + proceedImages.length + " images has proceeded.");
         context.succeed("OK, numbers of " + proceedImages.length + " images has proceeded.");
     })
     .catch(function(messages) {
-        context.fail("Woops, image process failed: " + messages);
+        if(messages == "Object was already processed."){
+            console.log("Image already processed");
+            context.succeed("Image already processed");
+        }
+        else {
+            context.fail("Woops, image process failed: " + messages);
+        }
     });
 };

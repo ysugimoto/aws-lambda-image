@@ -9,11 +9,12 @@ var path = require("path");
  * @param String|Buffer data
  * @param Object headers
  */
-function ImageData(key, name, data, headers) {
+function ImageData(key, name, data, headers, acl) {
     this.fileName   = key;
     this.bucketName = name;
     this.data       = ( Buffer.isBuffer(data) ) ? data : new Buffer(data, "binary");
     this.headers    = headers;
+    this.acl        = acl;
 }
 
 /**
@@ -86,6 +87,16 @@ ImageData.prototype.getData = function ImageData_getData() {
  */
 ImageData.prototype.getHeaders = function ImageData_getHeaders() {
     return this.headers;
+};
+
+/**
+ * Image acl getter
+ *
+ * @public
+ * @return Object
+ */
+ImageData.prototype.getACL = function ImageData_getACL() {
+    return this.acl;
 };
 
 module.exports = ImageData;

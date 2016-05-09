@@ -10,8 +10,8 @@ var ImageMagick = require("imagemagick");
  * @constructor
  * @param Number width
  */
-function ImageResizer(width) {
-    this.width = width;
+function ImageResizer(options) {
+    this.options = options;
 }
 
 /**
@@ -22,12 +22,26 @@ function ImageResizer(width) {
  * @return Promise
  */
 ImageResizer.prototype.exec = function ImageResizer_exec(image) {
+    var imagetype = image.getType();
     var params = {
         srcData:   image.getData().toString("binary"),
-        srcFormat: image.getType(),
-        format:    image.getType(),
-        width:     this.width
+        srcFormat: imagetype,
+        format:    imagetype
     };
+
+    var acl = this.options.acl;
+
+    if(this.options.size){
+        params['width'] = this.options.size;
+    }
+    else {
+        if(this.options.width){
+            params['width'] = this.options.width;
+        }
+        if(this.options.height){
+            params['height'] = this.options.height;
+        }
+    }
 
     return new Promise(function(resolve, reject) {
         ImageMagick.resize(params, function(err, stdout, stderr) {
@@ -38,7 +52,8 @@ ImageResizer.prototype.exec = function ImageResizer_exec(image) {
                     image.fileName,
                     image.bucketName,
                     stdout,
-                    image.getHeaders()
+                    image.getHeaders(),
+                    acl
                 ));
             }
         });
