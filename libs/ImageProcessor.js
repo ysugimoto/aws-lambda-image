@@ -60,9 +60,11 @@ ImageProcessor.prototype.run = function ImageProcessor_run(config) {
 };
 
 ImageProcessor.prototype.processImage = function ImageProcessor_processImage(imageData, config) {
-    var reduce      = config.get("reduce", {});
+    var jpegOptimizer = config.get("jpegOptimizer", "mozjpeg");
     var promiseList = config.get("resizes", []).filter(function(option) {
-            return (option.size && option.size > 0) || (option.width && option.width > 0) || (option.height && option.height > 0);
+            return (option.size && option.size > 0)   ||
+                   (option.width && option.width > 0) ||
+                   (option.height && option.height > 0);
         }).map(function(option) {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
@@ -70,13 +72,19 @@ ImageProcessor.prototype.processImage = function ImageProcessor_processImage(ima
             if ( ! option.acl ){
                 option.acl = config.get("acl");
             }
+            option.jpegOptimizer = option.jpegOptimizer || jpegOptimizer;
             return this.execResizeImage(option, imageData);
         }.bind(this));
 
-    if ( ! reduce.bucket ) {
-        reduce.bucket = config.get("bucket");
+    if ( config.exists("reduce") ) {
+        var reduce = config.get("reduce");
+
+        if ( ! reduce.bucket ) {
+            reduce.bucket = config.get("bucket");
+        }
+        reduce.jpegOptimizer = reduce.jpegOptimizer || jpegOptimizer;
+        promiseList.unshift(this.execReduceImage(reduce, imageData));
     }
-    promiseList.unshift(this.execReduceImage(reduce, imageData));
 
     return Promise.all(promiseList);
 };

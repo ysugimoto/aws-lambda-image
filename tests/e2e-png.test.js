@@ -50,7 +50,18 @@ describe("Optimize PNG Test", function() {
     });
 
     it("Reduce PNG with no configuration", function(done) {
-        processor.run(new Config())
+        processor.run(new Config({}))
+        .then(function(images) {
+            // no working
+            expect(images).to.have.length(0);
+            done();
+        });
+    });
+
+    it("Reduce PNG with basic configuration", function(done) {
+        processor.run(new Config({
+            reduce: {}
+        }))
         .then(function(images) {
             expect(images).to.have.length(1);
             var image = images.shift();
