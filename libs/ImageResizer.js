@@ -31,15 +31,14 @@ ImageResizer.prototype.exec = function ImageResizer_exec(image) {
 
     var acl = this.options.acl;
 
-    if(this.options.size){
-        params['width'] = this.options.size;
-    }
-    else {
-        if(this.options.width){
-            params['width'] = this.options.width;
+    if ( "size" in this.options ) {
+        params.width = this.options.size;
+    } else {
+        if ( "width" in this.options ) {
+            params.width = this.options.width;
         }
-        if(this.options.height){
-            params['height'] = this.options.height;
+        if ( "height" in this.options ) {
+            params.height = this.options.height;
         }
     }
 

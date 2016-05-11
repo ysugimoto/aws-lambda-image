@@ -11,7 +11,7 @@ var path       = require("path");
 var sourceFile = path.join(__dirname, "/fixture/event_source.json");
 var setting    = JSON.parse(fs.readFileSync(sourceFile));
 
-describe("Optimize JPEG Test", function() {
+describe("Optimize JPEG with JpegOptim Test", function() {
     var processor;
 
     before(function() {
@@ -50,7 +50,7 @@ describe("Optimize JPEG Test", function() {
     });
 
     it("Reduce JPEG with no configuration", function(done) {
-        processor.run(new Config({}))
+        processor.run(new Config({jpegOptimizer: "jpegoptim"}))
         .then(function(images) {
             // no working
             expect(images).to.have.length(0);
@@ -60,6 +60,7 @@ describe("Optimize JPEG Test", function() {
 
     it("Reduce JPEG with basic configuration", function(done) {
         processor.run(new Config({
+            jpegOptimizer: "jpegoptim",
             reduce: {}
         }))
         .then(function(images) {
@@ -83,7 +84,8 @@ describe("Optimize JPEG Test", function() {
         processor.run(new Config({
             "reduce": {
                 "bucket": "foo",
-                "directory": "some"
+                "directory": "some",
+                "jpegOptimizer": "jpegoptim"
             }
         }))
         .then(function(images) {
