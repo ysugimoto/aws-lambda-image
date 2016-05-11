@@ -36,7 +36,7 @@ ImageProcessor.prototype.run = function ImageProcessor_run(config) {
 
         S3.getObject(
             this.s3Object.bucket.name,
-            this.s3Object.object.key
+            unescape(this.s3Object.object.key.replace(/\+/g, ' '))
         )
         .then(function(imageData) {
             this.processImage(imageData, config)
