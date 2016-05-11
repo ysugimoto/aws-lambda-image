@@ -39,6 +39,14 @@ try {
     console.log(e.message);
 }
 
+stdout.write(magenta + "Checking JPEG optimizer...        " + reset);
+var optimizer = ( config.jpegOptimizer ) ? config.jpegOptimizer : "mozjpeg";
+if ( optimizer !== "jpegoptim" && optimizer !== "mozjpeg" ) {
+    warning.push("[Warning] JPEG Optimizer is invalid. It accepts 'jpegoptim' or 'mozjpeg'.");
+    optimizer = "mozjpeg";
+}
+stdout.write(optimizer + "\r\n");
+
 var bucket = ( config.bucket ) ? config.bucket : "";
 stdout.write(magenta + "Checking destination bucket...    " + reset);
 stdout.write(( bucket ) ? bucket : "[Same bucket]");
@@ -47,15 +55,19 @@ stdout.write("\r\n");
 
 stdout.write("Reduce image configuration\r\n");
 stdout.write("--------------------------------\r\n");
-var reduce = config.reduce || {};
-stdout.write(magenta + "    Save bucket:    " + reset);
-stdout.write(( reduce.bucket ) ? reduce.bucket : bucket ? bucket : "[Same bucket]");
-stdout.write("\r\n");
-stdout.write(magenta + "    Save directory: " + reset);
-stdout.write(( reduce.directory ) ? reduce.directory : "[Same directory]");
-stdout.write("\r\n");
-if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
-    warning.push("Reduced image may save same bucket and directory. This causes infinite process AWS-Lambda.");
+if ( "reduce" in config ) {
+    var reduce = config.reduce || {};
+    stdout.write(magenta + "    Save bucket:    " + reset);
+    stdout.write(( reduce.bucket ) ? reduce.bucket : bucket ? bucket : "[Same bucket]");
+    stdout.write("\r\n");
+    stdout.write(magenta + "    Save directory: " + reset);
+    stdout.write(( reduce.directory ) ? reduce.directory : "[Same directory]");
+    stdout.write("\r\n");
+    if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
+        warning.push("Reduced image may save same bucket and directory. This causes infinite process AWS-Lambda.");
+    }
+} else {
+    stdout.write("Reduce option is not supplid, skip it.\r\n");
 }
 
 stdout.write("\r\n");
@@ -95,7 +107,7 @@ if ( fatals.length === 0 && warning.length === 0 ) {
         stdout.write(red + "[Fatal] " + f + "\r\n" + reset);
     });
     warning.forEach(function(n) {
-        stdout.write(yellow + "[Warning] " + n + "\r\n" + reset);
+        stdout.write(red + "[Warning] " + n + "\r\n" + reset);
     });
 }
 
