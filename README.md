@@ -44,7 +44,7 @@ Configuration is simple, see below:
 ```json
 {
   "bucket": "your-destination-bucket",
-  "jpegOptimizer": "jpegoptim|mozjpeg"
+  "jpegOptimizer": "jpegoptim|mozjpeg",
   "reduce": {
       "directory": "reduced"
   },

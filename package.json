@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-image",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "An AWS Lambda Function to resize/reduce images automatically",
   "scripts": {
     "test": "make test"
@@ -13,10 +13,10 @@
   "author": "Yoshiaki Sugimoto",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.2.9",
-    "es6-promise": "^3.0.2",
+    "aws-sdk": "2.3.9",
+    "es6-promise": "3.1.2",
     "imagemagick": "^0.1.3",
-    "lodash": "^4.6.1"
+    "lodash": "4.12.0"
   },
   "devDependencies": {
     "chai": "^3.4.0",
