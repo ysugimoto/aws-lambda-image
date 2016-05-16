@@ -1,6 +1,7 @@
 .PHONY: test clean configtest
 
 lambda:
+	npm install .
 	@echo "Factory package files..."
 	@if [ ! -d build ] ;then mkdir build; fi
 	@cp index.js build/index.js
