@@ -21,6 +21,10 @@ describe("Reduce JPEG Test", function() {
             expect(reduced.getData().length > 0).to.be.true;
             expect(reduced.getData().length).to.be.below(fixture.length);
             done();
+        })
+        .catch(function(message) {
+            throw new Error(message);
+            done();
         });
     });
 });

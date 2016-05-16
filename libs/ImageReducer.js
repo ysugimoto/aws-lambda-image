@@ -31,7 +31,7 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
 
     return new Promise(function(resolve, reject) {
         var input   = new ReadableStream(image.getData());
-        var streams = this.createReduceStreams(image.getType());
+        var streams = this.createReduceProcessList(image.getType());
         var chain   = new StreamChain(input);
         var acl = image.getACL();
 
@@ -58,28 +58,28 @@ ImageReducer.prototype.exec = function ImageReducer_exec(image) {
 };
 
 /**
- * Create reduce image streams
+ * Create reduce image process list
  *
  * @protected
  * @param String type
- * @return Array<ChildProcess>
+ * @return Array<Optimizer>
  * @thorws Error
  */
-ImageReducer.prototype.createReduceStreams = function ImageReducer_createReduceStreams(type) {
+ImageReducer.prototype.createReduceProcessList = function ImageReducer_createReduceProcessList(type) {
     var streams = [];
 
     switch ( type ) {
         case "png":
-            streams.push((new Pngquant()).spawnProcess());
-            streams.push((new Pngout()).spawnProcess());
+            streams.push(new Pngquant());
+            streams.push(new Pngout());
             break;
         case "jpg":
         case "jpeg":
             // switch JPEG optimizer
             if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
-                streams.push((new JpegOptim()).spawnProcess());
+                streams.push(new JpegOptim());
             } else {                                           // using mozjpeg
-                streams.push((new Mozjpeg()).spawnProcess());
+                streams.push(new Mozjpeg());
             }
             break;
         default:

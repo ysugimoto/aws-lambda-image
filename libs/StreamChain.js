@@ -10,7 +10,7 @@ var Promise        = require("es6-promise").Promise;
  */
 function StreamChain(inputStream) {
     this.inputStream = inputStream;
-    this.pipeStreams = [];
+    this.pipeProcesses = [];
 }
 
 /**
@@ -29,14 +29,14 @@ StreamChain.make = function(inputStream) {
  * Pipes stream lists
  *
  * @public
- * @param Array<ChildProcess> streams
+ * @param Array<Optimizer> processes
  * @return StreamChain this
  */
-StreamChain.prototype.pipes = function(streams) {
+StreamChain.prototype.pipes = function(processes) {
     var index = -1;
 
-    while ( streams[++index] ) {
-        this.pipeStreams.push(streams[index]);
+    while ( processes[++index] ) {
+        this.pipeProcesses.push(processes[index]);
     }
 
     return this;
@@ -58,10 +58,10 @@ StreamChain.prototype.run = function() {
         this.inputStream.on("error", reject);
         current = this.inputStream;
 
-        this.pipeStreams.forEach(function(stream) {
-            stream.stderr.on("error", reject);
-            current.pipe(stream.stdin);
-            current = stream.stdout;
+        this.pipeProcesses.forEach(function(optimizer) {
+            var proc = optimizer.spawnProcess();
+            current.pipe(proc.stdin);
+            current = proc.stdout;
         });
 
         current.pipe(output);

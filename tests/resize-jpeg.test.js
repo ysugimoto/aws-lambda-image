@@ -28,7 +28,8 @@ describe("Resize JPEG Test", function() {
             });
         })
         .catch(function(err) {
-            expect.fail(err);
+            throw new Error(err);
+            done();
         });
 
     });
@@ -52,7 +53,8 @@ describe("Resize JPEG Test", function() {
             });
         })
         .catch(function(err) {
-            expect.fail(err);
+            throw new Error(err);
+            done();
         });
 
     });
