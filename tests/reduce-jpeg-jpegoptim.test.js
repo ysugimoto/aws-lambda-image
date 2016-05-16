@@ -24,7 +24,7 @@ describe("Reduce JPEG with JpegOptim Test", function() {
             expect(reduced.getData().length).to.be.below(fixture.length);
             done();
         }).catch(function(msg) {
-            console.log(msg);
+            throw new Error(msg);
             done();
         });
     });

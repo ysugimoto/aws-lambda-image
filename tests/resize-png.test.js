@@ -9,7 +9,7 @@ var destPath   = path.join(__dirname, "/fixture/fixture_resized.png");
 
 describe("Resize PNG Test", function() {
 
-    it("Resize PNG", function(done, fail) {
+    it("Resize PNG", function(done) {
         var resizer = new ImageResizer({size: 200});
         var image = new ImageData(
             "fixture/fixture.png",
@@ -31,8 +31,8 @@ describe("Resize PNG Test", function() {
             });
         })
         .catch(function(message) {
-            console.log(message);
-            fail();
+            throw new Error(message);
+            done();
         });
     });
 });
