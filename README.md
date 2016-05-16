@@ -15,7 +15,7 @@ An AWS Lambda Function to resize/reduce images automatically. When an image is p
 
 Clone this repository and install dependencies:
 
-```
+```bash
 $ git clone git@github.com:ysugimoto/aws-lambda-image.git
 $ cd aws-lambda-image
 $ npm install .
@@ -25,7 +25,7 @@ $ npm install .
 
 AWS Lambda accepts zip archived package. To create it, run `make lambda` task simply.
 
-```
+```bash
 $ make lambda
 ```
 
@@ -35,7 +35,7 @@ It will create `aws-lambda-image.zip` at project root. You can upload it.
 
 This works with `config.json` put on project root. There is `config.json.sample` as example. You can copy to use it.
 
-```
+```bash
 $ cp config.json.sample config.json
 ```
 
@@ -44,7 +44,7 @@ Configuration is simple, see below:
 ```json
 {
   "bucket": "your-destination-bucket",
-  "jpegOptimizer": "jpegoptim|mozjpeg"
+  "jpegOptimizer": "jpegoptim|mozjpeg",
   "reduce": {
       "directory": "reduced"
   },
@@ -77,7 +77,7 @@ Configuration is simple, see below:
 
 If you want to check how this works with your configuration, you can use `configtest`:
 
-```
+```bash
 $ make configtest
 ```
 
@@ -85,7 +85,7 @@ $ make configtest
 
 You can handle resize/reduce process on success/error result on `index.js`. `ImageProcessor::run` will return `Promise` object, run your original code:
 
-```
+```javascript
 processor.run(config)
 .then(function(proceedImages)) {
 
