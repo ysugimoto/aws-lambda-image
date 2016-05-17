@@ -2,7 +2,7 @@ var ImageData      = require("./ImageData");
 var Mozjpeg        = require("./optimizers/Mozjpeg");
 var Pngquant       = require("./optimizers/Pngquant");
 var Pngout         = require("./optimizers/Pngout");
-var JpegOptim      = require("./optimizers/JpegOptim");
+//var JpegOptim      = require("./optimizers/JpegOptim");
 var ReadableStream = require("./ReadableImageStream");
 var StreamChain    = require("./StreamChain");
 
@@ -75,12 +75,12 @@ ImageReducer.prototype.createReduceProcessList = function ImageReducer_createRed
             break;
         case "jpg":
         case "jpeg":
+            streams.push(new Mozjpeg());
             // switch JPEG optimizer
-            if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
-                streams.push(new JpegOptim());
-            } else {                                           // using mozjpeg
-                streams.push(new Mozjpeg());
-            }
+            //if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
+            //    streams.push(new JpegOptim());
+            //} else {                                           // using mozjpeg
+            //}
             break;
         default:
             throw new Error("Unexcepted file type.");

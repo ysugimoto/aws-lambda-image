@@ -44,7 +44,6 @@ Configuration is simple, see below:
 ```json
 {
   "bucket": "your-destination-bucket",
-  "jpegOptimizer": "jpegoptim|mozjpeg",
   "reduce": {
       "directory": "reduced"
   },
@@ -66,7 +65,6 @@ Configuration is simple, see below:
 ```
 
 - `bucket`: [String] Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.
-- `jpegOptimizer`: [String] Select JPEG image optimizer. `jpegoptim` or `mozjpeg` is avaialble. (default is `mozjpeg`).
 - `reduce`: [Object] Reduce setting.
   - `directory`: [String] Image directory path.
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
