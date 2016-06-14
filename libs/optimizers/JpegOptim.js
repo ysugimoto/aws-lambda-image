@@ -1,16 +1,19 @@
-var Optimizer = require("./Optimizer");
+"use strict";
 
-/**
- * JpegOption optimizer
- *
- * @constructor
- * @extends Optimizer
- */
-function Jpegoptim() {
-    Optimizer.call(this);
+import Optimizer from "./Optimizer";
 
-    this.command = this.findBin("jpegoptim");
-    this.args    = ["--stdin", "-s", "--all-progressive", "--stdout"];
+export default class extends Optimizer {
+    /**
+     * JpegOption optimizer
+     *
+     * @constructor
+     * @extends Optimizer
+     */
+    constructor Jpegoptim() {
+        super();
+
+        this.command = this.findBin("jpegoptim");
+        this.args    = ["--stdin", "-s", "--all-progressive", "--stdout"];
+    }
 }
 
-module.exports = Optimizer.extend(Jpegoptim);

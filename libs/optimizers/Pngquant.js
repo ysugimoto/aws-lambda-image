@@ -1,18 +1,19 @@
-var Optimizer = require("./Optimizer");
+"use strict";
 
-/**
- * pngquant optimizer
- *
- * @constructor
- * @extends Optimizer
- */
-function Pngquant() {
-    Optimizer.call(this);
+import Optimizer from "./Optimizer";
 
-    this.command = this.findBin("pngquant");
-    this.args    = ["--speed=1", "256", "-"];
+export default class Pngquant extends Optimizer {
+
+    /**
+     * pngquant optimizer
+     *
+     * @constructor
+     * @extends Optimizer
+     */
+    constructor() {
+        super();
+
+        this.command = this.findBin("pngquant");
+        this.args    = ["--speed=1", "256", "-"];
+    }
 }
-
-module.exports = Optimizer.extend(Pngquant);
-
-

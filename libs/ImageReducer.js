@@ -1,92 +1,91 @@
-var ImageData      = require("./ImageData");
-var Mozjpeg        = require("./optimizers/Mozjpeg");
-var Pngquant       = require("./optimizers/Pngquant");
-var Pngout         = require("./optimizers/Pngout");
-//var JpegOptim      = require("./optimizers/JpegOptim");
-var ReadableStream = require("./ReadableImageStream");
-var StreamChain    = require("./StreamChain");
+"use strict";
 
-var Promise = require("es6-promise").Promise;
+import ImageData      from "./ImageData";
+import Mozjpeg        from "./optimizers/Mozjpeg";
+import Pngquant       from "./optimizers/Pngquant";
+import Pngout         from "./optimizers/Pngout";
+import ReadableStream from "./ReadableImageStream";
+import StreamChain    from "./StreamChain";
+//import JpegOptim    from "./optimizers/JpegOptim";
 
-/**
- * Image Reducer
- * Accept png/jpeg typed image
- *
- * @constructor
- * @param Object option
- */
-function ImageReducer(option) {
-    this.option = option || {};
-}
+export default class ImageReducer {
 
-/**
- * Execute process
- *
- * @public
- * @param ImageData image
- * @return Promise
- */
-ImageReducer.prototype.exec = function ImageReducer_exec(image) {
-    var option = this.option;
-
-    return new Promise(function(resolve, reject) {
-        var input   = new ReadableStream(image.getData());
-        var streams = this.createReduceProcessList(image.getType());
-        var chain   = new StreamChain(input);
-        var acl = image.getACL();
-
-        chain.pipes(streams).run()
-        .then(function(buffer) {
-            var dir = option.directory || image.getDirName();
-
-            if ( dir ) {
-                dir = dir.replace(/\/$/, "") + "/";
-            }
-
-            resolve(new ImageData(
-                dir + image.getBaseName(),
-                option.bucket || image.bucketName,
-                buffer,
-                image.getHeaders(),
-                acl
-            ));
-        })
-        .catch(function(message) {
-            reject(message);
-        });
-    }.bind(this));
-};
-
-/**
- * Create reduce image process list
- *
- * @protected
- * @param String type
- * @return Array<Optimizer>
- * @thorws Error
- */
-ImageReducer.prototype.createReduceProcessList = function ImageReducer_createReduceProcessList(type) {
-    var streams = [];
-
-    switch ( type ) {
-        case "png":
-            streams.push(new Pngquant());
-            streams.push(new Pngout());
-            break;
-        case "jpg":
-        case "jpeg":
-            streams.push(new Mozjpeg());
-            // switch JPEG optimizer
-            //if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
-            //    streams.push(new JpegOptim());
-            //} else {                                           // using mozjpeg
-            //}
-            break;
-        default:
-            throw new Error("Unexcepted file type.");
+    /**
+     * Image Reducer
+     * Accept png/jpeg typed image
+     *
+     * @constructor
+     * @param Object option
+     */
+    constructor(option) {
+        this.option = option || {};
     }
 
-    return streams;
-};
+    /**
+     * Execute process
+     *
+     * @public
+     * @param ImageData image
+     * @return Promise
+     */
+    exec(image) {
+        const option = this.option;
 
-module.exports = ImageReducer;
+        return new Promise((resolve, reject) => {
+            const input   = new ReadableStream(image.getData());
+            const streams = this.createReduceProcessList(image.getType());
+            const chain   = new StreamChain(input);
+            const acl     = image.getACL();
+
+            chain.pipes(streams).run()
+            .then((buffer) => {
+                let dir = option.directory || image.getDirName();
+
+                if ( dir ) {
+                    dir = dir.replace(/\/$/, "") + "/";
+                }
+
+                resolve(new ImageData(
+                    dir + image.getBaseName(),
+                    option.bucket || image.bucketName,
+                    buffer,
+                    image.getHeaders(),
+                    acl
+                ));
+            })
+            .catch((message) => reject(message));
+        });
+    };
+
+    /**
+     * Create reduce image process list
+     *
+     * @protected
+     * @param String type
+     * @return Array<Optimizer>
+     * @thorws Error
+     */
+    createReduceProcessList(type) {
+        const streams = [];
+
+        switch ( type ) {
+            case "png":
+                streams.push(new Pngquant());
+                streams.push(new Pngout());
+                break;
+            case "jpg":
+            case "jpeg":
+                streams.push(new Mozjpeg());
+                // switch JPEG optimizer
+                //if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
+                //    streams.push(new JpegOptim());
+                //} else {                                           // using mozjpeg
+                //}
+                break;
+            default:
+                throw new Error("Unexcepted file type.");
+        }
+
+        return streams;
+    }
+}

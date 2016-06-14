@@ -1,18 +1,18 @@
-var Optimizer = require("./Optimizer");
+"use strict";
 
-/**
- * MozJpeg(cjpeg) optimizer
- *
- * @constructor
- * @extends Optimizer
- */
-function Mozjpeg() {
-    Optimizer.call(this);
+import Optimizer from "./Optimizer";
 
-    this.command = this.findBin("cjpeg");
-    this.args    = ["-optimize", "-progressive"];
+export default class Mozjpeg extends Optimizer {
+    /**
+     * MozJpeg(cjpeg) optimizer
+     *
+     * @constructor
+     * @extends Optimizer
+     */
+    constructor() {
+        super();
+
+        this.command = this.findBin("cjpeg");
+        this.args    = ["-optimize", "-progressive"];
+    }
 }
-
-module.exports = Optimizer.extend(Mozjpeg);
-
-
