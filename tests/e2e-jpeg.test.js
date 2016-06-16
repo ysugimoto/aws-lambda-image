@@ -72,9 +72,9 @@ describe("Optimize JPEG Test", () => {
             const image = images.shift();
             const buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
 
-            expect(image.getBucketName()).to.equal("sourcebucket");
-            expect(image.getFileName()).to.equal("HappyFace.jpg");
-            expect(image.getData().length).to.be.above(0)
+            expect(image.bucketName).to.equal("sourcebucket");
+            expect(image.fileName).to.equal("HappyFace.jpg");
+            expect(image.data.length).to.be.above(0)
                                          .and.be.below(buf.length);
             done();
         })
@@ -97,9 +97,9 @@ describe("Optimize JPEG Test", () => {
             const image = images.shift();
             const buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
 
-            expect(image.getBucketName()).to.equal("foo");
-            expect(image.getFileName()).to.equal("some/HappyFace.jpg");
-            expect(image.getData().length).to.be.above(0)
+            expect(image.bucketName).to.equal("foo");
+            expect(image.fileName).to.equal("some/HappyFace.jpg");
+            expect(image.data.length).to.be.above(0)
                                          .and.be.below(buf.length);
             done();
         })

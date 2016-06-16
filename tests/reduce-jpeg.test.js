@@ -20,8 +20,8 @@ describe("Reduce JPEG Test", () => {
 
         reducer.exec(image)
         .then((reduced) => {
-            expect(reduced.getData().length > 0).to.be.true;
-            expect(reduced.getData().length).to.be.below(fixture.length);
+            expect(reduced.data.length > 0).to.be.true;
+            expect(reduced.data.length).to.be.below(fixture.length);
             done();
         })
         .catch((message) => {
