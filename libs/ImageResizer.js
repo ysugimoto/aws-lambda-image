@@ -1,9 +1,9 @@
 "use strict";
 
-import ImageData   from "./ImageData";
-import ImageMagick from "imagemagick";
+const ImageData   = require("./ImageData");
+const ImageMagick = require("imagemagick");
 
-export default class ImageResizer {
+class ImageResizer {
 
     /**
      * Image Resizer
@@ -61,3 +61,5 @@ export default class ImageResizer {
         });
     }
 }
+
+module.exports = ImageResizer;

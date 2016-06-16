@@ -1,8 +1,8 @@
 "use strict";
 
-import WritableStream from "./WritableImageStream";
+const WritableStream = require("./WritableImageStream");
 
-export default class StreamChain {
+class StreamChain {
 
     /**
      * Strem Chain
@@ -73,3 +73,5 @@ export default class StreamChain {
         });
     }
 }
+
+module.exports = StreamChain;

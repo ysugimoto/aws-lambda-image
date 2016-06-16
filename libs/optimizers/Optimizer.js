@@ -1,10 +1,10 @@
 "use strict";
 
-import {spawn} from "child_process";
-import path from "path";
-import fs from "fs";
+const spawn = require("child_process").spawn;
+const path  = require("path");
+const fs    = require("fs");
 
-export default class Optimizer {
+class Optimizer {
 
     /**
      * Optimizer Base Constructor
@@ -41,3 +41,5 @@ export default class Optimizer {
         return binPath;
     }
 }
+
+module.exports= Optimizer;

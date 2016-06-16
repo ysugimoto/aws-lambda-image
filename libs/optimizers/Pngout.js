@@ -1,8 +1,8 @@
 "use strict";
 
-import Optimizer from "./Optimizer";
+const Optimizer = require("./Optimizer");
 
-export default class Pngout extends Optimizer {
+class Pngout extends Optimizer {
     /**
      * pngout optimizer
      *
@@ -16,3 +16,5 @@ export default class Pngout extends Optimizer {
         this.args    = ["-", "-", "-s0", "-k0", "-f0"];
     }
 }
+
+module.exports = Pngout;

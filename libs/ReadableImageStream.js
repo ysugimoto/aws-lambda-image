@@ -1,8 +1,8 @@
 "use strict";
 
-import stream from "stream";
+const stream = require("stream");
 
-export default class ReadableImageStream extends stream.Readable {
+class ReadableImageStream extends stream.Readable {
 
     /**
      * Readable image binary stream implementation
@@ -39,3 +39,5 @@ export default class ReadableImageStream extends stream.Readable {
         }
     }
 }
+
+module.exports = ReadableImageStream;

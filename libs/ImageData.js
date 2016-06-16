@@ -1,8 +1,8 @@
 "use strict";
 
-import path from "path";
+const path = require("path");
 
-export default class ImageData {
+class ImageData {
     /**
      * Image data interface
      *
@@ -103,3 +103,5 @@ export default class ImageData {
         return this.acl;
     }
 }
+
+module.exports = ImageData;

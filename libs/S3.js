@@ -1,7 +1,7 @@
 "use strict";
 
-import ImageData from "./ImageData";
-import aws       from "aws-sdk";
+const ImageData = require("./ImageData");
+const aws       = require("aws-sdk");
 
 const client  = new aws.S3({apiVersion: "2006-03-01"});
 
@@ -12,7 +12,7 @@ const client  = new aws.S3({apiVersion: "2006-03-01"});
  * @param String key
  * @return Promise
  */
-exports.getObject = (bucket, key, acl) => {
+function getObject(bucket, key, acl) {
     return new Promise((resolve, reject) => {
         client.getObject({ Bucket: bucket, Key: key }, (err, data) => {
             if ( err ) {
@@ -43,7 +43,7 @@ exports.getObject = (bucket, key, acl) => {
  * @param Buffer buffer
  * @return Promise
  */
-exports.putObject = (bucket, key, buffer, headers, acl) => {
+function putObject(bucket, key, buffer, headers, acl) {
     return new Promise((resolve, reject) => {
         const params = {
             Bucket:       bucket,
@@ -69,7 +69,7 @@ exports.putObject = (bucket, key, buffer, headers, acl) => {
  * @param Array<ImageData> images
  * @return Promise.all
  */
-exports.putObjects = (images) => {
+function putObjects(images) {
     return Promise.all(images.map((image) => {
         return new Promise((resolve, reject) => {
             exports.putObject(image.getBucketName(), image.getFileName(), image.getData(), image.getHeaders(), image.getACL())
@@ -77,4 +77,10 @@ exports.putObjects = (images) => {
             .catch((message) => reject(message));
         });
     }));
+};
+
+module.exports = {
+    getObject:  getObject,
+    putObject:  putObject,
+    putObjects: putObjects
 };

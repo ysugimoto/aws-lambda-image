@@ -1,14 +1,14 @@
 "use strict";
 
-import ImageData      from "./ImageData";
-import Mozjpeg        from "./optimizers/Mozjpeg";
-import Pngquant       from "./optimizers/Pngquant";
-import Pngout         from "./optimizers/Pngout";
-import ReadableStream from "./ReadableImageStream";
-import StreamChain    from "./StreamChain";
-//import JpegOptim    from "./optimizers/JpegOptim";
+const ImageData      = require("./ImageData");
+const Mozjpeg        = require("./optimizers/Mozjpeg");
+const Pngquant       = require("./optimizers/Pngquant");
+const Pngout         = require("./optimizers/Pngout");
+const ReadableStream = require("./ReadableImageStream");
+const StreamChain    = require("./StreamChain");
+//const JpegOptim    = require("./optimizers/JpegOptim");
 
-export default class ImageReducer {
+class ImageReducer {
 
     /**
      * Image Reducer
@@ -89,3 +89,5 @@ export default class ImageReducer {
         return streams;
     }
 }
+
+module.exports = ImageReducer;

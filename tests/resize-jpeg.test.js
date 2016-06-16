@@ -1,23 +1,25 @@
-var ImageResizer = require("../libs/ImageResizer");
-var ImageData    = require("../libs/ImageData");
-var ImageMagick  = require("imagemagick");
+"use strict";
 
-var expect     = require("chai").expect;
-var fs         = require("fs");
-var path       = require("path");
-var destPath   = path.join(__dirname, "/fixture/fixture_resized.jpg");
+const ImageResizer = require("../libs/ImageResizer");
+const ImageData    = require("../libs/ImageData");
+const ImageMagick  = require("imagemagick");
 
-describe("Resize JPEG Test", function() {
+const expect     = require("chai").expect;
+const fs         = require("fs");
+const path       = require("path");
+const destPath   = path.join(__dirname, "/fixture/fixture_resized.jpg");
 
-    it("Resize JPEG with cjpeg", function(done) {
-        var resizer = new ImageResizer({size: 200});
-        var buffer  = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
-        var image   = new ImageData("fixture/fixture.jpg", "fixture", buffer);
+describe("Resize JPEG Test", () => {
+
+    it("Resize JPEG with cjpeg", (done) => {
+        const resizer = new ImageResizer({size: 200});
+        const buffer  = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
+        const image   = new ImageData("fixture/fixture.jpg", "fixture", buffer);
 
         resizer.exec(image)
-        .then(function(resized) {
+        .then((resized) => {
             fs.writeFileSync(destPath, resized.getData(), {encoding: "binary"});
-            ImageMagick.identify(["-format", "%w", destPath], function(err, out) {
+            ImageMagick.identify(["-format", "%w", destPath], (err, out) => {
                 if ( err ) {
                     expect.fail(err);
                 } else {
@@ -27,22 +29,22 @@ describe("Resize JPEG Test", function() {
                 done();
             });
         })
-        .catch(function(err) {
+        .catch((err) => {
             throw new Error(err);
             done();
         });
 
     });
 
-    it("Resize JPEG with jpegoptim", function(done) {
-        var resizer = new ImageResizer({size: 200, jpegOptimizer: "jpegoptim"});
-        var buffer  = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
-        var image   = new ImageData("fixture/fixture.jpg", "fixture", buffer);
+    it("Resize JPEG with jpegoptim", (done) => {
+        const resizer = new ImageResizer({size: 200, jpegOptimizer: "jpegoptim"});
+        const buffer  = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
+        const image   = new ImageData("fixture/fixture.jpg", "fixture", buffer);
 
         resizer.exec(image)
-        .then(function(resized) {
+        .then((resized) => {
             fs.writeFileSync(destPath, resized.getData(), {encoding: "binary"});
-            ImageMagick.identify(["-format", "%w", destPath], function(err, out) {
+            ImageMagick.identify(["-format", "%w", destPath], (err, out) => {
                 if ( err ) {
                     expect.fail(err);
                 } else {
@@ -52,7 +54,7 @@ describe("Resize JPEG Test", function() {
                 done();
             });
         })
-        .catch(function(err) {
+        .catch((err) => {
             throw new Error(err);
             done();
         });

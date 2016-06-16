@@ -7,11 +7,10 @@
  */
 "use strict";
 
-import ImageProcessor from "./libs/ImageProcessor";
-import Config from "./libs/Config";
-
-import fs from "fs";
-import path from "path";
+const ImageProcessor = require("./libs/ImageProcessor");
+const Config         = require("./libs/Config");
+const fs             = require("fs");
+const path           = require("path");
 
 // Lambda Handler
 exports.handler = (event, context) => {

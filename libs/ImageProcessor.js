@@ -1,10 +1,10 @@
 "use strict";
 
-import ImageResizer from "./ImageResizer";
-import ImageReducer from "./ImageReducer";
-import {getObject, putObjects} from "./S3";
+const ImageResizer = require("./ImageResizer");
+const ImageReducer = require("./ImageReducer");
+const S3           = require("./S3");
 
-export default class ImageProcessor {
+class ImageProcessor {
 
     /**
      * Image processor
@@ -36,14 +36,14 @@ export default class ImageProcessor {
                 config.set("bucket", this.s3Object.bucket.name);
             }
 
-            getObject(
+            S3.getObject(
                 this.s3Object.bucket.name,
                 unescape(this.s3Object.object.key.replace(/\+/g, ' '))
             )
             .then((imageData) => {
                 this.processImage(imageData, config)
                 .then((results) => {
-                    putObjects(results)
+                    S3.putObjects(results)
                     .then((images) => resolve(images))
                     .catch((messages) => reject(messages));
                 })
@@ -132,3 +132,5 @@ export default class ImageProcessor {
         });
     }
 }
+
+module.exports = ImageProcessor;

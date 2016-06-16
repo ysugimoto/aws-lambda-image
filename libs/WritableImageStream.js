@@ -1,8 +1,8 @@
 "use strict";
 
-import stream from "stream";
+const stream = require("stream");
 
-export default class WritableImageStream extends stream.Writable {
+class WritableImageStream extends stream.Writable {
 
     /**
      * Writable image binary stream implementation
@@ -42,3 +42,5 @@ export default class WritableImageStream extends stream.Writable {
         return Buffer.concat(this._buffers, this._bufferLength);
     }
 }
+
+module.exports = WritableImageStream;

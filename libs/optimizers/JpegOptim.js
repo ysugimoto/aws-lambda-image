@@ -1,15 +1,15 @@
 "use strict";
 
-import Optimizer from "./Optimizer";
+const Optimizer = require("./Optimizer");
 
-export default class extends Optimizer {
+class Jpegoptim extends Optimizer {
     /**
      * JpegOption optimizer
      *
      * @constructor
      * @extends Optimizer
      */
-    constructor Jpegoptim() {
+    constructor() {
         super();
 
         this.command = this.findBin("jpegoptim");
@@ -17,3 +17,4 @@ export default class extends Optimizer {
     }
 }
 
+module.exports = Jpegoptim;

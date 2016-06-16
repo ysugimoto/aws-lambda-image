@@ -1,6 +1,6 @@
 "use strict";
 
-export default class Config {
+class Config {
     /**
      * Task configuration getter interface
      *
@@ -42,7 +42,9 @@ export default class Config {
      * @param String key
      * @return Boolean
      */
-    exits(key) {
+    exists(key) {
         return ( key in this.stack );
     }
 }
+
+module.exports = Config;

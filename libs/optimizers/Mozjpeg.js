@@ -1,8 +1,8 @@
 "use strict";
 
-import Optimizer from "./Optimizer";
+const Optimizer = require("./Optimizer");
 
-export default class Mozjpeg extends Optimizer {
+class Mozjpeg extends Optimizer {
     /**
      * MozJpeg(cjpeg) optimizer
      *
@@ -16,3 +16,5 @@ export default class Mozjpeg extends Optimizer {
         this.args    = ["-optimize", "-progressive"];
     }
 }
+
+module.exports = Mozjpeg;

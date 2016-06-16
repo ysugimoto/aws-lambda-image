@@ -1,8 +1,8 @@
 "use strict";
 
-import Optimizer from "./Optimizer";
+const Optimizer = require("./Optimizer");
 
-export default class Pngquant extends Optimizer {
+class Pngquant extends Optimizer {
 
     /**
      * pngquant optimizer
@@ -17,3 +17,5 @@ export default class Pngquant extends Optimizer {
         this.args    = ["--speed=1", "256", "-"];
     }
 }
+
+module.exports = Pngquant;

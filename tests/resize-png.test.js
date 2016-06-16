@@ -1,26 +1,28 @@
-var ImageResizer = require("../libs/ImageResizer");
-var ImageData    = require("../libs/ImageData");
-var ImageMagick  = require("imagemagick");
+"use strict";
 
-var expect     = require("chai").expect;
-var fs         = require("fs");
-var path       = require("path");
-var destPath   = path.join(__dirname, "/fixture/fixture_resized.png");
+const ImageResizer = require("../libs/ImageResizer");
+const ImageData    = require("../libs/ImageData");
+const ImageMagick  = require("imagemagick");
 
-describe("Resize PNG Test", function() {
+const expect     = require("chai").expect;
+const fs         = require("fs");
+const path       = require("path");
+const destPath   = path.join(__dirname, "/fixture/fixture_resized.png");
 
-    it("Resize PNG", function(done) {
-        var resizer = new ImageResizer({size: 200});
-        var image = new ImageData(
+describe("Resize PNG Test", () => {
+
+    it("Resize PNG", (done) => {
+        const resizer = new ImageResizer({size: 200});
+        const image = new ImageData(
             "fixture/fixture.png",
             "fixture",
             fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"})
         );
 
         resizer.exec(image)
-        .then(function(resized) {
+        .then((resized) => {
             fs.writeFileSync(destPath, resized.getData(), {encoding: "binary"});
-            ImageMagick.identify(["-format", "%w", destPath], function(err, out) {
+            ImageMagick.identify(["-format", "%w", destPath], (err, out) => {
                 if ( err ) {
                     expect.fail();
                 } else {
@@ -30,7 +32,7 @@ describe("Resize PNG Test", function() {
                 done();
             });
         })
-        .catch(function(message) {
+        .catch((message) => {
             throw new Error(message);
             done();
         });
