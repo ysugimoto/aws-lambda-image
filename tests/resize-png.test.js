@@ -21,7 +21,7 @@ describe("Resize PNG Test", () => {
 
         resizer.exec(image)
         .then((resized) => {
-            fs.writeFileSync(destPath, resized.getData(), {encoding: "binary"});
+            fs.writeFileSync(destPath, resized.data, {encoding: "binary"});
             ImageMagick.identify(["-format", "%w", destPath], (err, out) => {
                 if ( err ) {
                     expect.fail();

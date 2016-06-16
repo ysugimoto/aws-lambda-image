@@ -14,11 +14,11 @@ class ImageData {
      * @param Object acl
      */
     constructor(key, name, data, headers, acl) {
-        this.fileName   = key;
-        this.bucketName = name;
-        this.data       = ( Buffer.isBuffer(data) ) ? data : new Buffer(data, "binary");
-        this.headers    = headers;
-        this.acl        = acl;
+        this._fileName   = key;
+        this._bucketName = name;
+        this._data       = ( Buffer.isBuffer(data) ) ? data : new Buffer(data, "binary");
+        this._headers    = headers;
+        this._acl        = acl;
     }
 
     /**
@@ -27,8 +27,8 @@ class ImageData {
      * @public
      * @return String
      */
-    getBucketName() {
-        return this.bucketName;
+    get bucketName() {
+        return this._bucketName;
     }
 
     /**
@@ -37,8 +37,8 @@ class ImageData {
      * @public
      * @return String
      */
-    getBaseName() {
-        return path.basename(this.fileName);
+    get baseName() {
+        return path.basename(this._fileName);
     }
 
     /**
@@ -47,8 +47,8 @@ class ImageData {
      * @public
      * @return String
      */
-    getDirName() {
-        var dir = path.dirname(this.fileName);
+    get dirName() {
+        const dir = path.dirname(this._fileName);
 
         return ( dir === "." ) ? "" : dir;
     }
@@ -59,8 +59,8 @@ class ImageData {
      * @public
      * @return String
      */
-    getFileName() {
-        return this.fileName;
+    get fileName() {
+        return this._fileName;
     }
 
     /**
@@ -69,8 +69,8 @@ class ImageData {
      * @public
      * @return String
      */
-    getType() {
-        return path.extname(this.fileName).slice(1);
+    get type() {
+        return path.extname(this._fileName).slice(1);
     }
 
     /**
@@ -79,8 +79,8 @@ class ImageData {
      * @public
      * @return Buffer
      */
-    getData() {
-        return this.data;
+    get data() {
+        return this._data;
     }
 
     /**
@@ -89,8 +89,8 @@ class ImageData {
      * @public
      * @return Object
      */
-    getHeaders() {
-        return this.headers;
+    get headers() {
+        return this._headers;
     }
 
     /**
@@ -99,8 +99,8 @@ class ImageData {
      * @public
      * @return Object
      */
-    getACL() {
-        return this.acl;
+    get acl() {
+        return this._acl;
     }
 }
 

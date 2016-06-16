@@ -68,9 +68,9 @@ describe("Optimize PNG Test", () => {
             const image = images.shift();
             const buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"});
 
-            expect(image.getBucketName()).to.equal(setting.Records[0].s3.bucket.name);
-            expect(image.getFileName()).to.equal("test.png");
-            expect(image.getData().length).to.be.above(0)
+            expect(image.bucketName).to.equal(setting.Records[0].s3.bucket.name);
+            expect(image.fileName).to.equal("test.png");
+            expect(image.data.length).to.be.above(0)
                                           .and.be.below(buf.length);
             done();
         })
@@ -92,9 +92,9 @@ describe("Optimize PNG Test", () => {
             const image = images.shift();
             const buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"});
 
-            expect(image.getBucketName()).to.equal("some");
-            expect(image.getFileName()).to.equal("resized/test.png");
-            expect(image.getData().length).to.be.above(0)
+            expect(image.bucketName).to.equal("some");
+            expect(image.fileName).to.equal("resized/test.png");
+            expect(image.data.length).to.be.above(0)
                                          .and.be.below(buf.length);
             done();
         })

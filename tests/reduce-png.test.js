@@ -20,7 +20,7 @@ describe("Reduce PNG Test", () => {
 
         reducer.exec(image)
         .then((reduced) => {
-            expect(reduced.getData().length).to.be.below(fixture.length);
+            expect(reduced.data.length).to.be.below(fixture.length);
             done();
         })
         .catch((err) => {

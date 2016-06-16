@@ -24,11 +24,10 @@ class ImageResizer {
      * @return Promise
      */
     exec(image) {
-        const imagetype = image.getType();
         const params = {
-            srcData:   image.getData().toString("binary"),
-            srcFormat: imagetype,
-            format:    imagetype
+            srcData:   image.data.toString("binary"),
+            srcFormat: image.type,
+            format:    image.type
         };
 
         const acl = this.options.acl;
@@ -53,7 +52,7 @@ class ImageResizer {
                         image.fileName,
                         image.bucketName,
                         stdout,
-                        image.getHeaders(),
+                        image.headers,
                         acl
                     ));
                 }
