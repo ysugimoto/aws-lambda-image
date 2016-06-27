@@ -66,7 +66,7 @@ ImageData.prototype.getFileName = function ImageData_getFileName() {
  * @return String
  */
 ImageData.prototype.getType = function ImageData_getType() {
-    return path.extname(this.fileName).slice(1);
+    return path.extname(this.fileName).slice(1).toLowerCase();
 };
 
 /**
