@@ -8,7 +8,7 @@ An AWS Lambda Function to resize/reduce images automatically. When an image is p
 
 ### Requirements
 
-- `node.js` ( AWS Lambda working version is **0.10.26** )
+- `node.js` ( AWS Lambda working version is **4.3.2** )
 - `make`
 
 ### Installation
@@ -45,7 +45,8 @@ Configuration is simple, see below:
 {
   "bucket": "your-destination-bucket",
   "reduce": {
-      "directory": "reduced"
+      "directory": "reduced",
+      "quality": 90
   },
   "resizes": [
     {
@@ -68,10 +69,12 @@ Configuration is simple, see below:
 - `reduce`: [Object] Reduce setting.
   - `directory`: [String] Image directory path.
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
+  - `quality`: [Number] Determine reduced image quality ( enables only `JPG` ).
 - `resizes`: [Array] Resize setting.
   - `size`: [Number] Image width.
   - `directory`: [String] Image directory path.
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
+  - `quality`: [Number] Determine reduced image quality ( enables only `JPG` ).
 
 If you want to check how this works with your configuration, you can use `configtest`:
 

@@ -74,7 +74,7 @@ class ImageReducer {
                 break;
             case "jpg":
             case "jpeg":
-                streams.push(new Mozjpeg());
+                streams.push(new Mozjpeg(this.option.quality));
                 // switch JPEG optimizer
                 //if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
                 //    streams.push(new JpegOptim());

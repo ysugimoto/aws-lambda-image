@@ -12,7 +12,7 @@ describe("Reduce JPEG Test", () => {
     let reducer;
 
     beforeEach(() => {
-        reducer = new ImageReducer();
+        reducer = new ImageReducer({quality: 90});
     });
 
     it("Reduce JPEG", (done) => {
