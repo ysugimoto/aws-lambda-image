@@ -3,6 +3,7 @@
 const ImageResizer = require("./ImageResizer");
 const ImageReducer = require("./ImageReducer");
 const S3           = require("./S3");
+const Hooks        = require("./Hooks");
 
 class ImageProcessor {
 
