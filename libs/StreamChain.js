@@ -1,76 +1,77 @@
-var WritableStream = require("./WritableImageStream");
-var Promise        = require("es6-promise").Promise;
+"use strict";
 
-/**
- * Strem Chain
- * Start input, pipes streams, and get output buffer
- *
- * @constructor
- * @param stream.Readable inputStream
- */
-function StreamChain(inputStream) {
-    this.inputStream = inputStream;
-    this.pipeProcesses = [];
-}
+const WritableStream = require("./WritableImageStream");
 
-/**
- * Static instantiate
- *
- * @public
- * @static
- * @param stream.Readable inputStream
- * @return StreamChain
- */
-StreamChain.make = function(inputStream) {
-    return new StreamChain(inputStream);
-};
+class StreamChain {
 
-/**
- * Pipes stream lists
- *
- * @public
- * @param Array<Optimizer> processes
- * @return StreamChain this
- */
-StreamChain.prototype.pipes = function(processes) {
-    var index = -1;
-
-    while ( processes[++index] ) {
-        this.pipeProcesses.push(processes[index]);
+    /**
+     * Strem Chain
+     * Start input, pipes streams, and get output buffer
+     *
+     * @constructor
+     * @param stream.Readable inputStream
+     */
+    constructor(inputStream) {
+        this.inputStream   = inputStream;
+        this.pipeProcesses = [];
     }
 
-    return this;
-};
+    /**
+     * Static instantiate
+     *
+     * @public
+     * @static
+     * @param stream.Readable inputStream
+     * @return StreamChain
+     */
+    static make(inputStream) {
+        return new StreamChain(inputStream);
+    }
 
-/**
- * Run the streams
- *
- * @public
- * @return Promise
- */
-StreamChain.prototype.run = function() {
-    this.inputStream.pause();
+    /**
+     * Pipes stream lists
+     *
+     * @public
+     * @param Array<Optimizer> processes
+     * @return StreamChain this
+     */
+    pipes(processes) {
+        let index = -1;
+        while ( processes[++index] ) {
+            this.pipeProcesses.push(processes[index]);
+        }
 
-    return new Promise(function(resolve, reject) {
-        var output = new WritableStream();
-        var current;
+        return this;
+    }
 
-        this.inputStream.on("error", reject);
-        current = this.inputStream;
+    /**
+     * Run the streams
+     *
+     * @public
+     * @return Promise
+     */
+    run() {
+        this.inputStream.pause();
 
-        this.pipeProcesses.forEach(function(optimizer) {
-            var proc = optimizer.spawnProcess();
-            current.pipe(proc.stdin);
-            current = proc.stdout;
+        return new Promise((resolve, reject) => {
+            const output = new WritableStream();
+            let current;
+
+            this.inputStream.on("error", reject);
+            current = this.inputStream;
+
+            this.pipeProcesses.forEach((optimizer) => {
+                const proc = optimizer.spawnProcess();
+                current.pipe(proc.stdin);
+                current = proc.stdout;
+            });
+
+            current.pipe(output);
+            output.on("error", reject);
+            output.on("finish", () => resolve(output.getBufferStack()));
+            this.inputStream.resume();
         });
-
-        current.pipe(output);
-        output.on("error", reject);
-        output.on("finish", function() {
-            resolve(output.getBufferStack());
-        });
-        this.inputStream.resume();
-    }.bind(this));
-};
+    }
+}
 
 module.exports = StreamChain;

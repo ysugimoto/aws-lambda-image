@@ -5,33 +5,32 @@
  * @author Yoshiaki Sugimoto
  * @created 2015/10/29
  */
-var ImageProcessor = require("./libs/ImageProcessor");
-var Config         = require("./libs/Config");
+"use strict";
 
-var fs   = require("fs");
-var path = require("path");
+const ImageProcessor = require("./libs/ImageProcessor");
+const Config         = require("./libs/Config");
+const fs             = require("fs");
+const path           = require("path");
 
 // Lambda Handler
-exports.handler = function(event, context) {
-    var s3Object   = event.Records[0].s3;
-    var configPath = path.resolve(__dirname, "config.json");
-    var processor  = new ImageProcessor(s3Object);
-    var config     = new Config(
+exports.handler = (event, context) => {
+    const s3Object   = event.Records[0].s3;
+    const configPath = path.resolve(__dirname, "config.json");
+    const processor  = new ImageProcessor(s3Object);
+    const config     = new Config(
         JSON.parse(fs.readFileSync(configPath, { encoding: "utf8" }))
     );
 
-    console.log(s3Object);
     processor.run(config)
-    .then(function(proceedImages) {
+    .then((proceedImages) => {
         console.log("OK, numbers of " + proceedImages.length + " images has proceeded.");
         context.succeed("OK, numbers of " + proceedImages.length + " images has proceeded.");
     })
-    .catch(function(messages) {
-        if(messages == "Object was already processed."){
+    .catch((messages) => {
+        if ( messages === "Object was already processed." ) {
             console.log("Image already processed");
             context.succeed("Image already processed");
-        }
-        else {
+        } else {
             context.fail("Woops, image process failed: " + messages);
         }
     });

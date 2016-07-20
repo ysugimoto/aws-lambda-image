@@ -1,71 +1,73 @@
-var ImageResizer = require("./ImageResizer");
-var ImageReducer = require("./ImageReducer");
-var S3           = require("./S3");
-var Promise      = require("es6-promise").Promise;
+"use strict";
 
-/**
- * Image processor
- * management resize/reduce image list by configration,
- * and pipe AWS Lambda's event/context
- *
- * @constructor
- * @param Object s3Object
- * @param Object context
- */
-function ImageProcessor(s3Object) {
-    this.s3Object = s3Object;
-}
+const ImageResizer = require("./ImageResizer");
+const ImageReducer = require("./ImageReducer");
+const S3           = require("./S3");
 
-/**
- * Run the process
- *
- * @public
- * @param Config config
- */
-ImageProcessor.prototype.run = function ImageProcessor_run(config) {
-    return new Promise(function(resolve, reject) {
-        // If object.size equals 0, stop process
-        if ( this.s3Object.object.size === 0 ) {
-            reject("Object size equal zero. Nothing to process.");
-            return;
-        }
+class ImageProcessor {
 
-        if ( ! config.get("bucket") ) {
-            config.set("bucket", this.s3Object.bucket.name);
-        }
+    /**
+     * Image processor
+     * management resize/reduce image list by configration,
+     * and pipe AWS Lambda's event/context
+     *
+     * @constructor
+     * @param Object s3Object
+     */
+    constructor(s3Object) {
+        this.s3Object = s3Object;
+    }
 
-        S3.getObject(
-            this.s3Object.bucket.name,
-            unescape(this.s3Object.object.key.replace(/\+/g, ' '))
-        )
-        .then(function(imageData) {
-            this.processImage(imageData, config)
-            .then(function(results) {
-                S3.putObjects(results)
-                .then(function(images) {
-                    resolve(images);
+    /**
+     * Run the process
+     *
+     * @public
+     * @param Config config
+     */
+    run(config) {
+        return new Promise((resolve, reject) => {
+            // If object.size equals 0, stop process
+            if ( this.s3Object.object.size === 0 ) {
+                reject("Object size equal zero. Nothing to process.");
+                reject();
+            }
+
+            if ( ! config.get("bucket") ) {
+                config.set("bucket", this.s3Object.bucket.name);
+            }
+
+            S3.getObject(
+                this.s3Object.bucket.name,
+                unescape(this.s3Object.object.key.replace(/\+/g, ' '))
+            )
+            .then((imageData) => {
+                this.processImage(imageData, config)
+                .then((results) => {
+                    S3.putObjects(results)
+                    .then((images) => resolve(images))
+                    .catch((messages) => reject(messages));
                 })
-                .catch(function(messages) {
-                    reject(messages);
-                });
+                .catch((messages) => reject(messages));
             })
-            .catch(function(messages) {
-                reject(messages);
-            });
-        }.bind(this))
-        .catch(function(error) {
-            reject(error);
+            .catch((error) => reject(error));
         });
-    }.bind(this));
-};
+    }
 
-ImageProcessor.prototype.processImage = function ImageProcessor_processImage(imageData, config) {
-    var jpegOptimizer = config.get("jpegOptimizer", "mozjpeg");
-    var promiseList = config.get("resizes", []).filter(function(option) {
-            return (option.size && option.size > 0)   ||
-                   (option.width && option.width > 0) ||
-                   (option.height && option.height > 0);
-        }).map(function(option) {
+    /**
+     * Processing image
+     *
+     * @public
+     * @param ImageData imageData
+     * @param Config config
+     * @return Promise
+     */
+    processImage(imageData, config) {
+        const jpegOptimizer = config.get("jpegOptimizer", "mozjpeg");
+        const promiseList   = config.get("resizes", []).filter((option) => {
+            return ( option.size   && option.size   > 0 ) ||
+                   ( option.width  && option.width  > 0 ) ||
+                   ( option.height && option.height > 0 );
+        }).map((option) => {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
             }
@@ -74,68 +76,61 @@ ImageProcessor.prototype.processImage = function ImageProcessor_processImage(ima
             }
             option.jpegOptimizer = option.jpegOptimizer || jpegOptimizer;
             return this.execResizeImage(option, imageData);
-        }.bind(this));
+        });
 
-    if ( config.exists("reduce") ) {
-        var reduce = config.get("reduce");
+        if ( config.exists("reduce") ) {
+            const reduce = config.get("reduce");
 
-        if ( ! reduce.bucket ) {
-            reduce.bucket = config.get("bucket");
+            if ( ! reduce.bucket ) {
+                reduce.bucket = config.get("bucket");
+            }
+            reduce.jpegOptimizer = reduce.jpegOptimizer || jpegOptimizer;
+            promiseList.unshift(this.execReduceImage(reduce, imageData));
         }
-        reduce.jpegOptimizer = reduce.jpegOptimizer || jpegOptimizer;
-        promiseList.unshift(this.execReduceImage(reduce, imageData));
+
+        return Promise.all(promiseList);
     }
 
-    return Promise.all(promiseList);
-};
+    /**
+     * Execute resize image
+     *
+     * @public
+     * @param Object option
+     * @param imageData imageData
+     * @return Promise
+     */
+    execResizeImage(option, imageData) {
+        return new Promise((resolve, reject) => {
+            const resizer = new ImageResizer(option);
 
-/**
- * Execute resize image
- *
- * @public
- * @param Object option
- * @param imageData imageData
- * @return Promise
- */
-ImageProcessor.prototype.execResizeImage = function ImageProcessor_execResizeImage(option, imageData) {
-    return new Promise(function(resolve, reject) {
-        var resizer = new ImageResizer(option);
+            resizer.exec(imageData)
+            .then((resizedImage) => {
+                const reducer = new ImageReducer(option);
 
-        resizer.exec(imageData)
-        .then(function(resizedImage) {
-            var reducer = new ImageReducer(option);
-
-            return reducer.exec(resizedImage);
-        })
-        .then(function(reducedImage) {
-            resolve(reducedImage);
-        })
-        .catch(function(message) {
-            reject(message);
+                return reducer.exec(resizedImage);
+            })
+            .then((reducedImage) => resolve(reducedImage))
+            .catch((message) => reject(message));
         });
-    });
-};
+    }
 
-/**
- * Execute reduce image
- *
- * @public
- * @param Object option
- * @param ImageData imageData
- * @return Promise
- */
-ImageProcessor.prototype.execReduceImage = function(option, imageData) {
-    return new Promise(function(resolve, reject) {
-        var reducer = new ImageReducer(option);
+    /**
+     * Execute reduce image
+     *
+     * @public
+     * @param Object option
+     * @param ImageData imageData
+     * @return Promise
+     */
+    execReduceImage(option, imageData) {
+        return new Promise((resolve, reject) => {
+            const reducer = new ImageReducer(option);
 
-        reducer.exec(imageData)
-        .then(function(reducedImage) {
-            resolve(reducedImage);
-        })
-        .catch(function(message) {
-            reject(message);
+            reducer.exec(imageData)
+            .then((reducedImage) => resolve(reducedImage))
+            .catch((message) => reject(message));
         });
-    });
-};
+    }
+}
 
 module.exports = ImageProcessor;

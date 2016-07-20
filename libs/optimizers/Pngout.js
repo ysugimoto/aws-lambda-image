@@ -1,16 +1,20 @@
-var Optimizer = require("./Optimizer");
+"use strict";
 
-/**
- * pngout optimizer
- *
- * @constructor
- * @extends Optimizer
- */
-function Pngout() {
-    Optimizer.call(this);
+const Optimizer = require("./Optimizer");
 
-    this.command = this.findBin("pngout");
-    this.args    = ["-", "-", "-s0", "-k0", "-f0"];
+class Pngout extends Optimizer {
+    /**
+     * pngout optimizer
+     *
+     * @constructor
+     * @extends Optimizer
+     */
+    constructor() {
+        super();
+
+        this.command = this.findBin("pngout");
+        this.args    = ["-", "-", "-s0", "-k0", "-f0"];
+    }
 }
 
-module.exports = Optimizer.extend(Pngout);
+module.exports = Pngout;

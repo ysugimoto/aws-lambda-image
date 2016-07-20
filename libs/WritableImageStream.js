@@ -1,44 +1,46 @@
-var stream = require("stream");
-var util   = require("util");
+"use strict";
 
-/**
- * Writable image binary stream implementation
- *
- * @constructor
- * @extends stream.Writable
- */
-function WritableImageStream() {
-    stream.Writable.call(this);
+const stream = require("stream");
 
-    this._buffers      = [];
-    this._bufferLength = 0;
+class WritableImageStream extends stream.Writable {
+
+    /**
+     * Writable image binary stream implementation
+     *
+     * @constructor
+     * @extends stream.Writable
+     */
+    constructor() {
+        super();
+
+        this._buffers      = [];
+        this._bufferLength = 0;
+    }
+
+    /**
+     * stream.Writable interface implement
+     *
+     * @protected
+     * @param Buffer chunk
+     * @param String encoding
+     * @param Function callback
+     */
+    _write(chunk, encoding, callback) {
+        this._buffers.push(chunk);
+        this._bufferLength += chunk.length;
+
+        callback();
+    }
+
+    /**
+     * Get all written buffers after finished
+     *
+     * @public
+     * @return Buffer
+     */
+    getBufferStack() {
+        return Buffer.concat(this._buffers, this._bufferLength);
+    }
 }
-
-util.inherits(WritableImageStream, stream.Writable);
-
-/**
- * stream.Writable interface implement
- *
- * @protected
- * @param Buffer chunk
- * @param String encoding
- * @param Function callback
- */
-WritableImageStream.prototype._write = function WritableImageStream__write(chunk, encoding, callback) {
-    this._buffers.push(chunk);
-    this._bufferLength += chunk.length;
-
-    callback();
-};
-
-/**
- * Get all written buffers after finished
- *
- * @public
- * @return Buffer
- */
-WritableImageStream.prototype.getBufferStack = function WritableImageStream_getBufferStack() {
-    return Buffer.concat(this._buffers, this._bufferLength);
-};
 
 module.exports = WritableImageStream;
