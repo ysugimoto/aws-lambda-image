@@ -6,6 +6,11 @@
 
 An AWS Lambda Function to resize/reduce images automatically. When an image is put on AWS S3 bucket, this package will resize/reduce it and put to S3.
 
+## NOTICE
+
+AWS Lambda's runtime supports `node.js 4.3.2`! And, this project also support `node.js 4.3.2` at [this branch](https://github.com/ysugimoto/aws-lambda-image/tree/feature/node-4.x)
+If you use new, please use on `4.3.2` runtime.
+
 ### Requirements
 
 - `node.js` ( AWS Lambda working version is **4.3.2** )
