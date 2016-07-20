@@ -8,7 +8,7 @@ An AWS Lambda Function to resize/reduce images automatically. When an image is p
 
 ## NOTICE
 
-AWS Lambda's runtime supports `node.js 4.3.2`! And, this project also support `node.js 4.3.2` at [this branch](https://github.com/ysugimoto/aws-lambda-image/tree/feature/node-4.x)
+This branch is backup of old nodejs runime on `0.10.26`. AWS Lambda's now runtime supports `node.js 4.3.2`,  and this project also support `node.js 4.3.2` at master branch.
 If you use new, please use on `4.3.2` runtime.
 
 ### Requirements
