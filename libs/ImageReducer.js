@@ -4,6 +4,7 @@ const ImageData      = require("./ImageData");
 const Mozjpeg        = require("./optimizers/Mozjpeg");
 const Pngquant       = require("./optimizers/Pngquant");
 const Pngout         = require("./optimizers/Pngout");
+const Gifsicle       = require("./optimizers/Gifsicle");
 const ReadableStream = require("./ReadableImageStream");
 const StreamChain    = require("./StreamChain");
 //const JpegOptim    = require("./optimizers/JpegOptim");
@@ -80,6 +81,9 @@ class ImageReducer {
                 //    streams.push(new JpegOptim());
                 //} else {                                           // using mozjpeg
                 //}
+                break;
+            case "gif":
+                streams.push(new Gifsicle());
                 break;
             default:
                 throw new Error("Unexcepted file type.");
