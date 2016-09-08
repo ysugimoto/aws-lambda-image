@@ -3,7 +3,8 @@
   "version": "0.8.0",
   "description": "An AWS Lambda Function to resize/reduce images automatically",
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "postinstall": "[-f config.json] || cp config.json.sample config.json"
   },
   "keywords": [
     "aws",
