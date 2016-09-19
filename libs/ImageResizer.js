@@ -44,7 +44,7 @@ class ImageResizer {
         }
 
         return new Promise((resolve, reject) => {
-            ImageMagick.resize(params, (err, stdout, stderr) => {
+            ImageMagick.crop(params, (err, stdout, stderr) => {
                 if ( err || stderr ) {
                     reject("ImageMagick err" + (err || stderr));
                 } else {
