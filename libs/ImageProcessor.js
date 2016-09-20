@@ -25,11 +25,6 @@ class ImageProcessor {
      * @param Config config
      */
     run(config) {
-        // If object.size equals 0, stop process
-        if ( this.s3Object.object.size === 0 ) {
-            return Promise.reject("Object size equal zero. Nothing to process.");
-        }
-
         if ( ! config.get("bucket") ) {
             config.set("bucket", this.s3Object.bucket.name);
         }
@@ -53,8 +48,8 @@ class ImageProcessor {
     processImage(imageData, config) {
         const jpegOptimizer = config.get("jpegOptimizer", "mozjpeg");
         const promiseList   = config.get("resizes", []).filter((option) => {
-            option.size &&
-            imageData.fileName.indexOf(option.directory) !== 0 // don't process images in the output folder
+            return option.size &&
+                imageData.fileName.indexOf(option.directory) !== 0 // don't process images in the output folder
         }).map((option) => {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
