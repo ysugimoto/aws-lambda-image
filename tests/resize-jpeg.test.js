@@ -2,7 +2,7 @@
 
 const ImageResizer = require("../libs/ImageResizer");
 const ImageData    = require("../libs/ImageData");
-const ImageMagick  = require("imagemagick");
+const gm = require("gm").subClass({ imageMagick: true });
 
 const expect     = require("chai").expect;
 const fs         = require("fs");
@@ -19,11 +19,11 @@ describe("Resize JPEG Test", () => {
         resizer.exec(image)
         .then((resized) => {
             fs.writeFileSync(destPath, resized.data, {encoding: "binary"});
-            ImageMagick.identify(["-format", "%w", destPath], (err, out) => {
+            gm(destPath).size((err, out) => {
                 if ( err ) {
                     expect.fail(err);
                 } else {
-                    expect(parseInt(out, 10)).to.equal(200);
+                    expect(out.width).to.equal(200);
                 }
                 fs.unlinkSync(destPath);
                 done();
@@ -43,11 +43,11 @@ describe("Resize JPEG Test", () => {
         resizer.exec(image)
         .then((resized) => {
             fs.writeFileSync(destPath, resized.data, {encoding: "binary"});
-            ImageMagick.identify(["-format", "%w", destPath], (err, out) => {
+            gm(destPath).size((err, out) => {
                 if ( err ) {
                     expect.fail(err);
                 } else {
-                    expect(parseInt(out, 10)).to.equal(200);
+                    expect(out.width).to.equal(200);
                 }
                 fs.unlinkSync(destPath);
                 done();

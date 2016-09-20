@@ -63,11 +63,7 @@ class ImageProcessor {
      */
     processImage(imageData, config) {
         const jpegOptimizer = config.get("jpegOptimizer", "mozjpeg");
-        const promiseList   = config.get("resizes", []).filter((option) => {
-            return ( option.size   && option.size   > 0 ) ||
-                   ( option.width  && option.width  > 0 ) ||
-                   ( option.height && option.height > 0 );
-        }).map((option) => {
+        const promiseList   = config.get("resizes", []).filter((option) => option.size).map((option) => {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
             }
