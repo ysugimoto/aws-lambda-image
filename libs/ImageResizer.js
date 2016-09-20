@@ -61,9 +61,9 @@ class ImageResizer {
             }
 
             if ( "format" in this.options ) {
-              img.toBuffer(this.options.format, toBufferHandler);
+                img.toBuffer(this.options.format, toBufferHandler);
             } else {
-              img.toBuffer(toBufferHandler);
+                img.toBuffer(toBufferHandler);
             }
         });
     }
