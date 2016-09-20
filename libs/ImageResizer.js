@@ -36,6 +36,9 @@ class ImageResizer {
             if ( "gravity" in this.options ) {
                 img = img.gravity(this.options.gravity);
             }
+            if ( "background" in this.options ) {
+              img = img.background(this.options.background).flatten();
+            }
             if ( "crop" in this.options ) {
                 var cropArgs = this.options.crop.match(cropSpec);
                 const cropWidth = cropArgs[1];
