@@ -30,8 +30,7 @@ describe("Resize GIF Test", () => {
             });
         })
         .catch((err) => {
-            throw new Error(err);
-            done();
+            done(err);
         });
 
     });

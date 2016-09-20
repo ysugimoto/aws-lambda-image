@@ -32,9 +32,8 @@ describe("Resize PNG Test", () => {
                 done();
             });
         })
-        .catch((message) => {
-            throw new Error(message);
-            done();
+        .catch((err) => {
+            done(err);
         });
     });
 });

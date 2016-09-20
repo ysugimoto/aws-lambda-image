@@ -30,8 +30,7 @@ describe("Resize JPEG Test", () => {
             });
         })
         .catch((err) => {
-            throw new Error(err);
-            done();
+            done(err);
         });
 
     });
@@ -55,8 +54,7 @@ describe("Resize JPEG Test", () => {
             });
         })
         .catch((err) => {
-            throw new Error(err);
-            done();
+            done(err);
         });
 
     });
