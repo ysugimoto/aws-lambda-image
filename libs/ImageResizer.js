@@ -45,7 +45,8 @@ class ImageResizer {
                 const cropPercent = cropArgs[5];
                 img = img.crop(cropWidth, cropHeight, cropX, cropY, cropPercent === "%");
             }
-            img.toBuffer((err, buffer) => {
+
+            function toBufferHandler(err, buffer) {
                 if (err) {
                     reject(err);
                 } else {
@@ -57,7 +58,13 @@ class ImageResizer {
                         acl
                     ));
                 }
-            });
+            }
+
+            if ( "format" in this.options ) {
+              img.toBuffer(this.options.format, toBufferHandler);
+            } else {
+              img.toBuffer(toBufferHandler);
+            }
         });
     }
 }

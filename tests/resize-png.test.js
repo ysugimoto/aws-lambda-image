@@ -36,4 +36,30 @@ describe("Resize PNG Test", () => {
             done(err);
         });
     });
+
+    it("Convert PNG to JPEG", (done) => {
+        const resizer = new ImageResizer({size: 200, format: "jpg"});
+        const image = new ImageData(
+            "fixture/fixture.png",
+            "fixture",
+            fs.readFileSync(path.join(__dirname, "/fixture/fixture.png"), {encoding: "binary"})
+        );
+
+        resizer.exec(image)
+        .then((resized) => {
+            fs.writeFileSync(destPath, resized.data, {encoding: "binary"});
+            gm(destPath).format((err, out) => {
+                if ( err ) {
+                    expect.fail();
+                } else {
+                    expect(out).to.equal("JPEG");
+                }
+                fs.unlinkSync(destPath);
+                done();
+            });
+        })
+        .catch((err) => {
+            done(err);
+        });
+    });
 });
