@@ -32,28 +32,25 @@ class ImageReducer {
     exec(image) {
         const option = this.option;
 
-        return new Promise((resolve, reject) => {
-            const input   = new ReadableStream(image.data);
-            const streams = this.createReduceProcessList(image.type.toLowerCase());
-            const chain   = new StreamChain(input);
+        const input   = new ReadableStream(image.data);
+        const streams = this.createReduceProcessList(image.type.toLowerCase());
+        const chain   = new StreamChain(input);
 
-            chain.pipes(streams).run()
-            .then((buffer) => {
-                let dir = option.directory || image.dirName;
+        return chain.pipes(streams).run()
+        .then((buffer) => {
+            let dir = option.directory || image.dirName;
 
-                if ( dir ) {
-                    dir = dir.replace(/\/$/, "") + "/";
-                }
+            if ( dir ) {
+                dir = dir.replace(/\/$/, "") + "/";
+            }
 
-                resolve(new ImageData(
-                    dir + image.baseName,
-                    option.bucket || image.bucketName,
-                    buffer,
-                    image.headers,
-                    image.acl
-                ));
-            })
-            .catch((message) => reject(message));
+            return new ImageData(
+                dir + image.baseName,
+                option.bucket || image.bucketName,
+                buffer,
+                image.headers,
+                image.acl
+            );
         });
     };
 

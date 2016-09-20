@@ -25,32 +25,21 @@ class ImageProcessor {
      * @param Config config
      */
     run(config) {
-        return new Promise((resolve, reject) => {
-            // If object.size equals 0, stop process
-            if ( this.s3Object.object.size === 0 ) {
-                reject("Object size equal zero. Nothing to process.");
-                reject();
-            }
+        // If object.size equals 0, stop process
+        if ( this.s3Object.object.size === 0 ) {
+            return Promise.reject("Object size equal zero. Nothing to process.");
+        }
 
-            if ( ! config.get("bucket") ) {
-                config.set("bucket", this.s3Object.bucket.name);
-            }
+        if ( ! config.get("bucket") ) {
+            config.set("bucket", this.s3Object.bucket.name);
+        }
 
-            S3.getObject(
-                this.s3Object.bucket.name,
-                unescape(this.s3Object.object.key.replace(/\+/g, ' '))
-            )
-            .then((imageData) => {
-                this.processImage(imageData, config)
-                .then((results) => {
-                    S3.putObjects(results)
-                    .then((images) => resolve(images))
-                    .catch((messages) => reject(messages));
-                })
-                .catch((messages) => reject(messages));
-            })
-            .catch((error) => reject(error));
-        });
+        return S3.getObject(
+            this.s3Object.bucket.name,
+            unescape(this.s3Object.object.key.replace(/\+/g, ' '))
+        )
+        .then((imageData) => this.processImage(imageData, config))
+        .then(S3.putObjects);
     }
 
     /**
@@ -96,17 +85,13 @@ class ImageProcessor {
      * @return Promise
      */
     execResizeImage(option, imageData) {
-        return new Promise((resolve, reject) => {
-            const resizer = new ImageResizer(option);
+        const resizer = new ImageResizer(option);
 
-            resizer.exec(imageData)
-            .then((resizedImage) => {
-                const reducer = new ImageReducer(option);
+        return resizer.exec(imageData)
+        .then((resizedImage) => {
+            const reducer = new ImageReducer(option);
 
-                return reducer.exec(resizedImage);
-            })
-            .then((reducedImage) => resolve(reducedImage))
-            .catch((message) => reject(message));
+            return reducer.exec(resizedImage);
         });
     }
 
@@ -119,13 +104,9 @@ class ImageProcessor {
      * @return Promise
      */
     execReduceImage(option, imageData) {
-        return new Promise((resolve, reject) => {
-            const reducer = new ImageReducer(option);
+        const reducer = new ImageReducer(option);
 
-            reducer.exec(imageData)
-            .then((reducedImage) => resolve(reducedImage))
-            .catch((message) => reject(message));
-        });
+        return reducer.exec(imageData)
     }
 }
 
