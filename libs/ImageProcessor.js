@@ -52,7 +52,10 @@ class ImageProcessor {
      */
     processImage(imageData, config) {
         const jpegOptimizer = config.get("jpegOptimizer", "mozjpeg");
-        const promiseList   = config.get("resizes", []).filter((option) => option.size).map((option) => {
+        const promiseList   = config.get("resizes", []).filter((option) => {
+            option.size &&
+            imageData.fileName.indexOf(option.directory) !== 0 // don't process images in the output folder
+        }).map((option) => {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
             }
