@@ -82,12 +82,12 @@ Configuration is simple, see below:
 - `resizes`: [Array] Resize setting.
   - `background`: [String] Background color to use for transparent pixels when destination image doesn't support transparency.
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
-  - `crop`: [String] Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop)
+  - `crop`: [String] Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop).
   - `directory`: [String] Image directory path.
   - `format`: [String] Image format override. If not supplied, it will leave the image in original format.
-  - `gravity`: [String] Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity)
+  - `gravity`: [String] Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity).
   - `quality`: [Number] Determine reduced image quality ( enables only `JPG` ).
-  - `size`: [String] Image dimensions. [See ImageMagick geometry formats](http://imagemagick.org/script/command-line-processing.php#geometry)
+  - `size`: [String] Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).
 
 If you want to check how this works with your configuration, you can use `configtest`:
 
