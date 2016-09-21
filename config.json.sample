@@ -13,8 +13,13 @@
       "size": "600x600^",
       "gravity": "Center",
       "crop": "600x600",
-      "format": "jpg",
       "directory": "resized/cropped-to-square"
+    },
+    {
+      "size": 600,
+      "directory": "resized/600-jpeg",
+      "format": "jpg",
+      "background": "white"
     },
     {
       "size": 900,
