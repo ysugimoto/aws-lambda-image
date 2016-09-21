@@ -28,9 +28,6 @@ class ImageResizer {
     exec(image) {
         const acl = this.options.acl;
 
-        const width = this.options.size || this.options.width;
-        const height = this.options.size || this.options.height;
-
         return new Promise((resolve, reject) => {
             var img = gm(image.data).geometry(this.options.size.toString());
             if ( "gravity" in this.options ) {
