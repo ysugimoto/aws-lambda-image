@@ -104,7 +104,7 @@ class ImageProcessor {
     execReduceImage(option, imageData) {
         const reducer = new ImageReducer(option);
 
-        return reducer.exec(imageData)
+        return reducer.exec(imageData);
     }
 }
 
