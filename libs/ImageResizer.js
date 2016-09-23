@@ -1,7 +1,9 @@
 "use strict";
 
 const ImageData   = require("./ImageData");
-const ImageMagick = require("imagemagick");
+const gm = require("gm").subClass({ imageMagick: true });
+
+const cropSpec = /(\d+)x(\d+)([+-]\d+)?([+-]\d+)?(%)?/;
 
 class ImageResizer {
 
@@ -24,39 +26,45 @@ class ImageResizer {
      * @return Promise
      */
     exec(image) {
-        const params = {
-            srcData:   image.data.toString("binary"),
-            srcFormat: image.type,
-            format:    image.type
-        };
-
         const acl = this.options.acl;
 
-        if ( "size" in this.options ) {
-            params.width = this.options.size;
-        } else {
-            if ( "width" in this.options ) {
-                params.width = this.options.width;
-            }
-            if ( "height" in this.options ) {
-                params.height = this.options.height;
-            }
-        }
-
         return new Promise((resolve, reject) => {
-            ImageMagick.resize(params, (err, stdout, stderr) => {
-                if ( err || stderr ) {
-                    reject("ImageMagick err" + (err || stderr));
+            var img = gm(image.data).geometry(this.options.size.toString());
+            if ( "gravity" in this.options ) {
+                img = img.gravity(this.options.gravity);
+            }
+            if ( "background" in this.options ) {
+              img = img.background(this.options.background).flatten();
+            }
+            if ( "crop" in this.options ) {
+                var cropArgs = this.options.crop.match(cropSpec);
+                const cropWidth = cropArgs[1];
+                const cropHeight = cropArgs[2];
+                const cropX = cropArgs[3];
+                const cropY = cropArgs[4];
+                const cropPercent = cropArgs[5];
+                img = img.crop(cropWidth, cropHeight, cropX, cropY, cropPercent === "%");
+            }
+
+            function toBufferHandler(err, buffer) {
+                if (err) {
+                    reject(err);
                 } else {
                     resolve(new ImageData(
                         image.fileName,
                         image.bucketName,
-                        stdout,
+                        buffer,
                         image.headers,
                         acl
                     ));
                 }
-            });
+            }
+
+            if ( "format" in this.options ) {
+                img.toBuffer(this.options.format, toBufferHandler);
+            } else {
+                img.toBuffer(toBufferHandler);
+            }
         });
     }
 }

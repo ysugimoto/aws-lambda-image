@@ -10,8 +10,16 @@
       "directory": "resized/small"
     },
     {
+      "size": "600x600^",
+      "gravity": "Center",
+      "crop": "600x600",
+      "directory": "resized/cropped-to-square"
+    },
+    {
       "size": 600,
-      "directory": "resized/middle"
+      "directory": "resized/600-jpeg",
+      "format": "jpg",
+      "background": "white"
     },
     {
       "size": 900,

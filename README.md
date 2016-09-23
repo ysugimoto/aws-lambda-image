@@ -54,12 +54,21 @@ Configuration is simple, see below:
       "directory": "resized/small"
     },
     {
+      "size": "600x600^",
+      "gravity": "Center",
+      "crop": "600x600",
+      "directory": "resized/cropped-to-square"
+    },
+    {
       "size": 600,
-      "directory": "resized/middle"
+      "directory": "resized/600-jpeg",
+      "format": "jpg",
+      "background": "white"
     },
     {
       "size": 900,
-      "directory": "resized/large"
+      "directory": "resized/large",
+      "quality": 90
     }
   ]
 }
@@ -71,10 +80,14 @@ Configuration is simple, see below:
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
   - `quality`: [Number] Determine reduced image quality ( enables only `JPG` ).
 - `resizes`: [Array] Resize setting.
-  - `size`: [Number] Image width.
-  - `directory`: [String] Image directory path.
+  - `background`: [String] Background color to use for transparent pixels when destination image doesn't support transparency.
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
+  - `crop`: [String] Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop).
+  - `directory`: [String] Image directory path.
+  - `format`: [String] Image format override. If not supplied, it will leave the image in original format.
+  - `gravity`: [String] Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity).
   - `quality`: [Number] Determine reduced image quality ( enables only `JPG` ).
+  - `size`: [String] Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).
 
 If you want to check how this works with your configuration, you can use `configtest`:
 

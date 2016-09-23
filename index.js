@@ -22,16 +22,17 @@ exports.handler = (event, context) => {
     );
 
     processor.run(config)
-    .then((proceedImages) => {
-        console.log("OK, numbers of " + proceedImages.length + " images has proceeded.");
-        context.succeed("OK, numbers of " + proceedImages.length + " images has proceeded.");
+    .then((processedImages) => {
+        var message = "OK, " + processedImages.length + " images were processed.";
+        console.log(message);
+        context.succeed(message);
     })
     .catch((messages) => {
         if ( messages === "Object was already processed." ) {
             console.log("Image already processed");
             context.succeed("Image already processed");
         } else {
-            context.fail("Woops, image process failed: " + messages);
+            context.fail("Error processing " + s3Object.object.key + ": " + messages);
         }
     });
 };

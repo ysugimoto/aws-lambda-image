@@ -25,32 +25,16 @@ class ImageProcessor {
      * @param Config config
      */
     run(config) {
-        return new Promise((resolve, reject) => {
-            // If object.size equals 0, stop process
-            if ( this.s3Object.object.size === 0 ) {
-                reject("Object size equal zero. Nothing to process.");
-                reject();
-            }
+        if ( ! config.get("bucket") ) {
+            config.set("bucket", this.s3Object.bucket.name);
+        }
 
-            if ( ! config.get("bucket") ) {
-                config.set("bucket", this.s3Object.bucket.name);
-            }
-
-            S3.getObject(
-                this.s3Object.bucket.name,
-                unescape(this.s3Object.object.key.replace(/\+/g, ' '))
-            )
-            .then((imageData) => {
-                this.processImage(imageData, config)
-                .then((results) => {
-                    S3.putObjects(results)
-                    .then((images) => resolve(images))
-                    .catch((messages) => reject(messages));
-                })
-                .catch((messages) => reject(messages));
-            })
-            .catch((error) => reject(error));
-        });
+        return S3.getObject(
+            this.s3Object.bucket.name,
+            unescape(this.s3Object.object.key.replace(/\+/g, ' '))
+        )
+        .then((imageData) => this.processImage(imageData, config))
+        .then(S3.putObjects);
     }
 
     /**
@@ -64,9 +48,8 @@ class ImageProcessor {
     processImage(imageData, config) {
         const jpegOptimizer = config.get("jpegOptimizer", "mozjpeg");
         const promiseList   = config.get("resizes", []).filter((option) => {
-            return ( option.size   && option.size   > 0 ) ||
-                   ( option.width  && option.width  > 0 ) ||
-                   ( option.height && option.height > 0 );
+            return option.size &&
+                imageData.fileName.indexOf(option.directory) !== 0 // don't process images in the output folder
         }).map((option) => {
             if ( ! option.bucket ) {
                 option.bucket = config.get("bucket");
@@ -100,17 +83,13 @@ class ImageProcessor {
      * @return Promise
      */
     execResizeImage(option, imageData) {
-        return new Promise((resolve, reject) => {
-            const resizer = new ImageResizer(option);
+        const resizer = new ImageResizer(option);
 
-            resizer.exec(imageData)
-            .then((resizedImage) => {
-                const reducer = new ImageReducer(option);
+        return resizer.exec(imageData)
+        .then((resizedImage) => {
+            const reducer = new ImageReducer(option);
 
-                return reducer.exec(resizedImage);
-            })
-            .then((reducedImage) => resolve(reducedImage))
-            .catch((message) => reject(message));
+            return reducer.exec(resizedImage);
         });
     }
 
@@ -123,13 +102,9 @@ class ImageProcessor {
      * @return Promise
      */
     execReduceImage(option, imageData) {
-        return new Promise((resolve, reject) => {
-            const reducer = new ImageReducer(option);
+        const reducer = new ImageReducer(option);
 
-            reducer.exec(imageData)
-            .then((reducedImage) => resolve(reducedImage))
-            .catch((message) => reject(message));
-        });
+        return reducer.exec(imageData);
     }
 }
 
