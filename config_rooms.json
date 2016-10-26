@@ -1,0 +1,44 @@
+{
+  "bucket": "knotel-rooms/dev-rooms",
+  "resizes": [
+    {
+      "size": "150x",
+      "directory": "small",
+      "quality": 80,
+      "acl": "public-read"
+    },
+    {
+      "size": "300x",
+      "directory": "retina-small",
+      "acl": "public-read"
+    },
+    {
+      "size": "100%",
+      "directory": "original",
+      "quallity":  80,
+      "acl": "public-read"
+    },
+    {
+      "size": "500x",
+      "directory": "medium",
+      "quality": 80,
+      "acl": "public-read"
+    },
+    {
+      "size": "1000x",
+      "directory": "retina-medium",
+      "acl": "public-read"
+    },
+    {
+      "size": "1280x960",
+      "directory": "large",
+      "quality": 80,
+      "acl": "public-read"
+    },
+    {
+      "size": "2560x",
+      "directory": "retina-large",
+      "acl": "public-read"
+    }
+  ]
+}
