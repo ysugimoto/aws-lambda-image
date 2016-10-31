@@ -1,5 +1,6 @@
 "use strict";
 
+const ImageData    = require("./ImageData");
 const ImageResizer = require("./ImageResizer");
 const ImageReducer = require("./ImageReducer");
 const S3           = require("./S3");
@@ -71,6 +72,15 @@ class ImageProcessor {
             promiseList.unshift(this.execReduceImage(reduce, imageData));
         }
 
+        if ( config.exists("backup") ) {
+            const backup = config.get("backup");
+
+            if ( ! backup.bucket ) {
+                backup.bucket = config.get("bucket");
+            }
+            promiseList.unshift(this.execBackupImage(backup, imageData));
+        }
+
         return Promise.all(promiseList);
     }
 
@@ -105,6 +115,34 @@ class ImageProcessor {
         const reducer = new ImageReducer(option);
 
         return reducer.exec(imageData);
+    }
+
+    execBackupImage(option, image) {
+        let dir;
+
+        if ( option.directory ) {
+            if ( option.directory.match(/^\.\//) ) {
+                dir = image.dirName + "/" + option.directory.replace(/^\.\//, '') + "/";
+            } else {
+                dir = option.directory + "/" + image.dirName + "/";
+            }
+        } else {
+            dir = image.dirName + "/";
+        }
+
+        dir = dir.replace(/[\/]+/g, "/");
+
+        return new Promise((resolve, reject) => {
+            resolve(
+                new ImageData(
+                    dir + image.baseName,
+                    option.bucket || image.bucketName,
+                    image.data,
+                    image.headers,
+                    image.acl
+                )
+            );
+        });
     }
 }
 
