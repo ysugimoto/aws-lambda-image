@@ -54,6 +54,24 @@ stdout.write(( bucket ) ? bucket : "[Same bucket]");
 stdout.write("\r\n");
 stdout.write("\r\n");
 
+stdout.write("Backup image configuration\r\n");
+stdout.write("--------------------------------\r\n");
+if ( "backup" in config ) {
+    var backup = config.backup || {};
+    stdout.write(magenta + "    Save bucket:    " + reset);
+    stdout.write(( backup.bucket ) ? backup.bucket : bucket ? bucket : "[Same bucket]");
+    stdout.write("\r\n");
+    stdout.write(magenta + "    Save directory: " + reset);
+    stdout.write(( backup.directory ) ? backup.directory : "[Same directory]");
+    stdout.write("\r\n");
+    if ( ! backup.directory && ! backup.bucket && ! bucket ) {
+        warning.push("Backuped image may save same bucket and directory. This doesn't make any sense.");
+    }
+} else {
+    stdout.write("Backup option is not supplid, skip it.\r\n");
+}
+
+stdout.write("\r\n");
 stdout.write("Reduce image configuration\r\n");
 stdout.write("--------------------------------\r\n");
 if ( "reduce" in config ) {
