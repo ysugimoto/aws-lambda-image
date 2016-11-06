@@ -71,6 +71,8 @@ class ImageReducer {
      * @thorws Error
      */
     createReduceProcessList(type) {
+        console.log("Reducing to: " + (this.option.directory || "in-place"));
+
         const streams = [];
 
         switch ( type ) {
