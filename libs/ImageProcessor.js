@@ -32,7 +32,7 @@ class ImageProcessor {
 
         return S3.getObject(
             this.s3Object.bucket.name,
-            unescape(this.s3Object.object.key.replace(/\+/g, ' '))
+            decodeURIComponent(this.s3Object.object.key.replace(/\+/g, ' '))
         )
         .then((imageData) => this.processImage(imageData, config))
         .then(S3.putObjects);
