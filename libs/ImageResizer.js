@@ -30,6 +30,9 @@ class ImageResizer {
 
         return new Promise((resolve, reject) => {
             var img = gm(image.data).geometry(this.options.size.toString());
+            if ( "orientation" in this.options ) {
+                img = img.autoOrient();
+            }
             if ( "gravity" in this.options ) {
                 img = img.gravity(this.options.gravity);
             }

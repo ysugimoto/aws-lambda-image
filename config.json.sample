@@ -13,7 +13,8 @@
       "size": "600x600^",
       "gravity": "Center",
       "crop": "600x600",
-      "directory": "./resized/cropped-to-square"
+      "directory": "./resized/cropped-to-square",
+			"orientation": true
     },
     {
       "size": 600,
