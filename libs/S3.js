@@ -15,6 +15,7 @@ class S3 {
      */
     static getObject(bucket, key, acl) {
         return new Promise((resolve, reject) => {
+            console.log("Downloading: " + key);
             client.getObject({ Bucket: bucket, Key: key }, (err, data) => {
                 if ( err ) {
                     reject("S3 getObject failed: " + err);
@@ -59,6 +60,7 @@ class S3 {
             if ( acl ) {
                 params.ACL = acl;
             }
+            console.log("Uploading to: " + params.Key + " (" + params.Body.length + " bytes)");
             client.putObject(params, (err) => {
                 ( err ) ? reject(err) : resolve("S3 putObject success");
             });

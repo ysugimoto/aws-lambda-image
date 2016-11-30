@@ -133,6 +133,8 @@ class ImageProcessor {
         dir = dir.replace(/[\/]+/g, "/");
 
         return new Promise((resolve, reject) => {
+            console.log("Backing up to: " + (option.directory || "in-place"));
+
             resolve(
                 new ImageData(
                     dir + image.baseName,
