@@ -32,6 +32,9 @@ class ImageResizer {
             console.log("Resizing to: " + (this.options.directory || "in-place"));
 
             var img = gm(image.data).geometry(this.options.size.toString());
+            if ( "orientation" in this.options ) {
+                img = img.autoOrient();
+            }
             if ( "gravity" in this.options ) {
                 img = img.gravity(this.options.gravity);
             }
