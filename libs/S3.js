@@ -46,19 +46,19 @@ class S3 {
      * @param Buffer buffer
      * @return Promise
      */
-    static putObject(bucket, key, buffer, headers, acl) {
+    static putObject(image) {
         return new Promise((resolve, reject) => {
             const params = {
-                Bucket:       bucket,
-                Key:          key,
-                Body:         buffer,
+                Bucket:       image.bucketName,
+                Key:          image.fileName,
+                Body:         image.data,
                 Metadata:     { "img-processed": "true" },
-                ContentType:  headers.ContentType,
-                CacheControl: headers.CacheControl
+                ContentType:  image.headers.ContentType,
+                CacheControl: image.headers.CacheControl
             };
 
-            if ( acl ) {
-                params.ACL = acl;
+            if ( image.acl ) {
+                params.ACL = image.acl;
             }
             console.log("Uploading to: " + params.Key + " (" + params.Body.length + " bytes)");
             client.putObject(params, (err) => {
@@ -76,7 +76,7 @@ class S3 {
     static putObjects(images) {
         return Promise.all(images.map((image) => {
             return new Promise((resolve, reject) => {
-                S3.putObject(image.bucketName, image.fileName, image.data, image.headers, image.acl)
+                S3.putObject(image)
                 .then(() => resolve(image))
                 .catch((message) => reject(message));
             });

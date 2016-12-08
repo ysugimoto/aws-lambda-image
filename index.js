@@ -23,7 +23,7 @@ exports.handler = (event, context) => {
 
     processor.run(config)
     .then((processedImages) => {
-        var message = "OK, " + processedImages.length + " images were processed.";
+        var message = "OK, " + processedImages + " images were processed.";
         console.log(message);
         context.succeed(message);
     })
