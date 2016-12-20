@@ -66,6 +66,11 @@ class ImageProcessor {
             if ( ! reduce.bucket ) {
                 reduce.bucket = config.get("bucket");
             }
+
+            if ( ! reduce.acl ) {
+                reduce.acl = config.get("acl");
+            }
+
             reduce.jpegOptimizer = reduce.jpegOptimizer || jpegOptimizer;
             promise = promise.then(() => this.execReduceImage(reduce, imageData).then(S3.putObject));
             processedImages++;
