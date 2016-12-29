@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-image",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "An AWS Lambda Function to resize/reduce images automatically",
   "scripts": {
     "test": "make test",
