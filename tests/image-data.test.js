@@ -5,7 +5,7 @@ const ImageData  = require("../libs/ImageData");
 const expect     = require("chai").expect;
 
 describe("ImageData combineWithDirectory Test", () => {
-    let image = new ImageData("a/b/c/key.png", "bucket", "data", {});
+    const image = new ImageData("a/b/c/key.png", "bucket", "data", {});
 
     it("No directory", () => {
         expect(image.combineWithDirectory(undefined)).to.equal("a/b/c/key.png");
@@ -37,5 +37,9 @@ describe("ImageData combineWithDirectory Test", () => {
 
     it("Root internal directory", () => {
         expect(image.combineWithDirectory("d/e")).to.equal("d/e/key.png");
+    });
+
+    it("With prefix", () => {
+        expect(image.combineWithDirectory("d/e", "prefix-")).to.equal("d/e/prefix-key.png");
     });
 });
