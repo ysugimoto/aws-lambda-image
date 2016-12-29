@@ -102,6 +102,28 @@ class ImageData {
     get acl() {
         return this._acl;
     }
+
+    /**
+     * Combines dirName, filename, and directory (from options).
+     *
+     * @public
+     * @param String directory (from options)
+     * @param String filePrefix (from options)
+     * @return String
+     */
+    combineWithDirectory(directory, filePrefix) {
+        const prefix = filePrefix || "";
+        if ( directory != null ) {
+            // ./X , ../X , . , ..
+            if ( directory.match(/^\.\.?\//) || directory.match(/^\.\.?$/) ) {
+                return path.join(this.dirName, directory, prefix + this.baseName);
+            } else {
+                return path.join(directory, prefix + this.baseName);
+            }
+        } else {
+            return path.join(this.dirName, prefix + this.baseName);
+        }
+    }
 }
 
 module.exports = ImageData;

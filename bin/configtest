@@ -13,6 +13,7 @@ var buffer;
 var red     = '\u001b[31m';
 var green   = '\u001b[32m';
 var magenta = '\u001b[35m';
+var yellow  = '\u001b[33m';
 var reset   = '\u001b[0m';
 
 (function() {
@@ -54,6 +55,28 @@ stdout.write(( bucket ) ? bucket : "[Same bucket]");
 stdout.write("\r\n");
 stdout.write("\r\n");
 
+stdout.write("Backup image configuration\r\n");
+stdout.write("--------------------------------\r\n");
+if ( "backup" in config ) {
+    var backup = config.backup || {};
+    stdout.write(magenta + "    Save bucket:    " + reset);
+    stdout.write(( backup.bucket ) ? backup.bucket : bucket ? bucket : "[Same bucket]");
+    stdout.write("\r\n");
+    stdout.write(magenta + "    Save directory: " + reset);
+    if ( backup.direcotry ) {
+        stdout.write(backup.directory + ( /^\.\//.test(backup.directory) ) ? " [Relative]" : "");
+    } else {
+        stdout.write("[Same directory]");
+    }
+    stdout.write("\r\n");
+    if ( ! backup.directory && ! backup.bucket && ! bucket ) {
+        warning.push("Backuped image may save same bucket and directory. This doesn't make any sense.");
+    }
+} else {
+    stdout.write("Backup option is not supplid, skip it.\r\n");
+}
+
+stdout.write("\r\n");
 stdout.write("Reduce image configuration\r\n");
 stdout.write("--------------------------------\r\n");
 if ( "reduce" in config ) {
@@ -62,8 +85,16 @@ if ( "reduce" in config ) {
     stdout.write(( reduce.bucket ) ? reduce.bucket : bucket ? bucket : "[Same bucket]");
     stdout.write("\r\n");
     stdout.write(magenta + "    Save directory: " + reset);
-    stdout.write(( reduce.directory ) ? reduce.directory : "[Same directory]");
+    if ( reduce.direcotry ) {
+        stdout.write(recude.directory + ( /^\.\//.test(reduce.directory) ) ? " [Relative]" : "");
+    } else {
+        stdout.write("[Same directory]");
+    }
     stdout.write("\r\n");
+    if ( reduce.prefix ) {
+        stdout.write(yellow + "                    Filename will append prefix with \"" + reduce.prefix + "\"" + reset);
+        stdout.write("\r\n");
+    }
     if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
         warning.push("Reduced image may save same bucket and directory. This causes infinite process AWS-Lambda.");
     }
@@ -99,8 +130,16 @@ resizes.forEach(function(resize, index) {
     stdout.write(( resize.bucket ) ? resize.bucket : bucket ? bucket : "[Same bucket]");
     stdout.write("\r\n");
     stdout.write(magenta + "    Save directory: " + reset);
-    stdout.write(( resize.directory ) ? resize.directory : "[Same directory]");
+    if ( resize.direcotry ) {
+        stdout.write(resize.directory + ( /^\.\//.test(resize.directory) ) ? " [Relative]" : "");
+    } else {
+        stdout.write("[Same directory]");
+    }
     stdout.write("\r\n");
+    if ( resize.prefix ) {
+        stdout.write(yellow + "                    Filename will append prefix with \"" + resize.prefix + "\"" + reset);
+        stdout.write("\r\n");
+    }
     if ( ! resize.directory && ! resize.bucket && ! bucket ) {
         warning.push(" Image will saving same directory. This may cause infinite process loop at AWS-Lambda.");
     }

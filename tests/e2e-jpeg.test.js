@@ -14,6 +14,7 @@ const setting    = JSON.parse(fs.readFileSync(sourceFile));
 
 describe("Optimize JPEG Test", () => {
     let processor;
+    let images;
 
     before(() => {
         sinon.stub(S3, "getObject", () => {
@@ -31,16 +32,16 @@ describe("Optimize JPEG Test", () => {
                 });
             });
         });
-        sinon.stub(S3, "putObjects", (images) => {
-            return Promise.all(images.map((image) => {
-                return image;
-            }));
+        images = [];
+        sinon.stub(S3, "putObject", (image) => {
+            images.push(image);
+            return new Promise((resolve) => resolve(image));
         });
     });
 
     after(() => {
         S3.getObject.restore();
-        S3.putObjects.restore();
+        S3.putObject.restore();
     });
 
     beforeEach(() => {
@@ -52,7 +53,7 @@ describe("Optimize JPEG Test", () => {
 
     it("Reduce JPEG with no configuration", (done) => {
         processor.run(new Config({}))
-        .then((images) => {
+        .then(() => {
             // no working
             expect(images).to.have.length(0);
             done();
@@ -67,7 +68,7 @@ describe("Optimize JPEG Test", () => {
         processor.run(new Config({
             reduce: {}
         }))
-        .then((images) => {
+        .then(() => {
             expect(images).to.have.length(1);
             const image = images.shift();
             const buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
@@ -92,7 +93,7 @@ describe("Optimize JPEG Test", () => {
                 "directory": "some"
             }
         }))
-        .then((images) => {
+        .then(() => {
             expect(images).to.have.length(1);
             const image = images.shift();
             const buf = fs.readFileSync(path.join(__dirname, "/fixture/fixture.jpg"), {encoding: "binary"});
