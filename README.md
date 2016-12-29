@@ -49,12 +49,14 @@ Configuration is simple, see below:
   },
   "reduce": {
       "directory": "./reduced",
+      "prefix": "reduced-",
       "quality": 90
   },
   "resizes": [
     {
       "size": 300,
-      "directory": "./resized/small"
+      "directory": "./resized/small",
+      "prefix": "resized-",
     },
     {
       "size": "600x600^",
@@ -83,6 +85,7 @@ Configuration is simple, see below:
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
 - `reduce`: [Object] Reduce setting.
   - `directory`: [String] Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.
+  - `prefix`: [String] Append filename prefix if you need.
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
   - `quality`: [Number] Determine reduced image quality ( enables only `JPG` ).
 - `resizes`: [Array] Resize setting.
@@ -90,6 +93,7 @@ Configuration is simple, see below:
   - `bucket`: [Object] Destination bucket to override. If not supplied, it will use `bucket` setting.
   - `crop`: [String] Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop).
   - `directory`: [String] Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.
+  - `prefix`: [String] Append filename prefix if you need.
   - `format`: [String] Image format override. If not supplied, it will leave the image in original format.
   - `gravity`: [String] Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity).
   - `quality`: [Number] Determine reduced image quality ( enables only `JPG` ).

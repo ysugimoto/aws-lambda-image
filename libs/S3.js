@@ -3,7 +3,7 @@
 const ImageData = require("./ImageData");
 const aws       = require("aws-sdk");
 
-const client  = new aws.S3({apiVersion: "2006-03-01"});
+const client  = new aws.S3({ apiVersion: "2006-03-01" });
 
 class S3 {
     /**
