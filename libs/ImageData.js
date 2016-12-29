@@ -112,15 +112,16 @@ class ImageData {
      * @return String
      */
     combineWithDirectory(directory, filePrefix) {
+        const prefix = filePrefix || "";
         if ( directory != null ) {
             // ./X , ../X , . , ..
             if ( directory.match(/^\.\.?\//) || directory.match(/^\.\.?$/) ) {
-                return path.join(this.dirName, directory, filePrefix + this.baseName);
+                return path.join(this.dirName, directory, prefix + this.baseName);
             } else {
-                return path.join(directory, filePrefix + this.baseName);
+                return path.join(directory, prefix + this.baseName);
             }
         } else {
-            return path.join(this.dirName, filePrefix + this.baseName);
+            return path.join(this.dirName, prefix + this.baseName);
         }
     }
 }
