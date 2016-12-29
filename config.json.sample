@@ -2,19 +2,21 @@
   "bucket": "your-destination-bucket",
   "reduce": {
       "directory": "./reduced",
+      "prefix": "reduced-",
       "quality": 90
   },
   "resizes": [
     {
       "size": 300,
-      "directory": "./resized/small"
+      "directory": "./resized/small",
+      "prefix": "resized-"
     },
     {
       "size": "600x600^",
       "gravity": "Center",
       "crop": "600x600",
       "directory": "./resized/cropped-to-square",
-			"orientation": true
+      "orientation": true
     },
     {
       "size": 600,
