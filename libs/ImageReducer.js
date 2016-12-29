@@ -7,7 +7,7 @@ const Pngout         = require("./optimizers/Pngout");
 const Gifsicle       = require("./optimizers/Gifsicle");
 const ReadableStream = require("./ReadableImageStream");
 const StreamChain    = require("./StreamChain");
-//const JpegOptim    = require("./optimizers/JpegOptim");
+// const JpegOptim    = require("./optimizers/JpegOptim");
 
 class ImageReducer {
 
@@ -39,14 +39,14 @@ class ImageReducer {
         return chain.pipes(streams).run()
         .then((buffer) => {
             return new ImageData(
-                image.combineWithDirectory(option.directory),
+                image.combineWithDirectory(option.directory, option.prefix || ''),
                 option.bucket || image.bucketName,
                 buffer,
                 image.headers,
                 option.acl
             );
         });
-    };
+    }
 
     /**
      * Create reduce image process list
@@ -70,10 +70,10 @@ class ImageReducer {
             case "jpeg":
                 streams.push(new Mozjpeg(this.option.quality));
                 // switch JPEG optimizer
-                //if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
-                //    streams.push(new JpegOptim());
-                //} else {                                           // using mozjpeg
-                //}
+                // if ( this.option.jpegOptimizer === "jpegoptim" ) { // using jpegoptim
+                //     streams.push(new JpegOptim());
+                // } else {                                           // using mozjpeg
+                // }
                 break;
             case "gif":
                 streams.push(new Gifsicle());
