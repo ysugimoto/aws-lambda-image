@@ -19,12 +19,8 @@ uploadlambda: lambda
 	@if [ -z "${LAMBDA_FUNCTION_NAME}" ]; then (echo "Please export LAMBDA_FUNCTION_NAME" && exit 1); fi
 	aws lambda update-function-code --function-name ${LAMBDA_FUNCTION_NAME} --zip-file fileb://aws-lambda-image.zip
 
-test:
-	./node_modules/mocha/bin/_mocha -R spec --timeout 10000 tests/*.test.js
-
 configtest:
 	@./bin/configtest
-	
 
 clean:
 	@echo "clean up package files"
