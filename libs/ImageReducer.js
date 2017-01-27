@@ -39,7 +39,7 @@ class ImageReducer {
         return chain.pipes(streams).run()
         .then((buffer) => {
             return new ImageData(
-                image.combineWithDirectory(option.directory, option.prefix),
+                image.combineWithDirectory(option.directory, option.prefix, option.suffix),
                 option.bucket || image.bucketName,
                 buffer,
                 image.headers,

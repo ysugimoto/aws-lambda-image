@@ -109,19 +109,21 @@ class ImageData {
      * @public
      * @param String directory (from options)
      * @param String filePrefix (from options)
+     * @param String fileSuffix (from options)
      * @return String
      */
-    combineWithDirectory(directory, filePrefix) {
+    combineWithDirectory(directory, filePrefix, fileSuffix) {
         const prefix = filePrefix || "";
+        const suffix = fileSuffix || "";
         if ( directory != null ) {
             // ./X , ../X , . , ..
             if ( directory.match(/^\.\.?\//) || directory.match(/^\.\.?$/) ) {
-                return path.join(this.dirName, directory, prefix + this.baseName);
+                return path.join(this.dirName, directory, prefix + this.baseName + suffix);
             } else {
-                return path.join(directory, prefix + this.baseName);
+                return path.join(directory, prefix + this.baseName + suffix);
             }
         } else {
-            return path.join(this.dirName, prefix + this.baseName);
+            return path.join(this.dirName, prefix + this.baseName + suffix);
         }
     }
 }
