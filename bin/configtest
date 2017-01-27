@@ -95,6 +95,10 @@ if ( "reduce" in config ) {
         stdout.write(yellow + "                    Filename will append prefix with \"" + reduce.prefix + "\"" + reset);
         stdout.write("\r\n");
     }
+    if ( reduce.suffix ) {
+        stdout.write(yellow + "                    Filename will append suffix with \"" + reduce.suffix + "\"" + reset);
+        stdout.write("\r\n");
+    }
     if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
         warning.push("Reduced image may save same bucket and directory. This causes infinite process AWS-Lambda.");
     }
@@ -138,6 +142,10 @@ resizes.forEach(function(resize, index) {
     stdout.write("\r\n");
     if ( resize.prefix ) {
         stdout.write(yellow + "                    Filename will append prefix with \"" + resize.prefix + "\"" + reset);
+        stdout.write("\r\n");
+    }
+    if ( resize.suffix ) {
+        stdout.write(yellow + "                    Filename will append suffix with \"" + resize.suffix + "\"" + reset);
         stdout.write("\r\n");
     }
     if ( ! resize.directory && ! resize.bucket && ! bucket ) {

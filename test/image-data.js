@@ -32,4 +32,10 @@ test("ImageData combineWithDirectory Test", t => {
 
     // With prefix
     t.is(image.combineWithDirectory("d/e", "prefix-"), "d/e/prefix-key.png");
+
+    // With suffix
+    t.is(image.combineWithDirectory("d/e", "", "-suffix"), "d/e/key-suffix.png");
+
+    // With prefix and suffix
+    t.is(image.combineWithDirectory("d/e", "prefix-", "_suffix"), "d/e/prefix-key_suffix.png");
 });

@@ -12,6 +12,11 @@
       "prefix": "resized-"
     },
     {
+      "size": 450,
+      "directory": "./resized/medium",
+      "suffix": "_medium"
+    },
+    {
       "size": "600x600^",
       "gravity": "Center",
       "crop": "600x600",

@@ -7,10 +7,10 @@ const test         = require("ava");
 const pify         = require("pify");
 const fs           = require("fs");
 const fsP          = pify(fs);
-const destPath     = `${__dirname}/fixture/fixture_resized.png`;
 
 test("Resize PNG", async t => {
     const fixture = await fsP.readFile(`${__dirname}/fixture/fixture.png`);
+    const destPath = `${__dirname}/fixture/fixture_resized_1.png`;
     const resizer = new ImageResizer({size: 200});
     const image = new ImageData("fixture/fixture.png", "fixture", fixture);
 
@@ -18,7 +18,7 @@ test("Resize PNG", async t => {
     await fsP.writeFile(destPath, resized.data);
     gm(destPath).size((err, out) => {
         if ( err ) {
-            t.fail();
+            t.fail(err);
         } else {
             t.is(out.width, 200);
         }
@@ -28,6 +28,7 @@ test("Resize PNG", async t => {
 
 test("Convert PNG to JPEG", async t => {
     const fixture = await fsP.readFile(`${__dirname}/fixture/fixture.png`);
+    const destPath = `${__dirname}/fixture/fixture_resized_2.png`;
     const resizer = new ImageResizer({size: 200, format: "jpg"});
     const image = new ImageData("fixture/fixture.png", "fixture", fixture);
 
@@ -35,7 +36,7 @@ test("Convert PNG to JPEG", async t => {
     await fsP.writeFile(destPath, resized.data);
     gm(destPath).format((err, out) => {
         if ( err ) {
-            t.fail();
+            t.fail(err);
         } else {
             t.is(out, "JPEG");
         }
