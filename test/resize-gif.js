@@ -7,10 +7,10 @@ const test         = require("ava");
 const pify         = require("pify");
 const fs           = require("fs");
 const fsP          = pify(fs);
-const destPath     = `${__dirname}/fixture/fixture_resized.gif`;
 
 test("Resize GIF with gifsicle", async t => {
     const fixture  = fs.readFileSync(`${__dirname}/fixture/fixture.gif`);
+    const destPath = `${__dirname}/fixture/fixture_resized.gif`;
     const resizer = new ImageResizer({size: 200});
     const image   = new ImageData("fixture/fixture.gif", "fixture", fixture);
 
