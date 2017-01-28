@@ -33,7 +33,7 @@ class ImageReducer {
         const option = this.option;
 
         const input   = new ReadableStream(image.data);
-        const streams = this.createReduceProcessList(image.type.toLowerCase());
+        const streams = this.createReduceProcessList(image.type.ext);
         const chain   = new StreamChain(input);
 
         return chain.pipes(streams).run()
@@ -61,7 +61,19 @@ class ImageReducer {
 
         const streams = [];
 
-        switch ( type ) {
+        let outputType;
+
+        if ( type == "gif" ) {
+            outputType = type;
+        } else if ( "quality" in this.option ) {
+            outputType = "jpg"; // force JPEG when quality given
+        } else if ( "format" in this.option ) {
+            outputType = this.option.format;
+        } else {
+            outputType = type;
+        }
+
+        switch ( outputType ) {
             case "png":
                 streams.push(new Pngquant());
                 streams.push(new Pngout());
@@ -79,7 +91,7 @@ class ImageReducer {
                 streams.push(new Gifsicle());
                 break;
             default:
-                throw new Error("Unexcepted file type.");
+                throw new Error("Unexcepted output type: " + outputType);
         }
 
         return streams;

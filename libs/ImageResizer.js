@@ -65,8 +65,9 @@ class ImageResizer {
                 }
             }
 
-            if ( "format" in this.options ) {
-                img.toBuffer(this.options.format, toBufferHandler);
+            if ( image.type.ext != "gif" && ( "format" in this.options || "quality" in this.options ) ) {
+                // ImageReducer will be responsible for converting to the right format
+                img.toBuffer("PNG", toBufferHandler);
             } else {
                 img.toBuffer(toBufferHandler);
             }
