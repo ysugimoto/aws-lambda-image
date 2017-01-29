@@ -10,7 +10,7 @@ const fs           = require("fs");
 let image;
 
 test.before(async t => {
-    const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpg`);
+    const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.gif`);
     image   = new ImageData("fixture/fixture.jpg", "fixture", fixture);
 });
 
