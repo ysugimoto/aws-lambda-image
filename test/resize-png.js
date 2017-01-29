@@ -35,7 +35,7 @@ test.cb("Convert PNG to JPEG", t => {
             if ( err ) {
                 t.fail(err);
             } else {
-                t.is(out, "JPEG");
+                t.is(out, "PNG");
             }
             t.end();
         });

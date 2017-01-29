@@ -35,7 +35,7 @@ test.cb("Convert GIF to JPEG", t => {
             if ( err ) {
                 t.fail(err);
             } else {
-                t.is(out, "JPEG");
+                t.is(out, "GIF");
             }
             t.end();
         });
