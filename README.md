@@ -107,9 +107,9 @@ Configuration is simple, see below:
 |        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                       |
 |        |    prefix   |  String | Append filename prefix if supplied.                                                                                                     |
 |        |    suffix   |  String | Append filename suffix if supplied.                                                                                                     |
-|        |    format   |  String | Image format override. If not supplied, it will leave the image in original format.                                                     |
 |        |   gravity   |  String | Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity). |
-|        |   quality   |  Number | Determine reduced image quality ( enables only `JPG` ).                                                                                 |
+|        |   quality   |  Number | Determine reduced image quality ( forces format `JPG` ).                                                                                |
+|        |    format   |  String | Image format override. If not supplied, it will leave the image in original format.                                                     |
 |        |     size    |  String | Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).         |
 |        | orientation | Boolean | Auto orientation if value is `true`.                                                                                                    |
 

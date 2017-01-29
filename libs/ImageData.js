@@ -1,6 +1,46 @@
 "use strict";
 
 const path = require("path");
+const imageType = require("image-type");
+
+class ImageType {
+    /**
+     * Gets real image type from ImageData
+     *
+     * @constructor
+     * @param ImageData image
+     */
+    constructor(image) {
+        const type = imageType(image.data);
+        if ( type ) {
+            this._ext = type.ext;
+            this._mime = type.mime;
+        } else {
+            this._ext = path.extname(image.fileName).slice(1).toLowerCase();
+            this._mime = image.headers.ContentType;
+        }
+    }
+
+    /**
+     * Extension getter
+     *
+     * @public
+     * @return String: "png", "jpg", etc...
+     */
+    get ext() {
+        return this._ext;
+    }
+
+    /**
+     * Mime getter
+     *
+     * @public
+     * @return String: "image/png", "image/jpeg", etc...
+     */
+    get mime() {
+        return this._mime;
+    }
+}
 
 class ImageData {
     /**
@@ -17,8 +57,11 @@ class ImageData {
         this._fileName   = key;
         this._bucketName = name;
         this._data       = ( Buffer.isBuffer(data) ) ? data : new Buffer(data, "binary");
-        this._headers    = headers;
+        this._headers    = Object.assign({}, headers);
         this._acl        = acl;
+
+        this._type = new ImageType(this);
+        this._headers.ContentType = this._type.mime;
     }
 
     /**
@@ -70,7 +113,7 @@ class ImageData {
      * @return String
      */
     get type() {
-        return path.extname(this._fileName).slice(1);
+        return this._type;
     }
 
     /**
