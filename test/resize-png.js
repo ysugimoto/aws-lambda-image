@@ -2,13 +2,13 @@
 
 const ImageResizer = require("../libs/ImageResizer");
 const ImageData    = require("../libs/ImageData");
-const bind         = require("./_bind");
+const bindAll      = require('bind-all');
 const gm           = require("gm").subClass({ imageMagick: true });
 const test         = require("ava");
 const pify         = require("pify");
 const fs           = require("fs");
 
-const gmP = (...args) => pify(bind(gm(...args)));
+const gmP = (...args) => pify(bindAll(gm(...args)));
 
 let image;
 

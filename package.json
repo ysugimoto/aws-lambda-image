@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "ava": "^0.17.0",
+    "bind-all": "^1.0.0",
     "pify": "^2.3.0",
     "sinon": "^1.17.7"
   },
