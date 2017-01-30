@@ -11,7 +11,7 @@ let image;
 
 test.before(async t => {
     const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpg`);
-    image   = new ImageData("fixture/fixture.jpg", "fixture", fixture);
+    image = new ImageData("fixture/fixture.jpg", "fixture", fixture);
 });
 
 test.cb("Resize JPEG with cjpeg", t => {
