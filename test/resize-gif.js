@@ -11,7 +11,7 @@ let image;
 
 test.before(async t => {
     const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.gif`);
-    image   = new ImageData("fixture/fixture.jpg", "fixture", fixture);
+    image   = new ImageData("fixture/fixture.gif", "fixture", fixture);
 });
 
 test.cb("Resize GIF with gifsicle", t => {
