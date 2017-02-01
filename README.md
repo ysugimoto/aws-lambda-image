@@ -89,7 +89,7 @@ Configuration is simple, see below:
 #### Configuration Parameters
 
 |  name  |    field    |   type  |                                                               description                                                                                               |
-|:------:|:-----------:|:-------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|:------:|:-----------:|:-------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | bucket |      -      |  String | Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.                                                         |
 | backup |      -      |  Object | Backup original file setting.                                                                                                                                           |
 |        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                                                       |
