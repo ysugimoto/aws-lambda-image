@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:eu-west-1:514223584321:sale-image-lambda-resizer:55bcf9df-04d1-40ea-a2ce-fab9c9a82f6b",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "808a9964-cb23-56f1-beb8-c86d75117654",
+        "TopicArn": "arn:aws:sns:eu-west-1:514223584321:sale-image-lambda-resizer",
+        "Subject": "Amazon S3 Notification",
+        "Message": "{\"Records\":[{\"eventVersion\":\"2.0\",\"eventSource\":\"aws:s3\",\"awsRegion\":\"eu-west-1\",\"eventTime\":\"2017-01-30T22:19:30.471Z\",\"eventName\":\"ObjectCreated:Put\",\"userIdentity\":{\"principalId\":\"A18ZVM2MRUILBS\"},\"requestParameters\":{\"sourceIPAddress\":\"83.20.91.200\"},\"responseElements\":{\"x-amz-request-id\":\"59F4AA3B325FCF1C\",\"x-amz-id-2\":\"9iusOACsUWNTvwD+kPQofg74DRuhSepmVr0OMj/RTstjbdDYaR6nOkVrFGaeXdHi\"},\"s3\":{\"s3SchemaVersion\":\"1.0\",\"configurationId\":\"a6131229-9228-49be-9daf-1e094c6b388a\",\"bucket\":{\"name\":\"test.avosoftware.net\",\"ownerIdentity\":{\"principalId\":\"A18ZVM2MRUILBS\"},\"arn\":\"arn:aws:s3:::test.avosoftware.net\"},\"object\":{\"key\":\"sales-test/25/Screen+Shot+2017-01-24+at+09.44.41.png\",\"size\":1369654,\"eTag\":\"2466acb79a876d5d144368b9452dc178\",\"sequencer\":\"00588FBBF2593C0193\"}}}]}",
+        "Timestamp": "2017-01-30T22:19:30.544Z",
+        "SignatureVersion": "1",
+        "Signature": "QDUbZtc4YRISr0b1dTo0iiUz3ljWTr0oeyJWvkW2kJZB6xfk+Zkhd1EQk+gBPjo9pOwo3/nqDLzLc7ano9976EgX4mFkbVlr25EgeIK32E76WGrUZsiI9D/uHi6uS8O1T1evafgN0y3t23YDPJ3YVtw98CP0y1CV7JaiRWv+d3WYTYusPotj6//docGiyq8R6GbFgzkQPA/SA/nqEy4lvGJNz2z9Q+Y/VeZsF7DxdTgyNMsEZzbbQ9uWDvKUdF6QJSlRbgbbJJBINlaD+KWXpKeXKsS8it4REO2ILaOWkoZE5kMe4agcg+pKkGBzNcmTcBzCVlBjgLcQ632hhJtgkw==",
+        "SigningCertUrl": "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-b95095beb82e8f6a046b3aafc7f4149a.pem",
+        "UnsubscribeUrl": "https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:514223584321:sale-image-lambda-resizer:55bcf9df-04d1-40ea-a2ce-fab9c9a82f6b",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}

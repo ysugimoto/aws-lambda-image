@@ -9,7 +9,7 @@ const sinon          = require("sinon");
 const pify           = require("pify");
 const fs             = require("fs");
 const fsP            = pify(fs);
-const sourceFile     = `${__dirname}/fixture/event_source.json`;
+const sourceFile     = `${__dirname}/fixture/s3_event_source.json`;
 const setting        = JSON.parse(fs.readFileSync(sourceFile));
 
 let processor;
