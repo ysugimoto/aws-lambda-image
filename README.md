@@ -88,30 +88,32 @@ Configuration is simple, see below:
 
 #### Configuration Parameters
 
-|  name  |    field    |   type  |                                                               description                                                               |
-|:------:|:-----------:|:-------:|---------------------------------------------------------------------------------------------------------------------------------------  |
-| bucket |      -      |  String | Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.                         |
-| backup |      -      |  Object | Backup original file setting.                                                                                                           |
-|        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                       |
-|        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                          |
-| reduce |      -      |  Object | Reduce setting following fields.                                                                                                        |
-|        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                       |
-|        |    prefix   |  String | Append filename prefix if supplied.                                                                                                     |
-|        |    suffix   |  String | Append filename suffix if supplied.                                                                                                     |
-|        |   quality   |  Number | Determine reduced image quality ( enables only `JPG` ).                                                                                 |
-|        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                          |
-| resize |      -      |  Array  | Resize setting list of following fields.                                                                                                |
-|        |  background |  String | Background color to use for transparent pixels when destination image doesn't support transparency.                                     |
-|        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                          |
-|        |     crop    |  String | Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop).        |
-|        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                       |
-|        |    prefix   |  String | Append filename prefix if supplied.                                                                                                     |
-|        |    suffix   |  String | Append filename suffix if supplied.                                                                                                     |
-|        |   gravity   |  String | Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity). |
-|        |   quality   |  Number | Determine reduced image quality ( forces format `JPG` ).                                                                                |
-|        |    format   |  String | Image format override. If not supplied, it will leave the image in original format.                                                     |
-|        |     size    |  String | Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).         |
-|        | orientation | Boolean | Auto orientation if value is `true`.                                                                                                    |
+|  name  |    field    |   type  |                                                               description                                                                                               |
+|:------:|:-----------:|:-------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| bucket |      -      |  String | Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.                                                         |
+| backup |      -      |  Object | Backup original file setting.                                                                                                                                           |
+|        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                                                       |
+|        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                                          |
+| reduce |      -      |  Object | Reduce setting following fields.                                                                                                                                        |
+|        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                                                       |
+|        |    prefix   |  String | Append filename prefix if supplied.                                                                                                                                     |
+|        |    suffix   |  String | Append filename suffix if supplied.                                                                                                                                     |
+|        |   quality   |  Number | Determine reduced image quality ( enables only `JPG` ).                                                                                                                 |
+|        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                                          |
+|        |     acl     |  String | Predefined permissions to set on the output file. [See AWS documentation for list of ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl). |
+| resize |      -      |  Array  | Resize setting list of following fields.                                                                                                                                |
+|        |  background |  String | Background color to use for transparent pixels when destination image doesn't support transparency.                                                                     |
+|        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                                          |
+|        |     crop    |  String | Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop).                                        |
+|        |  directory  |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                                                       |
+|        |    prefix   |  String | Append filename prefix if supplied.                                                                                                                                     |
+|        |    suffix   |  String | Append filename suffix if supplied.                                                                                                                                     |
+|        |   gravity   |  String | Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity).                                 |
+|        |   quality   |  Number | Determine reduced image quality ( forces format `JPG` ).                                                                                                                |
+|        |    format   |  String | Image format override. If not supplied, it will leave the image in original format.                                                                                     |
+|        |     size    |  String | Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).                                         |
+|        | orientation | Boolean | Auto orientation if value is `true`.                                                                                                                                    |
+|        |     acl     |  String | Predefined permissions to set on the output file. [See AWS documentation for list of ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl). |
 
 If you want to check how this works with your configuration, you can use `configtest`:
 
