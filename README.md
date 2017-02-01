@@ -123,8 +123,8 @@ $ make configtest
 
 ### Deployment
 
-To make use of the automated deployment you need to have [avs-cli installed and configured](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
-In addition you need to setup some environment variables:
+To make use of the automated deployment you need to have [aws-cli installed and configured](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
+In addition you will need to setup some environment variables:
 
 - `LAMBDA_FUNCTION_NAME` _(mandatory)_ - represents the name of the Lambda function under which it should be installed or updated.
 - `AWS_PROFILE` _(optional)_ - allows you to choose which aws configuration profile should be used to upload your Lambda. If not
@@ -136,7 +136,7 @@ Unfortunately automated installation process is not available yet.
 
 #### Updating
 
-To update lambda with you latest code, just use command below. Script will build the `aws-lambda-image.zip` archive and automatically
+To update lambda with you latest code just use the command below. Script will build the `aws-lambda-image.zip` archive and automatically
  publish it on AWS.
 
 ```bash
