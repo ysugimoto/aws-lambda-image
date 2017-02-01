@@ -121,6 +121,28 @@ If you want to check how this works with your configuration, you can use `config
 $ make configtest
 ```
 
+### Deployment
+
+To make use of the automated deployment you need to have [avs-cli installed and configured](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
+In addition you need to setup some environment variables:
+
+- `LAMBDA_FUNCTION_NAME` _(mandatory)_ - represents the name of the Lambda function under which it should be installed or updated.
+- `AWS_PROFILE` _(optional)_ - allows you to choose which aws configuration profile should be used to upload your Lambda. If not
+provided script will use `default` profile.
+
+#### Installation
+
+Unfortunately automated installation process is not available yet.
+
+#### Updating
+
+To update lambda with you latest code, just use command below. Script will build the `aws-lambda-image.zip` archive and automatically
+ publish it on AWS.
+
+```bash
+$ make uploadlambda
+```
+
 ### Complete / Failed hooks
 
 You can handle resize/reduce/backup process on success/error result on `index.js`. `ImageProcessor::run` will return `Promise` object, run your original code:
