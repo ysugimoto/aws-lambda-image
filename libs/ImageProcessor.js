@@ -56,6 +56,9 @@ class ImageProcessor {
             if ( ! backup.bucket ) {
                 backup.bucket = config.get("bucket");
             }
+            if ( ! backup.acl ) {
+                backup.acl = config.get("acl");
+            }
             promise = promise.then(() => this.execBackupImage(backup, imageData).then(S3.putObject));
             processedImages++;
         }
@@ -66,11 +69,9 @@ class ImageProcessor {
             if ( ! reduce.bucket ) {
                 reduce.bucket = config.get("bucket");
             }
-
             if ( ! reduce.acl ) {
                 reduce.acl = config.get("acl");
             }
-
             reduce.jpegOptimizer = reduce.jpegOptimizer || jpegOptimizer;
             promise = promise.then(() => this.execReduceImage(reduce, imageData).then(S3.putObject));
             processedImages++;
@@ -137,7 +138,7 @@ class ImageProcessor {
                     option.bucket || image.bucketName,
                     image.data,
                     image.headers,
-                    image.acl
+					option.acl || image.acl
                 )
             );
         });
