@@ -12,7 +12,7 @@ class ImageResizer {
      * resize image with ImageMagick
      *
      * @constructor
-     * @param Number width
+     * @param Map options
      */
     constructor(options) {
         this.options = options;
@@ -50,8 +50,11 @@ class ImageResizer {
                 const cropPercent = cropArgs[5];
                 img = img.crop(cropWidth, cropHeight, cropX, cropY, cropPercent === "%");
             }
+            if( "format" in this.options ) {
+                img = img.setFormat(this.options.format);
+            }
 
-            function toBufferHandler(err, buffer) {
+            img.toBuffer((err, buffer) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -63,14 +66,7 @@ class ImageResizer {
                         acl
                     ));
                 }
-            }
-
-            if ( image.type.ext != "gif" && ( "format" in this.options || "quality" in this.options ) ) {
-                // ImageReducer will be responsible for converting to the right format
-                img.toBuffer("PNG", toBufferHandler);
-            } else {
-                img.toBuffer(toBufferHandler);
-            }
+            });
         });
     }
 }

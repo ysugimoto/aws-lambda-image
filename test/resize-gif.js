@@ -17,7 +17,7 @@ test.before(async t => {
     image = new ImageData("fixture/fixture.gif", "fixture", fixture);
 });
 
-test("Resize GIF with gifsicle", async t => {
+test("Resize GIF", async t => {
     const resizer = new ImageResizer({size: 200});
     const resized = await resizer.exec(image);
     const gmImage = gmP(resized.data);
@@ -26,7 +26,7 @@ test("Resize GIF with gifsicle", async t => {
     t.is(out.width, 200);
 });
 
-test.failing("Convert GIF to JPEG", async t => {
+test("Convert GIF to JPEG", async t => {
     const resizer = new ImageResizer({size: 200, format: "jpg"});
     const resized = await resizer.exec(image);
     const gmImage = gmP(resized.data);
