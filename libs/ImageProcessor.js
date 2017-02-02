@@ -1,9 +1,9 @@
 "use strict";
 
-const ImageData    = require("./ImageData");
-const ImageResizer = require("./ImageResizer");
-const ImageReducer = require("./ImageReducer");
-const S3           = require("./S3");
+const ImageArchiver = require("./ImageArchiver");
+const ImageResizer  = require("./ImageResizer");
+const ImageReducer  = require("./ImageReducer");
+const S3            = require("./S3");
 
 class ImageProcessor {
 
@@ -56,6 +56,9 @@ class ImageProcessor {
             if ( ! backup.bucket ) {
                 backup.bucket = config.get("bucket");
             }
+            if ( ! backup.acl ) {
+                backup.acl = config.get("acl");
+            }
             promise = promise.then(() => this.execBackupImage(backup, imageData).then(S3.putObject));
             processedImages++;
         }
@@ -66,11 +69,9 @@ class ImageProcessor {
             if ( ! reduce.bucket ) {
                 reduce.bucket = config.get("bucket");
             }
-
             if ( ! reduce.acl ) {
                 reduce.acl = config.get("acl");
             }
-
             reduce.jpegOptimizer = reduce.jpegOptimizer || jpegOptimizer;
             promise = promise.then(() => this.execReduceImage(reduce, imageData).then(S3.putObject));
             processedImages++;
@@ -127,20 +128,18 @@ class ImageProcessor {
         return reducer.exec(imageData);
     }
 
-    execBackupImage(option, image) {
-        return new Promise((resolve, reject) => {
-            console.log("Backing up to: " + (option.directory || "in-place"));
+	/**
+	 * Execute image backup
+	 *
+	 * @public
+	 * @param Object option
+	 * @param ImageData imageData
+	 * @return Promise
+	 */
+    execBackupImage(option, imageData) {
+    	const archiver = new ImageArchiver(option);
 
-            resolve(
-                new ImageData(
-                    image.combineWithDirectory(option.directory),
-                    option.bucket || image.bucketName,
-                    image.data,
-                    image.headers,
-                    image.acl
-                )
-            );
-        });
+    	return archiver.exec(imageData);
     }
 }
 

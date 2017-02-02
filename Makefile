@@ -1,4 +1,5 @@
 .PHONY: test clean configtest
+AWS_PROFILE ?= "default"
 
 lambda:
 	npm install .
@@ -17,7 +18,8 @@ lambda:
 
 uploadlambda: lambda
 	@if [ -z "${LAMBDA_FUNCTION_NAME}" ]; then (echo "Please export LAMBDA_FUNCTION_NAME" && exit 1); fi
-	aws lambda update-function-code --function-name ${LAMBDA_FUNCTION_NAME} --zip-file fileb://aws-lambda-image.zip
+	@echo "Updating ${LAMBDA_FUNCTION_NAME} using ${AWS_PROFILE} AWS profile..."
+	aws --profile ${AWS_PROFILE} lambda update-function-code --function-name ${LAMBDA_FUNCTION_NAME} --zip-file fileb://aws-lambda-image.zip
 
 configtest:
 	@./bin/configtest
