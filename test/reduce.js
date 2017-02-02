@@ -10,7 +10,14 @@ let image;
 
 test.before(async t => {
 	const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpg`);
-	image = new ImageData("fixture/fixture.jpg", "fixture", fixture);
+	image = new ImageData("fixture/fixture.jpg", "fixture", fixture, {}, "private");
+});
+
+test("If ACL parameter is passed while reducing use original pme", async t => {
+	const reducer = new ImageReducer({quality: 90});
+	const reduced = await reducer.exec(image);
+
+	t.is(reduced.acl, 'private');
 });
 
 test("Ensuring that ACL parameter is passed while reducing", async t => {

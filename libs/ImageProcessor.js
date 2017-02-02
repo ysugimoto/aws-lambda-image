@@ -1,9 +1,9 @@
 "use strict";
 
-const ImageData    = require("./ImageData");
-const ImageResizer = require("./ImageResizer");
-const ImageReducer = require("./ImageReducer");
-const S3           = require("./S3");
+const ImageArchiver = require("./ImageArchiver");
+const ImageResizer  = require("./ImageResizer");
+const ImageReducer  = require("./ImageReducer");
+const S3            = require("./S3");
 
 class ImageProcessor {
 
@@ -128,20 +128,18 @@ class ImageProcessor {
         return reducer.exec(imageData);
     }
 
-    execBackupImage(option, image) {
-        return new Promise((resolve, reject) => {
-            console.log("Backing up to: " + (option.directory || "in-place"));
+	/**
+	 * Execute image backup
+	 *
+	 * @public
+	 * @param Object option
+	 * @param ImageData imageData
+	 * @return Promise
+	 */
+    execBackupImage(option, imageData) {
+    	const archiver = new ImageArchiver(option);
 
-            resolve(
-                new ImageData(
-                    image.combineWithDirectory(option.directory),
-                    option.bucket || image.bucketName,
-                    image.data,
-                    image.headers,
-					option.acl || image.acl
-                )
-            );
-        });
+    	return archiver.exec(imageData);
     }
 }
 

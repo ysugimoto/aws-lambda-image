@@ -14,7 +14,14 @@ let image;
 
 test.before(async t => {
 	const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpg`);
-	image = new ImageData("fixture/fixture.jpg", "fixture", fixture);
+	image = new ImageData("fixture/fixture.jpg", "fixture", fixture, {}, "private");
+});
+
+test("If ACL parameter is passed while resizing use original pme", async t => {
+	const resizer = new ImageResizer({size: 200});
+	const resized = await resizer.exec(image);
+
+	t.is(resized.acl, 'private');
 });
 
 test("Ensuring that ACL parameter is passed while resizing", async t => {
