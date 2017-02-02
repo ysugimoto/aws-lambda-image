@@ -3,7 +3,8 @@
   "reduce": {
       "directory": "./reduced",
       "prefix": "reduced-",
-      "quality": 90
+      "quality": 90,
+      "acl": "public-read"
   },
   "resizes": [
     {
