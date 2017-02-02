@@ -52,7 +52,8 @@ Configuration is simple, see below:
   "reduce": {
       "directory": "./reduced",
       "prefix": "reduced-",
-      "quality": 90
+      "quality": 90,
+      "acl": "public-read"
   },
   "resizes": [
     {
@@ -100,6 +101,7 @@ Configuration is simple, see below:
 |        |    suffix   |  String | Append filename suffix if supplied.                                                                                                     |
 |        |   quality   |  Number | Determine reduced image quality ( enables only `JPG` ).                                                                                 |
 |        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                          |
+|        |     acl     |  String | Permission of S3 object. [See acl values](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).           |
 | resize |      -      |  Array  | Resize setting list of following fields.                                                                                                |
 |        |  background |  String | Background color to use for transparent pixels when destination image doesn't support transparency.                                     |
 |        |    bucket   |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                          |
@@ -112,6 +114,7 @@ Configuration is simple, see below:
 |        |    format   |  String | Image format override. If not supplied, it will leave the image in original format.                                                     |
 |        |     size    |  String | Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).         |
 |        | orientation | Boolean | Auto orientation if value is `true`.                                                                                                    |
+|        |     acl     |  String | Permission of S3 object. [See acl values](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).           |
 
 If you want to check how this works with your configuration, you can use `configtest`:
 
