@@ -20,8 +20,12 @@ Clone this repository and install dependencies:
 ```bash
 $ git clone git@github.com:ysugimoto/aws-lambda-image.git
 $ cd aws-lambda-image
-$ npm install .
+$ NODE_ENV=production npm install .
 ```
+
+When upload to Lambda, the project will bundle all files. So we should ignore development packages (e.g. test tools)
+
+If you are developper, please install all packages :-)
 
 ### Packaging
 
