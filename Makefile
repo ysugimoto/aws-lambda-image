@@ -1,4 +1,4 @@
-.PHONY: test clean configtest
+.PHONY: clean configtest
 
 lambda:
 	npm install .

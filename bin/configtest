@@ -81,24 +81,16 @@ stdout.write("Reduce image configuration\r\n");
 stdout.write("--------------------------------\r\n");
 if ( "reduce" in config ) {
     var reduce = config.reduce || {};
-    stdout.write(magenta + "    Save bucket:    " + reset);
+    stdout.write(magenta + "    Save bucket:     " + reset);
     stdout.write(( reduce.bucket ) ? reduce.bucket : bucket ? bucket : "[Same bucket]");
     stdout.write("\r\n");
-    stdout.write(magenta + "    Save directory: " + reset);
+    stdout.write(magenta + "    Save directory:  " + reset);
     if ( reduce.direcotry ) {
         stdout.write(recude.directory + ( /^\.\//.test(reduce.directory) ) ? " [Relative]" : "");
     } else {
         stdout.write("[Same directory]");
     }
     stdout.write("\r\n");
-    if ( reduce.prefix ) {
-        stdout.write(yellow + "                    Filename will append prefix with \"" + reduce.prefix + "\"" + reset);
-        stdout.write("\r\n");
-    }
-    if ( reduce.suffix ) {
-        stdout.write(yellow + "                    Filename will append suffix with \"" + reduce.suffix + "\"" + reset);
-        stdout.write("\r\n");
-    }
     if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
         warning.push("Reduced image may save same bucket and directory. This causes infinite process AWS-Lambda.");
     }
@@ -106,10 +98,22 @@ if ( "reduce" in config ) {
         if ( reduce.quality < 0 || reduce.quality > 100 ) {
             warning.push("'quality' option is illigal. this option must be in range 0-100.");
         } else {
-            stdout.write(magenta + "    Image Quality:  " + reset);
+            stdout.write(magenta + "    Image Quality:   " + reset);
             stdout.write(reduce.quality + " (JPG Only)");
             stdout.write("\r\n");
         }
+    }
+    if ( "prefix" in reduce ) {
+        stdout.write(magenta + "    Filename Prefix: " + reset + reduce.prefix);
+        stdout.write("\r\n");
+    }
+    if ( "suffix" in reduce ) {
+        stdout.write(magenta + "    Filename Suffix: " + reset + reduce.suffix);
+        stdout.write("\r\n");
+    }
+    if ( "acl" in reduce ) {
+        stdout.write(magenta + "    S3's ACL:        " + reset + reduce.acl);
+        stdout.write("\r\n");
     }
 } else {
     stdout.write("Reduce option is not supplid, skip it.\r\n");
@@ -124,30 +128,22 @@ stdout.write("\r\n");
 resizes.forEach(function(resize, index) {
     stdout.write("    Resize image " + (index + 1) + " ( of " + resizes.length + " )\r\n");
     stdout.write("    --------------------------------\r\n");
-    stdout.write(magenta + "    Size:           " + reset + resize.size + "\r\n");
+    stdout.write(magenta + "    Size:            " + reset + resize.size + "\r\n");
     if ( ! resize.size ) {
         fatals.push("Resize destination size must be supplied ( at index " + index + " )");
     } else if ( isNaN(parseInt(resize.size, 10)) ) {
         fatals.push("Resize destination size must be a number ( at index " + index + " )");
     }
-    stdout.write(magenta + "    Save bucket:    " + reset);
+    stdout.write(magenta + "    Save bucket:     " + reset);
     stdout.write(( resize.bucket ) ? resize.bucket : bucket ? bucket : "[Same bucket]");
     stdout.write("\r\n");
-    stdout.write(magenta + "    Save directory: " + reset);
+    stdout.write(magenta + "    Save directory:  " + reset);
     if ( resize.direcotry ) {
         stdout.write(resize.directory + ( /^\.\//.test(resize.directory) ) ? " [Relative]" : "");
     } else {
         stdout.write("[Same directory]");
     }
     stdout.write("\r\n");
-    if ( resize.prefix ) {
-        stdout.write(yellow + "                    Filename will append prefix with \"" + resize.prefix + "\"" + reset);
-        stdout.write("\r\n");
-    }
-    if ( resize.suffix ) {
-        stdout.write(yellow + "                    Filename will append suffix with \"" + resize.suffix + "\"" + reset);
-        stdout.write("\r\n");
-    }
     if ( ! resize.directory && ! resize.bucket && ! bucket ) {
         warning.push(" Image will saving same directory. This may cause infinite process loop at AWS-Lambda.");
     }
@@ -155,10 +151,26 @@ resizes.forEach(function(resize, index) {
         if ( resize.quality < 0 || resize.quality > 100 ) {
             warning.push("'quality' option is illigal. this option must be in range 0-100.");
         } else {
-            stdout.write(magenta + "    Image Quality:  " + reset);
+            stdout.write(magenta + "    Image Quality:   " + reset);
             stdout.write(resize.quality + " (JPG Only)");
             stdout.write("\r\n");
         }
+    }
+    if ( "prefix" in resize ) {
+        stdout.write(magenta + "    Filename Prefix: " + reset + resize.prefix);
+        stdout.write("\r\n");
+    }
+    if ( "suffix" in resize ) {
+        stdout.write(magenta + "    Filename Suffix: " + reset + resize.suffix);
+        stdout.write("\r\n");
+    }
+    if ( "format" in resize ) {
+        stdout.write(magenta + "    Convert:         " + reset + resize.format);
+        stdout.write("\r\n");
+    }
+    if ( "acl" in resize ) {
+        stdout.write(magenta + "    S3's ACL:        " + reset + resize.acl);
+        stdout.write("\r\n");
     }
     stdout.write("\r\n");
 });
