@@ -26,15 +26,6 @@ test("Resize JPEG with cjpeg", async t => {
     t.is(out.width, 200);
 });
 
-test("Resize JPEG with jpegoptim", async t => {
-    const resizer = new ImageResizer({size: 200, jpegOptimizer: "jpegoptim"});
-    const resized = await resizer.exec(image);
-    const gmImage = gmP(resized.data);
-    const out = await gmImage.size();
-
-    t.is(out.width, 200);
-});
-
 test("Resize JPEG by default keep aspect ratio", async t => {
     const resizer = new ImageResizer({size: "200x200"});
     const resized = await resizer.exec(image);
