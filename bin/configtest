@@ -43,8 +43,8 @@ try {
 
 stdout.write(magenta + "Checking JPEG optimizer...        " + reset);
 var optimizer = ( config.jpegOptimizer ) ? config.jpegOptimizer : "mozjpeg";
-if ( optimizer !== "jpegoptim" && optimizer !== "mozjpeg" ) {
-    warning.push("[Warning] JPEG Optimizer is invalid. It accepts 'jpegoptim' or 'mozjpeg'.");
+if ( optimizer !== "mozjpeg" ) {
+    warning.push("[Warning] JPEG Optimizer is invalid. It accepts only 'mozjpeg'.");
     optimizer = "mozjpeg";
 }
 stdout.write(optimizer + "\r\n");
