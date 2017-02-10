@@ -163,7 +163,7 @@ processor.run(config)
 
 - `cjpeg`
 - `pngquant`
-- `pngout`
+- `gifsicle`
 
 ### License
 

@@ -1,9 +1,9 @@
 "use strict";
 
-const ImageProcessor = require("../libs/ImageProcessor");
-const ImageData      = require("../libs/ImageData");
-const Config         = require("../libs/Config");
-const S3             = require("../libs/S3");
+const ImageProcessor = require("../lib/ImageProcessor");
+const ImageData      = require("../lib/ImageData");
+const Config         = require("../lib/Config");
+const S3             = require("../lib/S3");
 const test           = require("ava");
 const sinon          = require("sinon");
 const pify           = require("pify");

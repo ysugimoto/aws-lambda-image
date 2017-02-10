@@ -1,7 +1,7 @@
 "use strict";
 
-const ImageReducer = require("../libs/ImageReducer");
-const ImageData    = require("../libs/ImageData");
+const ImageReducer = require("../lib/ImageReducer");
+const ImageData    = require("../lib/ImageData");
 const test         = require("ava");
 const pify         = require("pify");
 const fs           = require("fs");

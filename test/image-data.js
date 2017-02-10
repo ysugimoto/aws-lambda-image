@@ -1,6 +1,6 @@
 "use strict";
 
-const ImageData = require("../libs/ImageData");
+const ImageData = require("../lib/ImageData");
 const test      = require("ava");
 
 test("ImageData combineWithDirectory Test", t => {
