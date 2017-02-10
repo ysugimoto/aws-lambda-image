@@ -3,7 +3,6 @@
 const ImageData      = require("./ImageData");
 const Mozjpeg        = require("./optimizers/Mozjpeg");
 const Pngquant       = require("./optimizers/Pngquant");
-const Pngout         = require("./optimizers/Pngout");
 const Gifsicle       = require("./optimizers/Gifsicle");
 const ReadableStream = require("./ReadableImageStream");
 const StreamChain    = require("./StreamChain");
@@ -76,7 +75,6 @@ class ImageReducer {
         switch ( outputType ) {
             case "png":
                 streams.push(new Pngquant());
-                streams.push(new Pngout());
                 break;
             case "jpg":
             case "jpeg":
