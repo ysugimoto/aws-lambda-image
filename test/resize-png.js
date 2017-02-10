@@ -1,7 +1,7 @@
 "use strict";
 
-const ImageResizer = require("../libs/ImageResizer");
-const ImageData    = require("../libs/ImageData");
+const ImageResizer = require("../lib/ImageResizer");
+const ImageData    = require("../lib/ImageData");
 const bindAll      = require('bind-all');
 const gm           = require("gm").subClass({ imageMagick: true });
 const test         = require("ava");

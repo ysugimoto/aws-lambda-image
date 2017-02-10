@@ -7,8 +7,8 @@
  */
 "use strict";
 
-const ImageProcessor = require("./libs/ImageProcessor");
-const Config         = require("./libs/Config");
+const ImageProcessor = require("./lib/ImageProcessor");
+const Config         = require("./lib/Config");
 const fs             = require("fs");
 const path           = require("path");
 
