@@ -121,8 +121,8 @@ Deployment scripts are pre-configured to use some default values for the Lambda 
  just use:
 
 ```bash
-$ npm config set aws-lambda-image:profile work
-$ npm config set aws-lambda-image:region us-east-1
+$ npm config set aws-lambda-image:profile default
+$ npm config set aws-lambda-image:region eu-west-1
 $ npm config set aws-lambda-image:memory 1280
 $ npm config set aws-lambda-image:timeout 5
 ```
