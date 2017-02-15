@@ -3,13 +3,19 @@
   "reduce": {
       "directory": "./reduced",
       "prefix": "reduced-",
-      "quality": 90
+      "quality": 90,
+      "acl": "public-read"
   },
   "resizes": [
     {
       "size": 300,
       "directory": "./resized/small",
       "prefix": "resized-"
+    },
+    {
+      "size": 450,
+      "directory": "./resized/medium",
+      "suffix": "_medium"
     },
     {
       "size": "600x600^",
