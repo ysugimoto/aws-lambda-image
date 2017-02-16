@@ -31,10 +31,13 @@
   },
   "contributors": [
     {
-      "name": "1000ch"
+      "name": "Shogo Sensui",
+      "email": "shogo.sensui@gmail.com",
+      "web": "https://github.com/1000ch"
     },
     {
-      "name": "Kamil Dybicz"
+      "name": "Kamil Dybicz",
+      "web": "https://github.com/kdybicz"
     }
   ],
   "license": "MIT",
