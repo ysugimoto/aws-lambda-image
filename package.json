@@ -24,7 +24,19 @@
     "lambda",
     "image"
   ],
-  "author": "Yoshiaki Sugimoto",
+  "author": {
+    "name: "Yoshiaki Sugimoto",
+    "email": "sugimoto@wnotes.net",
+    "web": "https://github.com/ysugimoto"
+  },
+  "contributors": [
+    {
+      "name": "1000ch"
+    },
+    {
+      "name": "Kamil Dybicz"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "2.6.15",
