@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-image",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "An AWS Lambda Function to resize/reduce images automatically",
   "config": {
     "profile": "default",
