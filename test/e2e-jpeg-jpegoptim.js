@@ -80,3 +80,18 @@ test("Reduce JPEG with bucket/directory configuration", async t => {
     t.true(image.data.length > 0);
     t.true(image.data.length < fixture.length);
 });
+
+
+test("Reduce JPEG with quality", async t => {
+    await processor.run(new Config({
+        "reduce": {
+            "quality": 90,
+            "jpegOptimizer": "jpegoptim"
+        }
+    }));
+    t.is(images.length, 1);
+    const image = images.shift();
+    const fixture = await fsP.readFile(`${__dirname}/fixture/fixture.jpg`);
+    t.true(image.data.length > 0);
+    t.true(image.data.length < fixture.length);
+});

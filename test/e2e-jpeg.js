@@ -78,3 +78,44 @@ test("Reduce JPEG with bucket/directory configuration", async t => {
     t.true(image.data.length > 0);
     t.true(image.data.length < fixture.length);
 });
+
+test("Resize JPEG with quality", async t => {
+    await processor.run(new Config({
+        "resizes": [
+            {
+                "size": 100,
+                "quality": 90
+            }
+        ]
+    }));
+    t.is(images.length, 1);
+    const image = images.shift();
+    const fixture = await fsP.readFile(`${__dirname}/fixture/fixture.jpg`);
+    t.is(image.fileName, "HappyFace.jpg");
+    t.true(image.data.length > 0);
+    t.true(image.data.length < fixture.length);
+});
+
+test("Resize JPEG with format", async t => {
+    await processor.run(new Config({
+        "resizes": [
+            {
+                "size": 100,
+                "format": "png"
+            },
+            {
+                "size": 100,
+                "format": "gif"
+            }
+        ]
+    }));
+    t.is(images.length, 2);
+
+    const pngImage = images.shift();
+    t.is(pngImage.fileName, "HappyFace.png");
+    t.true(pngImage.data.length > 0);
+
+    const gifImage = images.shift();
+    t.is(gifImage.fileName, "HappyFace.gif");
+    t.true(gifImage.data.length > 0);
+});
