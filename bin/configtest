@@ -18,175 +18,179 @@ var reset   = '\u001b[0m';
 
 (function() {
 
-console.log(green + "==========================================" + reset);
-console.log(green + "  AWS-Lambda-Image Configuration Checker"   + reset);
-console.log(green + "==========================================" + reset);
-stdout.write("\r\n");
-
-if ( ! fs.existsSync(configPath) ) {
-    stdout.write(red + "[Error] Config file not exists.\r\n" + reset);
-    stdout.write(red + "Did you put a config file at " + projectDir + "/config.json?\r\n" + reset);
-    return;
-}
-
-buffer = fs.readFileSync(configPath, {encoding: "utf8"});
-
-stdout.write(magenta + "Checking configuration format...  " + reset);
-try {
-    config = JSON.parse(buffer);
-    stdout.write("OK\r\n");
-} catch ( e ) {
-    stdout.write(red + "Error!\r\n" + reset);
-    console.log(e.message);
-    process.exit(1);
-}
-
-stdout.write(magenta + "Checking JPEG optimizer...        " + reset);
-var optimizer = ( config.jpegOptimizer ) ? config.jpegOptimizer : "mozjpeg";
-if ( optimizer !== "jpegoptim" && optimizer !== "mozjpeg" ) {
-    warning.push("[Warning] JPEG Optimizer is invalid. It accepts 'jpegoptim' or 'mozjpeg'.");
-    optimizer = "mozjpeg";
-}
-stdout.write(optimizer + "\r\n");
-
-var bucket = ( config.bucket ) ? config.bucket : "";
-stdout.write(magenta + "Checking destination bucket...    " + reset);
-stdout.write(( bucket ) ? bucket : "[Same bucket]");
-stdout.write("\r\n");
-stdout.write("\r\n");
-
-stdout.write("Backup image configuration\r\n");
-stdout.write("--------------------------------\r\n");
-if ( "backup" in config ) {
-    var backup = config.backup || {};
-    stdout.write(magenta + "    Save bucket:    " + reset);
-    stdout.write(( backup.bucket ) ? backup.bucket : bucket ? bucket : "[Same bucket]");
+    console.log(green + "==========================================" + reset);
+    console.log(green + "  AWS-Lambda-Image Configuration Checker"   + reset);
+    console.log(green + "==========================================" + reset);
     stdout.write("\r\n");
-    stdout.write(magenta + "    Save directory: " + reset);
-    if ( backup.direcotry ) {
-        stdout.write(backup.directory + ( /^\.\//.test(backup.directory) ) ? " [Relative]" : "");
+
+    if ( ! fs.existsSync(configPath) ) {
+        stdout.write(red + "[Error] Config file not exists.\r\n" + reset);
+        stdout.write(red + "Did you put a config file at " + projectDir + "/config.json?\r\n" + reset);
+        return;
+    }
+
+    buffer = fs.readFileSync(configPath, {encoding: "utf8"});
+
+    stdout.write(magenta + "Configuration status: " + reset);
+    try {
+        config = JSON.parse(buffer);
+        stdout.write("OK\r\n");
+    } catch ( e ) {
+        stdout.write("\r\n");
+        stdout.write(red + "Error!\r\n" + reset);
+        console.log(e.message);
+        process.exit(1);
+    }
+
+    var jpegOptimizer = config.jpegOptimizer;
+    stdout.write(magenta + "Global Optimizer:     " + reset + (jpegOptimizer || "Not set") + "\r\n");
+
+    var bucket = config.bucket;
+    stdout.write(magenta + "Destination bucket:   " + reset + (bucket || "[Same bucket]") + "\r\n");
+
+    var acl = config.acl;
+    stdout.write(magenta + "Global S3 ACL:        " + reset + (acl || "Not set") + "\r\n");
+
+    stdout.write("\r\n");
+    stdout.write("Backup image configuration\r\n");
+    stdout.write("--------------------------------\r\n");
+    if ( "backup" in config ) {
+        var backup = config.backup || {};
+        validateDestination(stdout, bucket, backup.bucket, backup.directory);
+        validatePrefixAndSuffix(stdout, backup.prefix, backup.suffix);
+        validateAcl(stdout, acl, backup.acl);
     } else {
-        stdout.write("[Same directory]");
+        stdout.write("Backup option is not supplied, skip it.\r\n");
     }
-    stdout.write("\r\n");
-    if ( ! backup.directory && ! backup.bucket && ! bucket ) {
-        warning.push("Backuped image may save same bucket and directory. This doesn't make any sense.");
-    }
-} else {
-    stdout.write("Backup option is not supplid, skip it.\r\n");
-}
 
-stdout.write("\r\n");
-stdout.write("Reduce image configuration\r\n");
-stdout.write("--------------------------------\r\n");
-if ( "reduce" in config ) {
-    var reduce = config.reduce || {};
-    stdout.write(magenta + "    Save bucket:     " + reset);
-    stdout.write(( reduce.bucket ) ? reduce.bucket : bucket ? bucket : "[Same bucket]");
     stdout.write("\r\n");
-    stdout.write(magenta + "    Save directory:  " + reset);
-    if ( reduce.direcotry ) {
-        stdout.write(recude.directory + ( /^\.\//.test(reduce.directory) ) ? " [Relative]" : "");
+    stdout.write("Reduce image configuration\r\n");
+    stdout.write("--------------------------------\r\n");
+    if ( "reduce" in config ) {
+        var reduce = config.reduce || {};
+        validateQuality(stdout, reduce.quality);
+        validateOptimizer(stdout, reduce.jpegOptimizer || jpegOptimizer);
+        validateDestination(stdout, bucket, reduce.bucket, reduce.directory);
+        validatePrefixAndSuffix(stdout, reduce.prefix, reduce.suffix);
+        validateAcl(stdout, acl, reduce.acl);
     } else {
-        stdout.write("[Same directory]");
+        stdout.write("Reduce option is not supplied, skip it.\r\n");
     }
+
     stdout.write("\r\n");
-    if ( ! reduce.directory && ! reduce.bucket && ! bucket ) {
-        warning.push("Reduced image may save same bucket and directory. This causes infinite process AWS-Lambda.");
+    stdout.write("Resize image configuration\r\n");
+    stdout.write("--------------------------------\r\n");
+    var resizes = config.resizes || [];
+    stdout.write(magenta + "    Number of resize images: " + reset + resizes.length + "\r\n");
+    stdout.write("\r\n");
+    resizes.forEach(function(resize, index) {
+        stdout.write("    Resize image " + (index + 1) + " ( of " + resizes.length + " )\r\n");
+        stdout.write("    --------------------------------\r\n");
+        validateSize(stdout, resize.size);
+        validateFormat(stdout, resize.format);
+        validateQuality(stdout, resize.quality);
+        validateOptimizer(stdout, resize.jpegOptimizer || jpegOptimizer);
+        validateDestination(stdout, bucket, resize.bucket, resize.directory);
+        validatePrefixAndSuffix(stdout, resize.prefix, resize.suffix);
+        validateAcl(stdout, acl, resize.acl);
+        stdout.write("\r\n");
+    });
+
+    stdout.write("\r\n");
+    stdout.write(green + "Configuration check finished.\r\n" + reset + "\r\n");
+    if ( fatals.length === 0 && warning.length === 0 ) {
+        stdout.write(green + "Your configuration is green!\r\n" + reset);
+    } else {
+        new Set(fatals).forEach(function(f) {
+            stdout.write(red + "[Fatal] " + f + "\r\n" + reset);
+        });
+        new Set(warning).forEach(function(n) {
+            stdout.write(red + "[Warning] " + n + "\r\n" + reset);
+        });
     }
-    if ( "quality" in reduce ) {
-        if ( reduce.quality < 0 || reduce.quality > 100 ) {
-            warning.push("'quality' option is illigal. this option must be in range 0-100.");
-        } else {
-            stdout.write(magenta + "    Image Quality:   " + reset);
-            stdout.write(reduce.quality + " (JPG Only)");
-            stdout.write("\r\n");
+    if (fatals.length !== 0) {
+        process.exit(1);
+    }
+
+    function validateSize(stdout, size) {
+        var color = reset;
+        if ( ! size ) {
+            fatals.push("Resize destination size must be supplied");
+            color = red;
+        } else if ( isNaN(parseInt(size, 10)) ) {
+            fatals.push("Resize destination size must be a number");
+            color = red;
+        }
+        stdout.write(magenta + "    Size:             " + color + size + reset + "\r\n");
+    }
+
+    function validateQuality(stdout, quality) {
+        if ( quality ) {
+            var color = reset;
+            if ( isNaN(parseInt(quality, 10)) || quality < 0 || quality > 100 ) {
+                fatals.push("Invalid value of 'quality' option. It should be a number in range 0-100.");
+                color = red;
+            }
+            stdout.write(magenta + "    Image Quality:    " + color + quality + " (JPG Only)" + reset + "\r\n");
         }
     }
-    if ( "prefix" in reduce ) {
-        stdout.write(magenta + "    Filename Prefix: " + reset + reduce.prefix);
-        stdout.write("\r\n");
-    }
-    if ( "suffix" in reduce ) {
-        stdout.write(magenta + "    Filename Suffix: " + reset + reduce.suffix);
-        stdout.write("\r\n");
-    }
-    if ( "acl" in reduce ) {
-        stdout.write(magenta + "    S3's ACL:        " + reset + reduce.acl);
-        stdout.write("\r\n");
-    }
-} else {
-    stdout.write("Reduce option is not supplid, skip it.\r\n");
-}
 
-stdout.write("\r\n");
-stdout.write("Resize image configuration\r\n");
-stdout.write("--------------------------------\r\n");
-var resizes = config.resizes || [];
-stdout.write(magenta + "    Number of resize images: " + reset + resizes.length + "\r\n");
-stdout.write("\r\n");
-resizes.forEach(function(resize, index) {
-    stdout.write("    Resize image " + (index + 1) + " ( of " + resizes.length + " )\r\n");
-    stdout.write("    --------------------------------\r\n");
-    stdout.write(magenta + "    Size:            " + reset + resize.size + "\r\n");
-    if ( ! resize.size ) {
-        fatals.push("Resize destination size must be supplied ( at index " + index + " )");
-    } else if ( isNaN(parseInt(resize.size, 10)) ) {
-        fatals.push("Resize destination size must be a number ( at index " + index + " )");
-    }
-    stdout.write(magenta + "    Save bucket:     " + reset);
-    stdout.write(( resize.bucket ) ? resize.bucket : bucket ? bucket : "[Same bucket]");
-    stdout.write("\r\n");
-    stdout.write(magenta + "    Save directory:  " + reset);
-    if ( resize.direcotry ) {
-        stdout.write(resize.directory + ( /^\.\//.test(resize.directory) ) ? " [Relative]" : "");
-    } else {
-        stdout.write("[Same directory]");
-    }
-    stdout.write("\r\n");
-    if ( ! resize.directory && ! resize.bucket && ! bucket ) {
-        warning.push(" Image will saving same directory. This may cause infinite process loop at AWS-Lambda.");
-    }
-    if ( "quality" in resize ) {
-        if ( resize.quality < 0 || resize.quality > 100 ) {
-            warning.push("'quality' option is illigal. this option must be in range 0-100.");
+    function validateOptimizer(stdout, optimizer) {
+        var color = reset;
+        if ( ["mozjpeg", "jpegoptim", undefined].indexOf(optimizer) === -1 ) {
+            warning.push("Optimizer is invalid. It accepts 'jpegoptim', 'mozjpeg' or undefined only.");
+            color = red;
+        }
+
+        var optimizers;
+        if ( ["mozjpeg", "jpegoptim"].indexOf(optimizer) !== -1 ) {
+            optimizers = optimizer + " (JPG Only)";
         } else {
-            stdout.write(magenta + "    Image Quality:   " + reset);
-            stdout.write(resize.quality + " (JPG Only)");
-            stdout.write("\r\n");
+            optimizers = "default (JPG Only)";
+        }
+
+        stdout.write(magenta + "    Optimizer:        " + color + optimizers + reset + "\r\n");
+    }
+
+    function validateFormat(stdout, format) {
+        if ( format ) {
+            stdout.write(magenta + "    Convert:          " + reset + format + "\r\n");
         }
     }
-    if ( "prefix" in resize ) {
-        stdout.write(magenta + "    Filename Prefix: " + reset + resize.prefix);
-        stdout.write("\r\n");
-    }
-    if ( "suffix" in resize ) {
-        stdout.write(magenta + "    Filename Suffix: " + reset + resize.suffix);
-        stdout.write("\r\n");
-    }
-    if ( "format" in resize ) {
-        stdout.write(magenta + "    Convert:         " + reset + resize.format);
-        stdout.write("\r\n");
-    }
-    if ( "acl" in resize ) {
-        stdout.write(magenta + "    S3's ACL:        " + reset + resize.acl);
-        stdout.write("\r\n");
-    }
-    stdout.write("\r\n");
-});
 
-stdout.write("\r\n");
-stdout.write(green + "Configuration check finished.\r\n" + reset);
-stdout.write("\r\n");
-if ( fatals.length === 0 && warning.length === 0 ) {
-    stdout.write(green + "Your configuration is green!\r\n" + reset);
-} else {
-    fatals.forEach(function(f) {
-        stdout.write(red + "[Fatal] " + f + "\r\n" + reset);
-    });
-    warning.forEach(function(n) {
-        stdout.write(red + "[Warning] " + n + "\r\n" + reset);
-    });
-}
+    function validateDestination(stdout, globalBucket, bucket, directory) {
+        var color = reset;
+        if ( ! bucket && ! globalBucket && (! directory || /^\.\//.test(directory))) {
+            warning.push(" Saving image to the same or relative directory may cause infinite Lambda process loop.");
+            color = red;
+        }
+
+        stdout.write( magenta + "    Save bucket:      " + color );
+        stdout.write( bucket ? bucket : globalBucket ? globalBucket : "[Same bucket]");
+        stdout.write("\r\n");
+        stdout.write (magenta + "    Save directory:   " + color );
+        if ( directory ) {
+            stdout.write(directory);
+            stdout.write( /^\.\.?/.test(directory) ? " [Relative]" : "");
+        } else {
+            stdout.write("[Same directory]");
+        }
+        stdout.write(reset + "\r\n");
+    }
+
+    function validatePrefixAndSuffix(stdout, prefix, suffix) {
+        if ( prefix ) {
+            stdout.write(magenta + "    Filename Prefix:  " + reset + prefix + "\r\n");
+        }
+        if ( suffix ) {
+            stdout.write(magenta + "    Filename Suffix:  " + reset + suffix + "\r\n");
+        }
+    }
+
+    function validateAcl(stdout, globalAcl, acl) {
+        stdout.write(magenta + "    S3 ACL:           " + reset);
+        stdout.write(acl ? acl : globalAcl ? "[Global ACL]" : "[Source ACL]");
+        stdout.write("\r\n");
+    }
 
 })();
