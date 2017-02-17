@@ -129,11 +129,37 @@ $ npm config set aws-lambda-image:timeout 5
 
 #### Deployment
 
-Command below will install the Lambda function on AWS, together with setting up proper role and privileges.
+Command below will deploy the Lambda function on AWS, together with setting up roles and policies.
 
 ```bash
 $ npm run deploy
 ```
+
+*Notice*: Because there are some limitations in `Claudia.js` support for policies, which could lead to issues
+with `Access Denied` when processing images from one bucket and saving them to another, we have decided to introduce support
+for custom policies.
+
+##### Custom policies
+
+Policies which should be installed together with our Lambda function are stored in `policies/` directory. We keep there
+policy that grants access to all buckets, which is preventing possible errors with `Access Denied` described above. If you
+have any security-related concerns, feel free to change the:
+
+```json
+"Resource": [
+    "*"
+]
+```
+
+in the `policies/s3-bucket-full-access.json` to something more restrictive, like:
+
+```json
+"Resource": [
+    "arn:aws:s3:::destination-bucket-name/*"
+]
+```
+
+Just keep in mind, that you need to make those changes before you do the deployment.
 
 #### Adding S3 event handlers
 
@@ -141,7 +167,7 @@ To complete installation process you will need to take one more action. It will 
 which will send information about all uploaded images directly to your Lambda function.
 
 ```bash
-$ npm run add-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".jpg"
+$ npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".jpg"
 ```
 
 *Note:* Unfortunately, for now `Clauda.js` is able to install only one such handler per Bucket. This [issue](https://github.com/claudiajs/claudia/issues/101)
