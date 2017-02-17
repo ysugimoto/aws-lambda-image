@@ -12,7 +12,6 @@ An AWS Lambda Function to resize/reduce images automatically. When an image is p
 ### Requirements
 
 - `node.js` ( AWS Lambda working version is **4.3.2** )
-- `make`
 
 ### Installation
 
@@ -21,38 +20,21 @@ Clone this repository and install dependencies:
 ```bash
 $ git clone git@github.com:ysugimoto/aws-lambda-image.git
 $ cd aws-lambda-image
-$ NODE_ENV=production npm install .
+$ npm install .
 ```
 
-When upload to Lambda, the project will bundle all files. So we should ignore development packages (e.g. test tools)
-
-If you are developper, please install all packages :-)
-
-### Packaging
-
-AWS Lambda accepts zip archived package. To create it, run `make lambda` task simply.
-
-```bash
-$ make lambda
-```
-
-It will create `aws-lambda-image.zip` at project root. You can upload it.
+When upload to AWS Lambda, the project will bundle only needed files - no dev dependencies will be included.
 
 ### Configuration
 
-This works with `config.json` put on project root. There is `config.json.sample` as example. You can copy to use it.
-
-```bash
-$ cp config.json.sample config.json
-```
-
-Configuration is simple, see below:
+Configuration file you will find under the name `config.json` in project root. It's copy of our example file `config.json.sample`.
+More or less it looks like:
 
 ```json
 {
   "bucket": "your-destination-bucket",
   "backup": {
-      "directory": "./original",
+      "directory": "./original"
   },
   "reduce": {
       "directory": "./reduced",
@@ -64,7 +46,7 @@ Configuration is simple, see below:
     {
       "size": 300,
       "directory": "./resized/small",
-      "prefix": "resized-",
+      "prefix": "resized-"
     },
     {
       "size": 450,
@@ -121,11 +103,88 @@ Configuration is simple, see below:
 |        | orientation | Boolean | Auto orientation if value is `true`.                                                                                                    |
 |        |     acl     |  String | Permission of S3 object. [See acl values](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).           |
 
-If you want to check how this works with your configuration, you can use `configtest`:
+#### Testing Configuration
+
+If you want to check how your configuration will work, you can use:
 
 ```bash
-$ make configtest
+$ npm run test-config
 ```
+
+### Installation
+
+#### Preparations
+
+To use the automated deployment scripts you will need to have [aws-cli installed and configured](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
+
+Deployment scripts are pre-configured to use some default values for the Lambda configuration. I you want to change any of those
+ just use:
+
+```bash
+$ npm config set aws-lambda-image:profile default
+$ npm config set aws-lambda-image:region eu-west-1
+$ npm config set aws-lambda-image:memory 1280
+$ npm config set aws-lambda-image:timeout 5
+```
+
+#### Deployment
+
+Command below will deploy the Lambda function on AWS, together with setting up roles and policies.
+
+```bash
+$ npm run deploy
+```
+
+*Notice*: Because there are some limitations in `Claudia.js` support for policies, which could lead to issues
+with `Access Denied` when processing images from one bucket and saving them to another, we have decided to introduce support
+for custom policies.
+
+##### Custom policies
+
+Policies which should be installed together with our Lambda function are stored in `policies/` directory. We keep there
+policy that grants access to all buckets, which is preventing possible errors with `Access Denied` described above. If you
+have any security-related concerns, feel free to change the:
+
+```json
+"Resource": [
+    "*"
+]
+```
+
+in the `policies/s3-bucket-full-access.json` to something more restrictive, like:
+
+```json
+"Resource": [
+    "arn:aws:s3:::destination-bucket-name/*"
+]
+```
+
+Just keep in mind, that you need to make those changes before you do the deployment.
+
+#### Adding S3 event handlers
+
+To complete installation process you will need to take one more action. It will allow you to install S3 Bucket event handler,
+which will send information about all uploaded images directly to your Lambda function.
+
+```bash
+$ npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".jpg"
+```
+
+*Note:* Unfortunately, for now `Clauda.js` is able to install only one such handler per Bucket. This [issue](https://github.com/claudiajs/claudia/issues/101)
+has been already raised and hopefully will be fixed soon. 
+
+#### Updating
+
+To update Lambda with you latest code just use command below. Script will build new package and automatically
+publish it on AWS.
+
+```bash
+$ npm run update
+```
+
+#### More
+
+For more scripts look into [package.json](package.json).
 
 ### Complete / Failed hooks
 

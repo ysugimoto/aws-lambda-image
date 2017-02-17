@@ -1,17 +1,47 @@
 {
   "name": "aws-lambda-image",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "An AWS Lambda Function to resize/reduce images automatically",
+  "config": {
+    "profile": "default",
+    "region": "eu-west-1",
+    "memory": "1280",
+    "timeout": "5"
+  },
   "scripts": {
+    "postinstall": "[ -f config.json ] || cp config.json.sample config.json",
+    "deploy": "claudia create --profile $npm_package_config_profile --region $npm_package_config_region --version dev --handler index.handler --no-optional-dependencies --timeout $npm_package_config_timeout --memory $npm_package_config_memory --policies policies/*.json",
+    "add-handler": "npm run add-s3-handler",
+    "add-s3-handler": "claudia add-s3-event-source --profile $npm_package_config_profile --bucket $npm_config_s3_bucket --events s3:ObjectCreated:* --prefix $npm_config_s3_prefix --suffix $npm_config_s3_suffix",
+    "release": "claudia set-version --profile $npm_package_config_profile --version production",
+    "update": "claudia update --profile $npm_package_config_profile --no-optional-dependencies",
     "test": "nyc ava",
-    "postinstall": "[ -f config.json ] || cp config.json.sample config.json"
+    "test-config": "./bin/configtest",
+    "test-lambda": "claudia test-lambda --profile $npm_package_config_profile --event $npm_config_event_file",
+    "destroy": "AWS_PROFILE=$npm_package_config_profile claudia destroy --profile $npm_package_config_profile"
   },
   "keywords": [
     "aws",
     "lambda",
     "image"
   ],
-  "author": "Yoshiaki Sugimoto",
+  "author": {
+    "name": "Yoshiaki Sugimoto",
+    "email": "sugimoto@wnotes.net",
+    "web": "https://github.com/ysugimoto"
+  },
+  "contributors": [
+    {
+      "name": "Shogo Sensui",
+      "email": "shogo.sensui@gmail.com",
+      "web": "https://github.com/1000ch"
+    },
+    {
+      "name": "Kamil Dybicz",
+      "email": "kamil.dybicz@gmail.com",
+      "web": "https://github.com/kdybicz"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "2.6.15",
@@ -21,6 +51,7 @@
   "devDependencies": {
     "ava": "^0.17.0",
     "bind-all": "^1.0.0",
+    "claudia": "^2.7.0",
     "coveralls": "^2.11.15",
     "nyc": "^10.1.2",
     "pify": "^2.3.0",
