@@ -1,5 +1,11 @@
+dist: amazonlinux:2016.09
+
 language: node_js
 node_js:
   - 4
+
+before_install:
+  - yum -y install ImageMagick
+
 after_success:
   - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
