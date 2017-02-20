@@ -27,7 +27,7 @@ test.before(async t => {
     });
     sinon.stub(S3, "putObject", (image) => {
         images.push(image);
-        return new Promise((resolve) => resolve(image));
+        return Promise.resolve(image);
     });
 });
 
