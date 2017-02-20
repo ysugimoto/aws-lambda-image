@@ -35,22 +35,20 @@ test("Resize JPEG with jpegoptim", async t => {
     t.is(out.width, 200);
 });
 
-test("Resize JPEG by default keep aspect ratio", async t => {
-    const resizer = new ImageResizer({size: "200x200"});
+test("Convert JPEG to PNG", async t => {
+    const resizer = new ImageResizer({size: 200, format: "png"});
     const resized = await resizer.exec(image);
     const gmImage = gmP(resized.data);
-    const out = await gmImage.size();
+    const out = await gmImage.format();
 
-    t.is(out.height, 200);
-    t.false(out.width === 200);
+    t.is(out, "PNG");
 });
 
-test("Resize JPEG can be forced to change aspect ratio", async t => {
-    const resizer = new ImageResizer({size: "200x200!"});
+test("Convert JPEG to GIF", async t => {
+    const resizer = new ImageResizer({size: 200, format: "gif"});
     const resized = await resizer.exec(image);
     const gmImage = gmP(resized.data);
-    const out = await gmImage.size();
+    const out = await gmImage.format();
 
-    t.is(out.height, 200);
-    t.is(out.width, 200);
+    t.is(out, "GIF");
 });
