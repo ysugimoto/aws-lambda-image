@@ -15,7 +15,7 @@ const setting        = JSON.parse(fs.readFileSync(sourceFile));
 let processor;
 let images;
 
-test.before(() => {
+test.before(async t => {
     sinon.stub(S3, "getObject", () => {
         return fsP.readFile(`${__dirname}/fixture/fixture.jpg`).then(data => {
             return new ImageData(
@@ -25,23 +25,23 @@ test.before(() => {
             );
         });
     });
-    images = [];
     sinon.stub(S3, "putObject", (image) => {
         images.push(image);
         return Promise.resolve(image);
     });
 });
 
-test.after(() => {
+test.after(async t => {
     S3.getObject.restore();
     S3.putObject.restore();
 });
 
-test.beforeEach(() => {
+test.beforeEach(async t => {
     processor = new ImageProcessor(setting.Records[0].s3, {
         done: () => {},
         fail: () => {}
     });
+    images = [];
 });
 
 test("Reduce JPEG with no configuration", async t => {
@@ -77,4 +77,45 @@ test("Reduce JPEG with bucket/directory configuration", async t => {
     t.is(image.fileName, "some/HappyFace.jpg");
     t.true(image.data.length > 0);
     t.true(image.data.length < fixture.length);
+});
+
+test("Resize JPEG with quality", async t => {
+    await processor.run(new Config({
+        "resizes": [
+            {
+                "size": 100,
+                "quality": 90
+            }
+        ]
+    }));
+    t.is(images.length, 1);
+    const image = images.shift();
+    const fixture = await fsP.readFile(`${__dirname}/fixture/fixture.jpg`);
+    t.is(image.fileName, "HappyFace.jpg");
+    t.true(image.data.length > 0);
+    t.true(image.data.length < fixture.length);
+});
+
+test("Resize JPEG with format", async t => {
+    await processor.run(new Config({
+        "resizes": [
+            {
+                "size": 100,
+                "format": "png"
+            },
+            {
+                "size": 100,
+                "format": "gif"
+            }
+        ]
+    }));
+    t.is(images.length, 2);
+
+    const pngImage = images.shift();
+    t.is(pngImage.fileName, "HappyFace.png");
+    t.true(pngImage.data.length > 0);
+
+    const gifImage = images.shift();
+    t.is(gifImage.fileName, "HappyFace.gif");
+    t.true(gifImage.data.length > 0);
 });
