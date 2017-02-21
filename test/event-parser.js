@@ -1,10 +1,9 @@
 "use strict";
 
 const parser = require( '../lib/EventParser' );
-
-const test        = require( "ava" );
-const pify        = require("pify");
-const fs          = require("fs");
+const test   = require( "ava" );
+const pify   = require("pify");
+const fs     = require("fs");
 
 test("Parsing S3 event", t => {
     const s3EventSource = `${__dirname}/fixture/event_source.json`;
