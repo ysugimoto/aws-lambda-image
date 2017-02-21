@@ -26,3 +26,21 @@ test("Parsing SNS event carrying S3 event", t => {
     t.is( record.bucket.name, "sourcebucket" );
     t.is( record.bucket.arn, "arn:aws:s3:::mybucket" );
 });
+
+test("Parsing unsupported event returns false", t => {
+    const record = parser( { "Records": [ { "dynamodb": { "Keys": "Value" }, "eventSource": "aws:dynamodb" } ] } );
+
+    t.is( record, false );
+});
+
+test("Parsing null event returns false", t => {
+    const record = parser( null );
+
+    t.is( record, false );
+});
+
+test("Parsing empty event returns false", t => {
+    const record = parser( {} );
+
+    t.is( record, false );
+});
