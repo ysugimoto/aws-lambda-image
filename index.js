@@ -8,6 +8,7 @@
 "use strict";
 
 const ImageProcessor = require("./lib/ImageProcessor");
+const parser         = require("./lib/EventParser");
 const Config         = require("./lib/Config");
 const fs             = require("fs");
 const path           = require("path");
@@ -15,21 +16,12 @@ const path           = require("path");
 // Lambda Handler
 exports.handler = (event, context, callback) => {
 
-    var eventRecord = event.Records && event.Records[0];
+    var eventRecord = parser(event);
     if (eventRecord) {
-        if (eventRecord.eventSource === 'aws:s3' && eventRecord.s3) {
-            console.log("Incoming S3 event...");
-            process(eventRecord.s3, callback);
-        } else if (eventRecord.EventSource === 'aws:sns' && eventRecord.Sns) {
-            console.log("Incoming SNS message...");
-            process(JSON.parse(event.Records[0].Sns.Message).Records[0].s3, callback);
-        } else {
-            console.log(JSON.stringify(eventRecord));
-            callback('unsupported event source');
-        }
+        process(eventRecord, callback);
     } else {
         console.log(JSON.stringify(event));
-        callback('no records in the event');
+        callback('Unsupported or invalid event');
     }
 };
 
