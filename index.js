@@ -8,7 +8,7 @@
 "use strict";
 
 const ImageProcessor = require("./lib/ImageProcessor");
-const parser         = require("./lib/EventParser");
+const eventParser    = require("./lib/EventParser");
 const Config         = require("./lib/Config");
 const fs             = require("fs");
 const path           = require("path");
@@ -16,7 +16,7 @@ const path           = require("path");
 // Lambda Handler
 exports.handler = (event, context, callback) => {
 
-    var eventRecord = parser(event);
+    var eventRecord = eventParser(event);
     if (eventRecord) {
         process(eventRecord, callback);
     } else {
