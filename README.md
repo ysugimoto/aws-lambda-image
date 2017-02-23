@@ -171,7 +171,15 @@ $ npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/"
 ```
 
 *Note:* Unfortunately, for now `Clauda.js` is able to install only one such handler per Bucket. This [issue](https://github.com/claudiajs/claudia/issues/101)
-has been already raised and hopefully will be fixed soon. 
+has been already raised and hopefully will be fixed soon.
+
+#### Adding SNS message handlers
+
+As an addition, you can also setup and SNS message handler in case you would like to process S3 events over an SNS topic.
+
+```bash
+$ npm run add-sns-handler --sns_topic="arn:of:SNS:topic"
+```
 
 #### Updating
 

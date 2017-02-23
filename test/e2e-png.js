@@ -15,7 +15,7 @@ const setting        = JSON.parse(fs.readFileSync(sourceFile));
 let processor;
 let images;
 
-test.before(() => {
+test.before(async t => {
     sinon.stub(S3, "getObject", () => {
         return fsP.readFile(`${__dirname}/fixture/fixture.png`).then(data => {
             return new ImageData(
@@ -25,23 +25,23 @@ test.before(() => {
             );
         });
     });
-    images = [];
     sinon.stub(S3, "putObject", (image) => {
         images.push(image);
-        return new Promise((resolve) => resolve(image));
+        return Promise.resolve(image);
     });
 });
 
-test.after(() => {
+test.after(async t => {
     S3.getObject.restore();
     S3.putObject.restore();
 });
 
-test.beforeEach(() => {
+test.beforeEach(async t => {
     processor = new ImageProcessor(setting.Records[0].s3, {
         done: () => {},
         fail: () => {}
     });
+    images = [];
 });
 
 test("Reduce PNG with no configuration", async t => {
