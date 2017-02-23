@@ -1,6 +1,6 @@
 {
   "name": "aws-lambda-image",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "An AWS Lambda Function to resize/reduce images automatically",
   "config": {
     "profile": "default",
@@ -13,6 +13,7 @@
     "deploy": "claudia create --profile $npm_package_config_profile --region $npm_package_config_region --version dev --handler index.handler --no-optional-dependencies --timeout $npm_package_config_timeout --memory $npm_package_config_memory --policies policies/*.json",
     "add-handler": "npm run add-s3-handler",
     "add-s3-handler": "claudia add-s3-event-source --profile $npm_package_config_profile --bucket $npm_config_s3_bucket --events s3:ObjectCreated:* --prefix $npm_config_s3_prefix --suffix $npm_config_s3_suffix",
+    "add-sns-handler": "claudia add-sns-event-source --profile $npm_package_config_profile --topic $npm_config_sns_topic",
     "release": "claudia set-version --profile $npm_package_config_profile --version production",
     "update": "claudia update --profile $npm_package_config_profile --no-optional-dependencies",
     "test": "nyc ava",
