@@ -47,7 +47,6 @@
   "dependencies": {
     "aws-sdk": "2.6.15",
     "gm": "^1.23.0",
-    "lodash": "4.12.0",
     "image-type": "2.1.0"
   },
   "devDependencies": {
