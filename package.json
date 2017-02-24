@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "ava": "^0.17.0",
+    "aws-sdk-mock": "^1.6.1",
     "bind-all": "^1.0.0",
     "claudia": "^2.7.0",
     "coveralls": "^2.11.15",
