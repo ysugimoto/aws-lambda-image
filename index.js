@@ -8,6 +8,7 @@
 "use strict";
 
 const ImageProcessor = require("./lib/ImageProcessor");
+const S3FileSystem   = require("./lib/S3FileSystem");
 const eventParser    = require("./lib/EventParser");
 const Config         = require("./lib/Config");
 const fs             = require("fs");
@@ -27,7 +28,8 @@ exports.handler = (event, context, callback) => {
 
 function process(s3Object, callback) {
     const configPath = path.resolve(__dirname, "config.json");
-    const processor  = new ImageProcessor(s3Object);
+    const fileSystem = new S3FileSystem();
+    const processor  = new ImageProcessor(fileSystem, s3Object);
     const config     = new Config(
         JSON.parse(fs.readFileSync(configPath, { encoding: "utf8" }))
     );
