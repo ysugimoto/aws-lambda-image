@@ -1,5 +1,4 @@
 {
-    "esversion": 6,
     "esnext": true,
     "node": true
 }
