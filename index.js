@@ -42,6 +42,9 @@ function process(s3Object, callback) {
         if ( messages === "Object was already processed." ) {
             console.log("Image already processed");
             callback(null, "Image already processed");
+        } else if ( messages === "Empty file or directory." ) {
+            console.log( "Image file is broken or it's a folder" );
+            callback( null, "Image file is broken or it's a folder" );
         } else {
             callback("Error processing " + s3Object.object.key + ": " + messages);
         }
