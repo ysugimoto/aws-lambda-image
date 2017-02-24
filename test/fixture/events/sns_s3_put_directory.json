@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:eu-west-1:514223584321:lambda-image-resizer:eb4420e4-e23b-445c-82cc-c17c3aad8b83",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "de55427f-9fc4-50aa-9bc3-135663aa69ca",
+        "TopicArn": "arn:aws:sns:eu-west-1:514223584321:lambda-image-resizer",
+        "Subject": "Amazon S3 Notification",
+        "Message": "{\"Records\":[{\"eventVersion\":\"2.0\",\"eventSource\":\"aws:s3\",\"awsRegion\":\"eu-west-1\",\"eventTime\":\"2017-02-24T09:17:34.646Z\",\"eventName\":\"ObjectCreated:Put\",\"userIdentity\":{\"principalId\":\"A18ZVM2MRUILBS\"},\"requestParameters\":{\"sourceIPAddress\":\"127.0.0.1\"},\"responseElements\":{\"x-amz-request-id\":\"7A389B82857B32FB\",\"x-amz-id-2\":\"fptKzxR4TGXhuUkJ45IsaYo2rug4Se/4X1ypyXaBf2Tqk6vlATs+Uo5EaOe1jNx7LtYITjXf1JA=\"},\"s3\":{\"s3SchemaVersion\":\"1.0\",\"configurationId\":\"OTU2MjNhZGYtNDNjNC00OGZlLWJlNWMtNmY5MzgyZGVkYTkw\",\"bucket\":{\"name\":\"mybucket\",\"ownerIdentity\":{\"principalId\":\"A18ZVM2MRUILBS\"},\"arn\":\"arn:aws:s3:::mybucket\"},\"object\":{\"key\":\"some/\",\"size\":0,\"eTag\":\"d41d8cd98f00b204e9800998ecf8427e\",\"sequencer\":\"0058AFFA2E998530D6\"}}}]}",
+        "Timestamp": "2017-02-24T09:17:34.689Z",
+        "SignatureVersion": "1",
+        "Signature": "M349kyPwUx42Qy+55KxfOwwdQW3tmgBPPSqXWImasV9/OPHmin7NK8ZFuqo1QK6Ea3DWCaOjmZKlwdNSC33wRgQUOYs2/KKMO+V1KeCYiGSjL45yFJ7m52n0GFe44uq7/yZ6VzRZ/9+GlQkAaijidoU/iMEIUe9unpddhypuYbEpGYJyvUt1bBUi24wJLNAZHQqjw8kb2Y4RHJXNzqXIDgPggDOesG1v9HLYNkTHKhWS+pXcC0yuOPES/sGi+lsquZ1jgP3UL/8qF9kAKuIIBhtfMHkqmFhQ96j+EoGQ+K1WwVX7Z8bGXDm85LumWMc87Axe8YnsHxr5PIvm+rcfhw==",
+        "SigningCertUrl": "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-b95095beb82e8f6a046b3aafc7f4149a.pem",
+        "UnsubscribeUrl": "https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:514223584321:lambda-image-resizer:eb4420e4-e23b-445c-82cc-c17c3aad8b83",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}
