@@ -1,3 +1,4 @@
 {
-    "esversion": 6
+    "esversion": 6,
+    "esnext": true
 }
