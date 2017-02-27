@@ -40,7 +40,7 @@ test("Build output path", t => {
     t.is(image.combineWithDirectory("d/e", "prefix-", "_suffix"), "d/e/prefix-key_suffix.png");
 });
 
-test.only("Build output path with RegEx", t => {
+test("Build output path with RegEx", t => {
     const image = new ImageData("a/b/c/key.png", "bucket", "data", {});
 
     // No directory
