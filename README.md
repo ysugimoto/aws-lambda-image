@@ -176,7 +176,8 @@ which will send information about all uploaded images directly to your Lambda fu
 $ npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".jpg"
 ```
 
-`Clauda.js` is able to install multiple handlers per Bucket. For example to add PNG just re-run the above command:
+You are able to install multiple handlers per Bucket. So, to add handler for PNG files you just need to re-run above command with different _suffix_, ie:
+
 ```bash
 $ npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".png"
 ```
