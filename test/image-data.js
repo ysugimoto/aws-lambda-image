@@ -3,78 +3,108 @@
 const ImageData = require("../lib/ImageData");
 const test      = require("ava");
 
-test("Build output path", t => {
-    const image = new ImageData("a/b/c/key.png", "bucket", "data", {});
+let image;
 
-    // No directory
+test.before(t => {
+    image = new ImageData("a/b/c/key.png", "bucket", "data", {});
+});
+
+test("Build output path when directory is undefined", t => {
     t.is(image.combineWithDirectory(undefined), "a/b/c/key.png");
+});
 
-    // Empty directory
+test("Build output path when directory is empty", t => {
     t.is(image.combineWithDirectory(""), "key.png");
+});
 
-    // Relative directory
+test("Build output path when directory is relative deeper", t => {
     t.is(image.combineWithDirectory("./d"), "a/b/c/d/key.png");
+});
 
-    // Internal directory
+test("Build output path when directory is relative deeper - 2nd level", t => {
     t.is(image.combineWithDirectory("./d/e"), "a/b/c/d/e/key.png");
+});
 
-    // External directory
+test("Build output path when directory is relative backward", t => {
     t.is(image.combineWithDirectory(".."), "a/b/key.png");
+});
 
-    // External internal directory
+test("Build output path when directory is relative backward with new subdirectory branch", t => {
     t.is(image.combineWithDirectory("../d"), "a/b/d/key.png");
+});
 
-    // Root directory
+test("Build output path when directory is absolute", t => {
     t.is(image.combineWithDirectory("d"), "d/key.png");
+});
 
-    // Root internal directory
+test("Build output path when directory is absolute - 2nd level", t => {
     t.is(image.combineWithDirectory("d/e"), "d/e/key.png");
+});
 
-    // With prefix
+test("Build output path with prefix", t => {
     t.is(image.combineWithDirectory("d/e", "prefix-"), "d/e/prefix-key.png");
+});
 
-    // With suffix
+test("Build output path with suffix", t => {
     t.is(image.combineWithDirectory("d/e", "", "-suffix"), "d/e/key-suffix.png");
+});
 
-    // With prefix and suffix
+test("Build output path with prefix and suffix", t => {
     t.is(image.combineWithDirectory("d/e", "prefix-", "_suffix"), "d/e/prefix-key_suffix.png");
 });
 
-test("Build output path with template", t => {
-    const image = new ImageData("a/b/c/key.png", "bucket", "data", {});
-
-    // No directory
+test("[path-template] Build output path when directory is an empty object", t => {
     t.is(image.combineWithDirectory({}), "a/b/c/key.png");
+});
+
+test("[path-template] Build output path when directory is an empty template map", t => {
     t.is(image.combineWithDirectory({template: {}}), "a/b/c/key.png");
+});
+
+test("[path-template] Build output path when directory is an template map with pattern and output keys empty", t => {
     t.is(image.combineWithDirectory({template: {pattern: "", output: ""}}), "a/b/c/key.png");
+});
 
-    // Empty directory
+test("[path-template] Build output path when template replace whole directory", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*", output: ""}}), "key.png");
+});
 
-    // Relative directory
+test("[path-template] Build output path when template adds subdirectory", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*path", output: "*path/d"}}), "a/b/c/d/key.png");
+});
 
-    // Internal directory
+test("[path-template] Build output path when template adds subdirectory - 2nd level", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*path", output: "*path/d/e"}}), "a/b/c/d/e/key.png");
+});
 
-    // External directory
+test("[path-template] Build output path when template removes top subdirectory", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*path/c", output: "*path"}}), "a/b/key.png");
+});
 
-    // External internal directory
+test("[path-template] Build output path when template replaces top subdirectory with new one", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*path/c", output: "*path/d"}}), "a/b/d/key.png");
+});
 
-    // Root directory
+test("[path-template] Build output path when template replaces old path with new absolute one", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*", output: "d"}}), "d/key.png");
+});
 
-    // Root internal directory
+test("[path-template] Build output path when template replaces old path with new absolute one - 2nd level", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}}), "d/e/key.png");
+});
 
-    // With prefix
+test("[path-template] Build output path when template didn't match base directory", t => {
+    t.is(image.combineWithDirectory({template: {pattern: "x/:something", output: "d/e"}}), "a/b/c/key.png");
+});
+
+test("[path-template] Build output path with template and prefix", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}}, "prefix-"), "d/e/prefix-key.png");
+});
 
-    // With suffix
+test("[path-template] Build output path with template and suffix", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}}, "", "-suffix"), "d/e/key-suffix.png");
+});
 
-    // With prefix and suffix
+test("[path-template] Build output path with template, prefix and suffix", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}}, "prefix-", "_suffix"), "d/e/prefix-key_suffix.png");
 });
