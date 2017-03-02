@@ -11,8 +11,6 @@ engines:
     enabled: true
   markdownlint:
     enabled: true
-    tables: false
-    code_blocks: false
 ratings:
   paths:
   - "**.js"
