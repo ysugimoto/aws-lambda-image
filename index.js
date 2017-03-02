@@ -22,6 +22,7 @@ exports.handler = (event, context, callback) => {
     } else {
         console.log(JSON.stringify(event));
         callback('Unsupported or invalid event');
+        return;
     }
 };
 
@@ -37,13 +38,16 @@ function process(s3Object, callback) {
         const message = "OK, " + processedImages + " images were processed.";
         console.log(message);
         callback(null, message);
+        return;
     })
     .catch((messages) => {
         if ( messages === "Object was already processed." ) {
             console.log("Image already processed");
             callback(null, "Image already processed");
+            return;
         } else {
             callback("Error processing " + s3Object.object.key + ": " + messages);
+            return;
         }
     });
 }
