@@ -13,6 +13,7 @@ engines:
     enabled: true
 ratings:
   paths:
+  - "bin/configtest"
   - "**.js"
   - "**.md"
 exclude_paths:
