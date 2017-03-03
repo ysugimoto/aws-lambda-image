@@ -3,20 +3,22 @@
 const ImageProcessor = require("../lib/ImageProcessor");
 const ImageData      = require("../lib/ImageData");
 const Config         = require("../lib/Config");
-const S3             = require("../lib/S3");
+const S3FileSystem   = require("../lib/S3FileSystem");
 const test           = require("ava");
 const sinon          = require("sinon");
 const pify           = require("pify");
 const fs             = require("fs");
 const fsP            = pify(fs);
-const sourceFile     = `${__dirname}/fixture/event_source.json`;
+const sourceFile     = `${__dirname}/fixture/events/s3_put_file.json`;
 const setting        = JSON.parse(fs.readFileSync(sourceFile));
 
 let processor;
 let images;
+let fileSystem;
 
 test.before(async t => {
-    sinon.stub(S3, "getObject", () => {
+    fileSystem = new S3FileSystem();
+    sinon.stub(fileSystem, "getObject", () => {
         return fsP.readFile(`${__dirname}/fixture/fixture.png`).then(data => {
             return new ImageData(
                 "test.png",
@@ -25,22 +27,19 @@ test.before(async t => {
             );
         });
     });
-    sinon.stub(S3, "putObject", (image) => {
+    sinon.stub(fileSystem, "putObject", (image) => {
         images.push(image);
         return Promise.resolve(image);
     });
 });
 
 test.after(async t => {
-    S3.getObject.restore();
-    S3.putObject.restore();
+    fileSystem.getObject.restore();
+    fileSystem.putObject.restore();
 });
 
 test.beforeEach(async t => {
-    processor = new ImageProcessor(setting.Records[0].s3, {
-        done: () => {},
-        fail: () => {}
-    });
+    processor = new ImageProcessor(fileSystem, setting.Records[0].s3);
     images = [];
 });
 
