@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws:sns:eu-west-1:514223584321:lambda-image-resizer:eb4420e4-e23b-445c-82cc-c17c3aad8b83",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "f1a5d78d-9344-518f-bfb2-86a46f2641cb",
+        "TopicArn": "arn:aws:sns:eu-west-1:514223584321:lambda-image-resizer",
+        "Subject": "Amazon S3 Notification",
+        "Message": "{\"Service\":\"Amazon S3\",\"Event\":\"s3:TestEvent\",\"Time\":\"2017-02-24T09:17:22.334Z\",\"Bucket\":\"mybucket\",\"RequestId\":\"08BA42D492A002B0\",\"HostId\":\"ilNmIfYcYf1MNWeoIvXUqRbkfl861Sr8xaPMu9L5cze9SPD1ThnlIxU1iTwYe8gEZicPzvQflmA=\"}",
+        "Timestamp": "2017-02-24T09:17:22.586Z",
+        "SignatureVersion": "1",
+        "Signature": "h7BUG2zHmfEreSDeMoym6XRqvT0FgBBtRlcwXdLQxWMCo1UUtnMiMn/7yonQTBvym1unjNRiemyXQoD2s7ORjPyCrgQm7UzT3WHMeEEY+9d2E/fn6N3ytSBAOjXqwjsdxfbG+yC17td5AkNeeNcD2SLpV8q4W1SWIXC9cnIEZZad686LqcPdgzXyXToFHdyh+Q1esFMjc1yYJp4GaBjUiPaSgvpICVg0G/I5fVi1P0RHux3MH8+W14n33u2wysbH5awz+WanxJJN8cNMlHIFnZxqnbil/h3sfxVOmDNLNBK2I1rjLwQ9mlwuSolw3wZnFym3ARLNEIhDKhY9w+iyBg==",
+        "SigningCertUrl": "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-b95095beb82e8f6a046b3aafc7f4149a.pem",
+        "UnsubscribeUrl": "https://sns.eu-west-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:eu-west-1:514223584321:lambda-image-resizer:eb4420e4-e23b-445c-82cc-c17c3aad8b83",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}
