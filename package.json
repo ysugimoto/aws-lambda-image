@@ -50,7 +50,8 @@
     "image-type": "2.1.0"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
+    "ava": "^0.18.2",
+    "aws-sdk-mock": "^1.6.1",
     "bind-all": "^1.0.0",
     "claudia": "^2.9.0",
     "coveralls": "^2.11.15",
