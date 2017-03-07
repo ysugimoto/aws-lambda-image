@@ -84,8 +84,8 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |      acl      |        -        |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
 |    backup     |        -        |  Object | Backup original file setting.                                                                                                             |
 |               |      bucket     |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                            |
-|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode retails in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
-|               |     template    |  Object | Map representing pattern substitution pair. Mode retails in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
+|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
+|               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
@@ -93,7 +93,8 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |     quality     |  Number | Determine reduced image quality ( only `JPG` ).                                                                                           |
 |               |  jpegOptimizer  |  String | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                |
 |               |      bucket     |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                            |
-|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode retails in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
+|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
+|               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
@@ -106,8 +107,8 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |  jpegOptimizer  |  String | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                |
 |               |   orientation   | Boolean | Auto orientation if value is `true`.                                                                                                      |
 |               |      bucket     |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                            |
-|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode retails in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
-|               |     template    |  Object | Map representing pattern substitution pair. Mode retails in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
+|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
+|               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
