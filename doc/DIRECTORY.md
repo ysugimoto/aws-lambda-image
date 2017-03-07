@@ -120,7 +120,7 @@ additionally `/` and `.` will start a new segment.
 ### More examples
 
 Examples of `template` usage cases you can find in our
-[test files](test/image-data.js).
+[test files](../test/image-data.js).
 
 ## S3 event notification limitations
 
