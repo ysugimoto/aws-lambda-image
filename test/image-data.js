@@ -53,15 +53,15 @@ test("Build output path with prefix and suffix", t => {
     t.is(image.combineWithDirectory({directory: "d/e", prefix: "prefix-", suffix: "_suffix"}), "d/e/prefix-key_suffix.png");
 });
 
-test("[path-template] Build output path when directory is an empty object", t => {
+test("[path-template] Build output path when template is an empty object", t => {
     t.is(image.combineWithDirectory({}), "a/b/c/key.png");
 });
 
-test("[path-template] Build output path when directory is an empty template map", t => {
+test("[path-template] Build output path when template is an empty map", t => {
     t.is(image.combineWithDirectory({template: {}}), "a/b/c/key.png");
 });
 
-test("[path-template] Build output path when directory is an template map with pattern and output keys empty", t => {
+test("[path-template] Build output path when template is an map with pattern and output keys empty", t => {
     t.is(image.combineWithDirectory({template: {pattern: "", output: ""}}), "a/b/c/key.png");
 });
 
