@@ -10,47 +10,47 @@ test.before(t => {
 });
 
 test("Build output path when directory is undefined", t => {
-    t.is(image.combineWithDirectory(undefined), "a/b/c/key.png");
+    t.is(image.combineWithDirectory({}), "a/b/c/key.png");
 });
 
 test("Build output path when directory is empty", t => {
-    t.is(image.combineWithDirectory(""), "key.png");
+    t.is(image.combineWithDirectory({directory: ""}), "key.png");
 });
 
 test("Build output path when directory is relative deeper", t => {
-    t.is(image.combineWithDirectory("./d"), "a/b/c/d/key.png");
+    t.is(image.combineWithDirectory({directory: "./d"}), "a/b/c/d/key.png");
 });
 
 test("Build output path when directory is relative deeper - 2nd level", t => {
-    t.is(image.combineWithDirectory("./d/e"), "a/b/c/d/e/key.png");
+    t.is(image.combineWithDirectory({directory: "./d/e"}), "a/b/c/d/e/key.png");
 });
 
 test("Build output path when directory is relative backward", t => {
-    t.is(image.combineWithDirectory(".."), "a/b/key.png");
+    t.is(image.combineWithDirectory({directory: ".."}), "a/b/key.png");
 });
 
 test("Build output path when directory is relative backward with new subdirectory branch", t => {
-    t.is(image.combineWithDirectory("../d"), "a/b/d/key.png");
+    t.is(image.combineWithDirectory({directory: "../d"}), "a/b/d/key.png");
 });
 
 test("Build output path when directory is absolute", t => {
-    t.is(image.combineWithDirectory("d"), "d/key.png");
+    t.is(image.combineWithDirectory({directory: "d"}), "d/key.png");
 });
 
 test("Build output path when directory is absolute - 2nd level", t => {
-    t.is(image.combineWithDirectory("d/e"), "d/e/key.png");
+    t.is(image.combineWithDirectory({directory: "d/e"}), "d/e/key.png");
 });
 
 test("Build output path with prefix", t => {
-    t.is(image.combineWithDirectory("d/e", "prefix-"), "d/e/prefix-key.png");
+    t.is(image.combineWithDirectory({directory: "d/e", prefix: "prefix-"}), "d/e/prefix-key.png");
 });
 
 test("Build output path with suffix", t => {
-    t.is(image.combineWithDirectory("d/e", "", "-suffix"), "d/e/key-suffix.png");
+    t.is(image.combineWithDirectory({directory: "d/e", suffix: "-suffix"}), "d/e/key-suffix.png");
 });
 
 test("Build output path with prefix and suffix", t => {
-    t.is(image.combineWithDirectory("d/e", "prefix-", "_suffix"), "d/e/prefix-key_suffix.png");
+    t.is(image.combineWithDirectory({directory: "d/e", prefix: "prefix-", suffix: "_suffix"}), "d/e/prefix-key_suffix.png");
 });
 
 test("[path-template] Build output path when directory is an empty object", t => {
@@ -98,13 +98,13 @@ test("[path-template] Build output path when template didn't match base director
 });
 
 test("[path-template] Build output path with template and prefix", t => {
-    t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}}, "prefix-"), "d/e/prefix-key.png");
+    t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}, prefix: "prefix-"}), "d/e/prefix-key.png");
 });
 
 test("[path-template] Build output path with template and suffix", t => {
-    t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}}, "", "-suffix"), "d/e/key-suffix.png");
+    t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}, suffix: "-suffix"}), "d/e/key-suffix.png");
 });
 
 test("[path-template] Build output path with template, prefix and suffix", t => {
-    t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}}, "prefix-", "_suffix"), "d/e/prefix-key_suffix.png");
+    t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}, prefix: "prefix-", suffix: "_suffix"}), "d/e/prefix-key_suffix.png");
 });

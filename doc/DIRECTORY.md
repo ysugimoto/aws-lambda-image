@@ -44,6 +44,10 @@ used for matching and and parsing, which allows you to store parts of parsed
 input directory as variables. More details in [Syntax](#template-syntax)
 section.
 
+In case the input file directory will not match the `pattern`, it will be
+skipped and the [`directory`](#directory) parameter will be processed, if
+present.
+
 `output` defines a pattern that describe output directory path. It allows you to
 reuse variables parsed from input directory, like in example above. More details
 in [Syntax](#template-syntax) section.
