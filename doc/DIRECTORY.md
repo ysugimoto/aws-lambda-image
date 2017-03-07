@@ -54,7 +54,7 @@ where output files will be saved in same directory structure as input file -
 
 ### Template syntax
 
-**Source**: [path-template](matsadler/path-template#template-syntax)
+**Source**: [path-template](https://github.com/matsadler/path-template/blob/master/readme.md#template-syntax)
 
 The characters `:`, `*`, `(`, and `)` have special meanings.
 
