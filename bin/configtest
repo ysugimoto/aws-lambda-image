@@ -56,7 +56,7 @@ var reset   = '\u001b[0m';
     stdout.write("--------------------------------\r\n");
     if ( "backup" in config ) {
         var backup = config.backup || {};
-        validateDestination(stdout, bucket, backup.bucket, backup.directory);
+        validateDestination(stdout, bucket, backup.bucket, backup.directory, backup.template);
         validatePrefixAndSuffix(stdout, backup.prefix, backup.suffix);
         validateAcl(stdout, acl, backup.acl);
     } else {
@@ -70,7 +70,7 @@ var reset   = '\u001b[0m';
         var reduce = config.reduce || {};
         validateQuality(stdout, reduce.quality);
         validateOptimizer(stdout, reduce.jpegOptimizer || jpegOptimizer);
-        validateDestination(stdout, bucket, reduce.bucket, reduce.directory);
+        validateDestination(stdout, bucket, reduce.bucket, reduce.directory, reduce.template);
         validatePrefixAndSuffix(stdout, reduce.prefix, reduce.suffix);
         validateAcl(stdout, acl, reduce.acl);
     } else {
@@ -90,7 +90,7 @@ var reset   = '\u001b[0m';
         validateFormat(stdout, resize.format);
         validateQuality(stdout, resize.quality);
         validateOptimizer(stdout, resize.jpegOptimizer || jpegOptimizer);
-        validateDestination(stdout, bucket, resize.bucket, resize.directory);
+        validateDestination(stdout, bucket, resize.bucket, resize.directory, resize.template);
         validatePrefixAndSuffix(stdout, resize.prefix, resize.suffix);
         validateAcl(stdout, acl, resize.acl);
         stdout.write("\r\n");
@@ -158,9 +158,9 @@ var reset   = '\u001b[0m';
         }
     }
 
-    function validateDestination(stdout, globalBucket, bucket, directory) {
+    function validateDestination(stdout, globalBucket, bucket, directory, template) {
         var color = reset;
-        if ( ! bucket && ! globalBucket && (! directory || /^\.\//.test(directory))) {
+        if ( ! bucket && ! globalBucket && (! directory || /^\.\//.test(directory)) && (! template || ! template.pattern)) {
             warning.push(" Saving image to the same or relative directory may cause infinite Lambda process loop.");
             color = red;
         }
@@ -172,6 +172,9 @@ var reset   = '\u001b[0m';
         if ( directory ) {
             stdout.write(directory);
             stdout.write( /^\.\.?/.test(directory) ? " [Relative]" : "");
+        } else if ( template && template.pattern ) {
+            stdout.write(template.output || "/");
+            stdout.write(" [Pattern]");
         } else {
             stdout.write("[Same directory]");
         }
