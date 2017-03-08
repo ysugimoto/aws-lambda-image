@@ -1,4 +1,4 @@
-## aws-lambda-image
+# aws-lambda-image
 
 [![Build Status](https://travis-ci.org/ysugimoto/aws-lambda-image.svg?branch=master)](https://travis-ci.org/ysugimoto/aws-lambda-image)
 [![Code Climate](https://codeclimate.com/github/ysugimoto/aws-lambda-image/badges/gpa.svg)](https://codeclimate.com/github/ysugimoto/aws-lambda-image)
@@ -6,29 +6,30 @@
 [![npm version](https://badge.fury.io/js/aws-lambda-image.svg)](https://badge.fury.io/js/aws-lambda-image)
 [![Join the chat at https://gitter.im/aws-lambda-image](https://img.shields.io/badge/GITTER-join%20chat-green.svg)](https://gitter.im/aws-lambda-image?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+An AWS Lambda Function to resize/reduce images automatically. When an image is
+put on AWS S3 bucket, this package will resize/reduce it and put to S3.
 
-An AWS Lambda Function to resize/reduce images automatically. When an image is put on AWS S3 bucket, this package will resize/reduce it and put to S3.
-
-### Requirements
+## Requirements
 
 - `node.js` ( AWS Lambda working version is **4.3.2** )
 
-### Installation
+## Preparation
 
 Clone this repository and install dependencies:
 
 ```bash
-$ git clone git@github.com:ysugimoto/aws-lambda-image.git
-$ cd aws-lambda-image
-$ npm install .
+git clone git@github.com:ysugimoto/aws-lambda-image.git
+cd aws-lambda-image
+npm install .
 ```
 
-When upload to AWS Lambda, the project will bundle only needed files - no dev dependencies will be included.
+When upload to AWS Lambda, the project will bundle only needed files - no dev
+dependencies will be included.
 
-### Configuration
+## Configuration
 
-Configuration file you will find under the name `config.json` in project root. It's copy of our example file `config.json.sample`.
-More or less it looks like:
+Configuration file you will find under the name `config.json` in project root.
+It's copy of our example file `config.json.sample`. More or less it looks like:
 
 ```json
 {
@@ -74,7 +75,7 @@ More or less it looks like:
 }
 ```
 
-#### Configuration Parameters
+### Configuration Parameters
 
 |     name      |      field      |   type  |                                                               description                                                                 |
 |:-------------:|:---------------:|:-------:|-------------------------------------------------------------------------------------------------------------------------------------------|
@@ -83,7 +84,8 @@ More or less it looks like:
 |      acl      |        -        |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
 |    backup     |        -        |  Object | Backup original file setting.                                                                                                             |
 |               |      bucket     |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                            |
-|               |    directory    |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                         |
+|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
+|               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
@@ -91,7 +93,8 @@ More or less it looks like:
 |               |     quality     |  Number | Determine reduced image quality ( only `JPG` ).                                                                                           |
 |               |  jpegOptimizer  |  String | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                |
 |               |      bucket     |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                            |
-|               |    directory    |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                         |
+|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
+|               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
@@ -104,52 +107,57 @@ More or less it looks like:
 |               |  jpegOptimizer  |  String | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                |
 |               |   orientation   | Boolean | Auto orientation if value is `true`.                                                                                                      |
 |               |      bucket     |  String | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                            |
-|               |    directory    |  String | Image directory path. When starts with `./` relative to the source, otherwise creates a new tree.                                         |
+|               |    directory    |  String | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                   |
+|               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
 
-#### Testing Configuration
+### Testing Configuration
 
 If you want to check how your configuration will work, you can use:
 
 ```bash
-$ npm run test-config
+npm run test-config
 ```
 
-### Installation
+## Installation
 
-#### Preparations
+### Setup
 
-To use the automated deployment scripts you will need to have [aws-cli installed and configured](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
+To use the automated deployment scripts you will need to have
+[aws-cli installed and configured](http://docs.aws.amazon.com/cli/latest/userguide/installing.html).
 
-Deployment scripts are pre-configured to use some default values for the Lambda configuration. I you want to change any of those
- just use:
+Deployment scripts are pre-configured to use some default values for the Lambda
+configuration. I you want to change any of those just use:
 
 ```bash
-$ npm config set aws-lambda-image:profile default
-$ npm config set aws-lambda-image:region eu-west-1
-$ npm config set aws-lambda-image:memory 1280
-$ npm config set aws-lambda-image:timeout 5
+npm config set aws-lambda-image:profile default
+npm config set aws-lambda-image:region eu-west-1
+npm config set aws-lambda-image:memory 1280
+npm config set aws-lambda-image:timeout 5
 ```
 
-#### Deployment
+### Deployment
 
-Command below will deploy the Lambda function on AWS, together with setting up roles and policies.
+Command below will deploy the Lambda function on AWS, together with setting up
+roles and policies.
 
 ```bash
-$ npm run deploy
+npm run deploy
 ```
 
-*Notice*: Because there are some limitations in `Claudia.js` support for policies, which could lead to issues
-with `Access Denied` when processing images from one bucket and saving them to another, we have decided to introduce support
-for custom policies.
+*Notice*: Because there are some limitations in `Claudia.js` support for
+policies, which could lead to issues with `Access Denied` when processing
+images from one bucket and saving them to another, we have decided to introduce
+support for custom policies.
 
-##### Custom policies
+#### Custom policies
 
-Policies which should be installed together with our Lambda function are stored in `policies/` directory. We keep there
-policy that grants access to all buckets, which is preventing possible errors with `Access Denied` described above. If you
-have any security-related concerns, feel free to change the:
+Policies which should be installed together with our Lambda function are stored
+in `policies/` directory. We keep there policy that grants access to all
+buckets, which is preventing possible errors with `Access Denied` described
+above. If you have any security-related concerns, feel free to change the:
 
 ```json
 "Resource": [
@@ -157,7 +165,8 @@ have any security-related concerns, feel free to change the:
 ]
 ```
 
-in the `policies/s3-bucket-full-access.json` to something more restrictive, like:
+in the `policies/s3-bucket-full-access.json` to something more restrictive,
+like:
 
 ```json
 "Resource": [
@@ -165,47 +174,53 @@ in the `policies/s3-bucket-full-access.json` to something more restrictive, like
 ]
 ```
 
-Just keep in mind, that you need to make those changes before you do the deployment.
+Just keep in mind, that you need to make those changes before you do the
+deployment.
 
-#### Adding S3 event handlers
+### Adding S3 event handlers
 
-To complete installation process you will need to take one more action. It will allow you to install S3 Bucket event handler,
-which will send information about all uploaded images directly to your Lambda function.
-
-```bash
-$ npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".jpg"
-```
-
-You are able to install multiple handlers per Bucket. So, to add handler for PNG files you just need to re-run above command with different _suffix_, ie:
+To complete installation process you will need to take one more action. It will
+allow you to install S3 Bucket event handler, which will send information about
+all uploaded images directly to your Lambda function.
 
 ```bash
-$ npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".png"
+npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".jpg"
 ```
 
-#### Adding SNS message handlers
-
-As an addition, you can also setup and SNS message handler in case you would like to process S3 events over an SNS topic.
+You are able to install multiple handlers per Bucket. So, to add handler for PNG
+files you just need to re-run above command with different _suffix_, ie:
 
 ```bash
-$ npm run add-sns-handler --sns_topic="arn:of:SNS:topic"
+npm run add-s3-handler --s3_bucket="your-bucket-name" --s3_prefix="directory/" --s3_suffix=".png"
 ```
 
-#### Updating
+### Adding SNS message handlers
 
-To update Lambda with you latest code just use command below. Script will build new package and automatically
-publish it on AWS.
+As an addition, you can also setup and SNS message handler in case you would
+like to process S3 events over an SNS topic.
 
 ```bash
-$ npm run update
+npm run add-sns-handler --sns_topic="arn:of:SNS:topic"
 ```
 
-#### More
+### Updating
+
+To update Lambda with you latest code just use command below. Script will build
+new package and automatically publish it on AWS.
+
+```bash
+npm run update
+```
+
+### More
 
 For more scripts look into [package.json](package.json).
 
-### Complete / Failed hooks
+## Complete / Failed hooks
 
-You can handle resize/reduce/backup process on success/error result on `index.js`. `ImageProcessor::run` will return `Promise` object, run your original code:
+You can handle resize/reduce/backup process on success/error result on
+`index.js`. `ImageProcessor::run` will return `Promise` object, run your
+original code:
 
 ```javascript
 processor.run(config)
@@ -231,28 +246,28 @@ processor.run(config)
 });
 ```
 
-### Image resize
+## Image resize
 
 - `ImageMagick` (installed on AWS Lambda)
 
-### Image reduce
+## Image reduce
 
 - [cjpeg](https://github.com/mozilla/mozjpeg)
 - [jpegoptim](https://github.com/tjko/jpegoptim)
 - [pngquant](https://pngquant.org/)
 - [gifsicle](https://github.com/kohler/gifsicle)
 
-### License
+## License
 
 MIT License.
 
-### Author
+## Author
 
 Yoshiaki Sugimoto
 
-### Image credits
+## Image credits
 
 Thanks for testing fixture images:
 
-- http://pngimg.com/
-- https://www.pakutaso.com/
+- [pngimg](http://pngimg.com/)
+- [pakutaso](https://www.pakutaso.com/)

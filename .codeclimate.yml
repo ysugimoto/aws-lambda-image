@@ -1,0 +1,20 @@
+---
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+ratings:
+  paths:
+  - "bin/configtest"
+  - "**.js"
+  - "**.md"
+exclude_paths:
+- test/
