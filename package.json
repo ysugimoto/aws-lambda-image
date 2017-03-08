@@ -45,9 +45,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "2.6.15",
+    "aws-sdk": "^2.24.0",
     "gm": "^1.23.0",
-    "image-type": "2.1.0",
+    "image-type": "^3.0.0",
     "path-template": "0.0.0"
   },
   "devDependencies": {
@@ -55,7 +55,7 @@
     "aws-sdk-mock": "^1.6.1",
     "bind-all": "^1.0.0",
     "claudia": "^2.9.0",
-    "coveralls": "^2.11.15",
+    "coveralls": "^2.12.0",
     "nyc": "^10.1.2",
     "pify": "^2.3.0",
     "sinon": "^1.17.7"
