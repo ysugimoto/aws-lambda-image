@@ -19,6 +19,8 @@
     "test": "nyc ava",
     "test-config": "./bin/configtest",
     "test-lambda": "claudia test-lambda --profile $npm_package_config_profile --event $npm_config_event_file",
+    "pretest": "npm run lint",
+    "lint": "eslint .",
     "destroy": "AWS_PROFILE=$npm_package_config_profile claudia destroy --profile $npm_package_config_profile"
   },
   "keywords": [
@@ -53,9 +55,11 @@
   "devDependencies": {
     "ava": "^0.18.2",
     "aws-sdk-mock": "^1.6.1",
+    "babel-eslint": "^7.2.1",
     "bind-all": "^1.0.0",
     "claudia": "^2.9.0",
     "coveralls": "^2.12.0",
+    "eslint": "^3.18.0",
     "nyc": "^10.1.2",
     "pify": "^2.3.0",
     "sinon": "^1.17.7"

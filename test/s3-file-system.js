@@ -16,25 +16,21 @@ test.before(async t => {
     AWS.mock( "S3", "getObject", (params, callback) => {
         switch ( params.Key ) {
             case "processed.jpg":
-                callback( null, { Metadata: { "img-processed": "true" }, CacheControl: "cache-control" } );
-                break;
+                return callback( null, { Metadata: { "img-processed": "true" }, CacheControl: "cache-control" } );
             case "empty-file.jpg":
-                callback( null, { ContentLength: 0, Metadata: {}, CacheControl: "cache-control" } );
-                break;
+                return callback( null, { ContentLength: 0, Metadata: {}, CacheControl: "cache-control" } );
             case "network-error.jpg":
-                callback( "Simulated network error" );
-                break;
+                return callback( "Simulated network error" );
             default:
-                callback( null, { Body: fixture, Metadata: {}, CacheControl: "cache-control" } );
+                return callback( null, { Body: fixture, Metadata: {}, CacheControl: "cache-control" } );
         }
     });
     AWS.mock( "S3", "putObject", (params, callback) => {
         switch ( params.Key ) {
             case "network-error.jpg":
-                callback( "Simulated network error" );
-                break;
+                return callback( "Simulated network error" );
             default:
-                callback( null );
+                return callback( null );
         }
     });
 
@@ -85,7 +81,7 @@ test("Push valid ImageData object to S3", async t => {
 
     const response = await fileSystem.putObject(image);
     t.is(response, "S3 putObject success")
-})
+});
 
 test("Fail on network error while pushing ImageData object to S3", async t => {
     const image = new ImageData("network-error.jpg", "fixture", fixture, {}, "private");
@@ -95,4 +91,4 @@ test("Fail on network error while pushing ImageData object to S3", async t => {
     }, (reason) => {
         t.is(reason, "Simulated network error")
     })
-})
+});
