@@ -1,3 +1,5 @@
+parser: babel-eslint
+
 env:
   amd: true
   es6: true
@@ -38,7 +40,7 @@ rules:
   # Best Practices
   accessor-pairs: 2
   block-scoped-var: 0
-  complexity: [2, 6]
+  complexity: 2
   consistent-return: 0
   curly: 0
   default-case: 0
@@ -51,7 +53,6 @@ rules:
   no-case-declarations: 2
   no-div-regex: 2
   no-else-return: 0
-  no-empty-label: 2
   no-empty-pattern: 2
   no-eq-null: 2
   no-eval: 2
