@@ -64,7 +64,8 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
       "size": 600,
       "directory": "./resized/600-jpeg",
       "format": "jpg",
-      "background": "white"
+      "background": "white",
+      "changeExtension": true
     },
     {
       "size": 900,
@@ -88,6 +89,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
+|               | changeExtension | Boolean | Change the extension to match the actual file type.                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
 |               |       move      | Boolean | If `true`, an original uploaded file will delete from Bucket after completion.                                                            |
 |    reduce     |        -        |  Object | Reduce setting following fields.                                                                                                          |
@@ -98,6 +100,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
+|               | changeExtension | Boolean | Change the extension to match the actual file type.                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
 |    resize     |        -        |  Array  | Resize setting list of following fields.                                                                                                  |
 |               |      size       |  String | Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).           |
@@ -112,6 +115,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |     template    |  Object | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                    |
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
+|               | changeExtension | Boolean | Change the extension to match the actual file type.                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
 |   optimizers  |        -        |  Object | Definitions for override the each Optimizers command arguments.                                                                           |
 |               |     pngquant    |  Array  | `Pngquant` command arguments. Default is `["--speed=1", "256"]`.                                                                          |
