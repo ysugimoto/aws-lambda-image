@@ -11,7 +11,7 @@ put on AWS S3 bucket, this package will resize/reduce it and put to S3.
 
 ## Requirements
 
-- `node.js` ( AWS Lambda working version is **4.3.2** )
+- Node.js ( AWS Lambda working version is **6.10** )
 
 ## Preparation
 
