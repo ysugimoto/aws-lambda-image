@@ -33,6 +33,14 @@ test.before(async t => {
                 return callback( null );
         }
     });
+    AWS.mock( "S3", "deleteObject", (params, callback) => {
+        switch ( params.Key ) {
+            case "network-error.jpg":
+                return callback( "Simulated network error" );
+            default:
+                return callback( null );
+        }
+    });
 
     fileSystem = new S3FileSystem();
 });
@@ -79,14 +87,29 @@ test("Fail on creating ImageData because of network error", async t => {
 test("Push valid ImageData object to S3", async t => {
     const image = new ImageData("regular.jpg", "fixture", fixture, {}, "private");
 
-    const response = await fileSystem.putObject(image);
-    t.is(response, "S3 putObject success")
+    fileSystem.putObject(image).then(() => t.pass());
 });
 
 test("Fail on network error while pushing ImageData object to S3", async t => {
     const image = new ImageData("network-error.jpg", "fixture", fixture, {}, "private");
 
     fileSystem.putObject(image).then((value) => {
+        t.fail();
+    }, (reason) => {
+        t.is(reason, "Simulated network error")
+    })
+});
+
+test("Delate valid ImageData object from S3", async t => {
+    const image = new ImageData("regular.jpg", "fixture", fixture, {}, "private");
+
+    fileSystem.deleteObject(image).then(() => t.pass());
+});
+
+test("Fail on network error while deleting ImageData object to S3", async t => {
+    const image = new ImageData("network-error.jpg", "fixture", fixture, {}, "private");
+
+    fileSystem.deleteObject(image).then((value) => {
         t.fail();
     }, (reason) => {
         t.is(reason, "Simulated network error")
