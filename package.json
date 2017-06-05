@@ -50,6 +50,7 @@
     "aws-sdk": "^2.24.0",
     "gm": "^1.23.0",
     "image-type": "^3.0.0",
+    "merge-source-map": "^1.0.3",
     "path-template": "0.0.0"
   },
   "devDependencies": {
