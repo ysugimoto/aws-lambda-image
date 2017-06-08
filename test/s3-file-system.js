@@ -100,7 +100,7 @@ test("Fail on network error while pushing ImageData object to S3", async t => {
     })
 });
 
-test("Delate valid ImageData object from S3", async t => {
+test("Delete valid ImageData object from S3", async t => {
     const image = new ImageData("regular.jpg", "fixture", fixture, {}, "private");
 
     fileSystem.deleteObject(image).then(() => t.pass());
