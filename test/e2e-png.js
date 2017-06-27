@@ -11,12 +11,16 @@ const fs             = require("fs");
 const fsP            = pify(fs);
 const sourceFile     = `${__dirname}/fixture/events/s3_put_file.json`;
 const setting        = JSON.parse(fs.readFileSync(sourceFile));
+const AWS            = require("aws-sdk-mock");
 
 let processor;
 let images;
 let fileSystem;
 
 test.before(async t => {
+    AWS.mock("S3", "deleteObject", (params, callback) => {
+        return callback( null );
+    });
     fileSystem = new S3FileSystem();
     sinon.stub(fileSystem, "getObject", () => {
         return fsP.readFile(`${__dirname}/fixture/fixture.png`).then(data => {
@@ -34,12 +38,25 @@ test.before(async t => {
 });
 
 test.after(async t => {
+    AWS.restore("S3");
     fileSystem.getObject.restore();
     fileSystem.putObject.restore();
 });
 
 test.beforeEach(async t => {
     processor = new ImageProcessor(fileSystem, setting.Records[0].s3);
+    images = [];
+});
+
+test("Remove original file if move option is supplied", async t => {
+    const spy = sinon.spy(fileSystem, "deleteObject");
+    const im = await processor.run(new Config({
+        "bucket": "some",
+        "backup": {
+            "move": true
+        }
+    }));
+    t.true(spy.called);
     images = [];
 });
 
@@ -77,3 +94,4 @@ test("Reduce PNG with bucket/directory configuration", async t => {
     t.true(image.data.length > 0);
     t.true(image.data.length < fixture.length);
 });
+

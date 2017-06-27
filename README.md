@@ -89,6 +89,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
+|               |       move      | Boolean | If `true`, an original uploaded file will delete from Bucket after completion.                                                              |
 |    reduce     |        -        |  Object | Reduce setting following fields.                                                                                                          |
 |               |     quality     |  Number | Determine reduced image quality ( only `JPG` ).                                                                                           |
 |               |  jpegOptimizer  |  String | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                |
