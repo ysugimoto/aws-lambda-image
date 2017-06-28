@@ -113,6 +113,13 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
+|   optimizer   |        -        |  Object | Define argument pass to the each Optimizers.                                                                                              |
+|               |     pngquant    |  Array  | `Pngqunat` command arguments. Default is `["--speed=1", "256"]`.                                                                          |
+|               |    jpegoptim    |  Array  | `Jpegoptim` command arguments. Default is `["-s", "--all-progressive"]`.                                                                  |
+|               |     mozjpeg     |  Array  | `Mozjpeg` command arguments. Default is `["-optimize", "-progressive"]`.                                                                  |
+|               |     gifsicle    |  Array  | `Gifsicle` command arguments. Default is `["--optimize"]`.                                                                                |
+
+Note that the `optmizer` option will **force** override its command arguments, so if you define these configurations, we don't care any more about how optimizer works.
 
 ### Testing Configuration
 
