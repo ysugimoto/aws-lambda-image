@@ -122,7 +122,8 @@ var reset   = '\u001b[0m';
     }
 
     function formatArray(ary) {
-        return `[${ary.map(function(v) { return "\"" + v + "\""; }).join(", ")}]`;
+        ary = ary.map(function(v) { return "\"" + v + "\""; });
+        return "[" + ary.join(", ") + "]";
     }
 
     function validateSize(stdout, size) {
