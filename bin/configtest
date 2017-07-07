@@ -51,6 +51,15 @@ var reset   = '\u001b[0m';
     var acl = config.acl;
     stdout.write(magenta + "Global S3 ACL:        " + reset + (acl || "Not set") + "\r\n");
 
+    var optimizer = config.optimizers || {};
+    stdout.write("\r\n");
+    stdout.write("Override Optimizer configuration\r\n");
+    stdout.write("--------------------------------\r\n");
+    stdout.write(magenta + "    pngquant  :  " + reset + (optimizer.pngquant  ? formatArray(optimizer.pngquant)  : "Not set") + "\r\n");
+    stdout.write(magenta + "    jpegoptim :  " + reset + (optimizer.jpegoptim ? formatArray(optimizer.jpegoptim) : "Not set") + "\r\n");
+    stdout.write(magenta + "    mozjpeg   :  " + reset + (optimizer.mozjpeg   ? formatArray(optimizer.mozjpeg)   : "Not set") + "\r\n");
+    stdout.write(magenta + "    gifsicle  :  " + reset + (optimizer.gifsicle  ? formatArray(optimizer.gifsocle)  : "Not set") + "\r\n");
+
     stdout.write("\r\n");
     stdout.write("Backup image configuration\r\n");
     stdout.write("--------------------------------\r\n");
@@ -110,6 +119,10 @@ var reset   = '\u001b[0m';
     }
     if (fatals.length !== 0) {
         process.exit(1);
+    }
+
+    function formatArray(ary) {
+        return `[${ary.map(v => `"${v}"`).join(", ")}]`;
     }
 
     function validateSize(stdout, size) {

@@ -89,7 +89,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
-|               |       move      | Boolean | If `true`, an original uploaded file will delete from Bucket after completion.                                                              |
+|               |       move      | Boolean | If `true`, an original uploaded file will delete from Bucket after completion.                                                            |
 |    reduce     |        -        |  Object | Reduce setting following fields.                                                                                                          |
 |               |     quality     |  Number | Determine reduced image quality ( only `JPG` ).                                                                                           |
 |               |  jpegOptimizer  |  String | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                |
@@ -113,6 +113,13 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               |      prefix     |  String | Prepend filename prefix if supplied.                                                                                                      |
 |               |      suffix     |  String | Append filename suffix if supplied.                                                                                                       |
 |               |       acl       |  String | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).  |
+|   optimizers  |        -        |  Object | Definitions for override the each Optimizers command arguments.                                                                           |
+|               |     pngquant    |  Array  | `Pngquant` command arguments. Default is `["--speed=1", "256"]`.                                                                          |
+|               |    jpegoptim    |  Array  | `Jpegoptim` command arguments. Default is `["-s", "--all-progressive"]`.                                                                  |
+|               |     mozjpeg     |  Array  | `Mozjpeg` command arguments. Default is `["-optimize", "-progressive"]`.                                                                  |
+|               |     gifsicle    |  Array  | `Gifsicle` command arguments. Default is `["--optimize"]`.                                                                                |
+
+Note that the `optmizers` option will **force** override its command arguments, so if you define these configurations, we don't care any more about how optimizer works.
 
 ### Testing Configuration
 
