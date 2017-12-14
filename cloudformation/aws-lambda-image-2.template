@@ -1,6 +1,6 @@
  {
   "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "CF Template CoKL Image buckets and processing lambda",
+  "Description" : "CF Template Image buckets and resize lambda",
   "Parameters" : {
     "DomainName" : {
       "Description" : "domain to append to the buckets",
@@ -22,24 +22,6 @@
         "LoggingConfiguration" : {
           "DestinationBucketName" : {"Ref" : "AdminBucket"},
           "LogFilePrefix" : { "Fn::Sub" : "logs/s3/images.${DomainName}"}
-        },
-        "NotificationConfiguration": {
-          "LambdaConfigurations": [
-            {
-              "Event" : "s3:ObjectCreated:*",
-              "Function" : { "Fn::GetAtt" : ["ImageResizeLambda", "Arn"] },
-              "Filter" : {
-                "S3Key" : {
-                  "Rules" : [
-                    {
-                      "Name" : "prefix",
-                      "Value" : "images/raw"
-                    }
-                  ]
-                }
-              }
-            }
-          ]
         }
       }
     },
@@ -174,8 +156,6 @@
         }
       }
     }
-
-
   },
   "Outputs" : {
 

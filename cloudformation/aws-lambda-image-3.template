@@ -1,6 +1,6 @@
  {
   "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "CF Template CoKL Image buckets and processing lambda",
+  "Description" : "CF Template Image buckets and resize lambda",
   "Parameters" : {
     "DomainName" : {
       "Description" : "domain to append to the buckets",
