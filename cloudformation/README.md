@@ -6,9 +6,8 @@ There is one parameter in the template, a domain name.  This will be appended on
 
 Steps in order to spin the stack up:
 
-<ol>
-<li> Spin up stack 1.  This will create 2 buckets in s3, an `image` bucket and an `admin` bucket. </li>
-<li> Build the lambda archive as usual with `make`.  Upload the .zip file of code to the `admin` bucket.  If you do not upload it at `lambda/aws-lambda-image.zip`, you will need to change stack 2 and 3 to reflect the path </li>
-<li> Update with stack 2.  This will create the lambda and the lambda permission objects </li>
-<li> Update with stack 3.  This will setup the trigger between the s3 bucket and the lambda and grant public access to the processed paths in the bucket</li>
-</ol>
+
+1. Spin up stack 1.  This will create 2 buckets in s3, an `image` bucket and an `admin` bucket. 
+2. Build the lambda archive as usual with `make`.  Upload the .zip file of code to the `admin` bucket.  If you do not upload it at `lambda/aws-lambda-image.zip`, you will need to change stack 2 and 3 to reflect the path 
+3. Update with stack 2.  This will create the lambda and the lambda permission objects 
+4. Update with stack 3.  This will setup the trigger between the s3 bucket and the lambda and grant public access to the processed paths in the bucket
