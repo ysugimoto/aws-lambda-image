@@ -1,5 +1,0 @@
-h1. CloudFormation Template(s) for `AWS-Lambda-Image`
-
-This contains cloudformation template(s) to spin up a working bucket/lambda stack.  Although it only spins up one set of resources, due to limitations in CloudFormation there are 3 templates, to be run sequentally.
-
-There is one parameter in the template, a domain name.  This will be appended onto the name of the s3 bucket in order 
