@@ -1,0 +1,183 @@
+ {
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description" : "CF Template CoKL Image buckets and processing lambda",
+  "Parameters" : {
+    "DomainName" : {
+      "Description" : "domain to append to the buckets",
+      "Type" : "String",
+      "Default" : "nemo.com",
+      "AllowedPattern" : "[a-z.-]+",
+      "ConstraintDescription" : "can only contain lowercase letters, - and ."
+    }
+  },
+  "Resources" : {
+    "ImageBucket" : {
+      "Type" : "AWS::S3::Bucket",
+      "DependsOn" : "AdminBucket",
+      "Properties" : {
+        "BucketName" : { "Fn::Sub" : "images.${DomainName}"},
+        "Tags" : [
+          { "Key" : "Name", "Value" : "AWS Resize Images Bucket" }
+        ],
+        "LoggingConfiguration" : {
+          "DestinationBucketName" : {"Ref" : "AdminBucket"},
+          "LogFilePrefix" : { "Fn::Sub" : "logs/s3/images.${DomainName}"}
+        },
+        "NotificationConfiguration": {
+          "LambdaConfigurations": [
+            {
+              "Event" : "s3:ObjectCreated:*",
+              "Function" : { "Fn::GetAtt" : ["ImageResizeLambda", "Arn"] },
+              "Filter" : {
+                "S3Key" : {
+                  "Rules" : [
+                    {
+                      "Name" : "prefix",
+                      "Value" : "images/raw"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ImageBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "DependsOn": "ImageBucket",
+      "Properties": {
+        "Bucket": {"Ref" : "ImageBucket"},
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": [ "s3:GetObject" ],
+              "Resource": [
+                { "Fn::Join": [ "/", [ { "Fn::GetAtt" : ["ImageBucket", "Arn"] }, "images/small/*" ] ] },
+                { "Fn::Join": [ "/", [ { "Fn::GetAtt" : ["ImageBucket", "Arn"] }, "images/medium/*" ] ] }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "AdminBucket" : {
+      "Type" : "AWS::S3::Bucket",
+      "Properties" : {
+        "BucketName" : { "Fn::Sub" : "admin.${DomainName}"},
+        "AccessControl": "LogDeliveryWrite",
+        "Tags" : [
+          { "Key" : "Name", "Value" : "Admin code/logging Bucket" }
+        ]
+      }
+    },
+    "ResizeAccessPolicy" : {
+      "Type": "AWS::IAM::ManagedPolicy",
+      "Properties": {
+        "PolicyDocument" : {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:ListAllMyBuckets",
+                  "s3:GetBucketLocation"
+              ],
+              "Resource": [
+                  "arn:aws:s3:::*"
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:ListBucket"
+              ],
+              "Resource": [
+                  {"Fn::Sub" :  "arn:aws:s3:::images.${DomainName}"}
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:GetObject"
+              ],
+              "Resource": [
+                  {"Fn::Join" : ["", [{"Fn::Sub" :  "arn:aws:s3:::images.${DomainName}"}, "/images/raw/*"]]}
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                  "s3:PutObject",
+                  "S3:PutObjectACL",
+                  "s3:GetObject"
+              ],
+              "Resource": [
+                  {"Fn::Join" : ["", [{"Fn::Sub" :  "arn:aws:s3:::images.${DomainName}"}, "/images/small/*"]]},
+                  {"Fn::Join" : ["", [{"Fn::Sub" :  "arn:aws:s3:::images.${DomainName}"}, "/images/medium/*"]]}
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "ResizeLambdaRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName" : {"Fn::Sub" : "lambda-imageresizer-${DomainName}"},
+        "ManagedPolicyArns" : [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+          { "Ref": "ResizeAccessPolicy" }
+        ],
+        "AssumeRolePolicyDocument": {
+          "Version" : "2012-10-17",
+          "Statement": [  
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [ "lambda.amazonaws.com" ]
+              },
+              "Action": [ "sts:AssumeRole" ]
+          }]
+        },
+        "Path": "/"
+      }
+    },
+    "ImageResizeLambda": {
+      "Type": "AWS::Lambda::Function",
+      "DependsOn" : "ResizeLambdaRole",
+      "Properties": {
+        "Description" : "Image Resizer",
+        "FunctionName" : "image_resizer",
+        "Handler": "index.handler",
+        "Role": { "Fn::GetAtt" : ["ResizeLambdaRole", "Arn"] },
+        "MemorySize" : "384",
+        "Code": {
+          "S3Bucket": {"Ref" : "AdminBucket"},
+          "S3Key": "lambda/aws-lambda-image.zip"
+        },
+        "Runtime": "nodejs6.10",
+        "Timeout": "300"
+      }
+    },
+    "ImageResizeLambdaPerm": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties" : {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {"Ref": "ImageResizeLambda"},
+        "Principal": "s3.amazonaws.com",
+        "SourceAccount": {"Ref": "AWS::AccountId"},
+        "SourceArn": { "Fn::Join": [":", [
+            "arn", "aws", "s3", "" , "", {"Ref" : "ImageBucket"}]]
+        }
+      }
+    }
+
+
+  },
+  "Outputs" : {
+
+  }
+}
