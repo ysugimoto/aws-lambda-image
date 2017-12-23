@@ -126,6 +126,82 @@ test("Resize JPEG with format", async t => {
     t.is(images.length, 2);
 
     const pngImage = images.shift();
+    t.is(pngImage.fileName, "HappyFace.jpg");
+    t.true(pngImage.data.length > 0);
+
+    const gifImage = images.shift();
+    t.is(gifImage.fileName, "HappyFace.jpg");
+    t.true(gifImage.data.length > 0);
+});
+
+test("Resize JPEG with format and changeExtension", async t => {
+    await processor.run(new Config({
+        "resizes": [
+            {
+                "size": 100,
+                "format": "png",
+                "changeExtension": true
+            },
+            {
+                "size": 100,
+                "format": "gif",
+                "changeExtension": true
+            }
+        ]
+    }));
+    t.is(images.length, 2);
+
+    const pngImage = images.shift();
+    t.is(pngImage.fileName, "HappyFace.png");
+    t.true(pngImage.data.length > 0);
+
+    const gifImage = images.shift();
+    t.is(gifImage.fileName, "HappyFace.gif");
+    t.true(gifImage.data.length > 0);
+});
+
+test("Resize JPEG with format", async t => {
+    await processor.run(new Config({
+        "resizes": [
+            {
+                "size": 100,
+                "format": "png"
+            },
+            {
+                "size": 100,
+                "format": "gif"
+            }
+        ]
+    }));
+    t.is(images.length, 2);
+
+    const pngImage = images.shift();
+    t.is(pngImage.fileName, "HappyFace.jpg");
+    t.true(pngImage.data.length > 0);
+
+    const gifImage = images.shift();
+    t.is(gifImage.fileName, "HappyFace.jpg");
+    t.true(gifImage.data.length > 0);
+});
+
+test("Resize JPEG with format and changeExtension", async t => {
+    await processor.run(new Config({
+        "resizes": [
+            {
+                "size": 100,
+                "format": "png",
+                "changeExtension": true
+            },
+            {
+                "size": 100,
+                "format": "gif",
+                "changeExtension": true
+            }
+        ]
+    }));
+    t.is(images.length, 2);
+
+    const pngImage = images.shift();
     t.is(pngImage.fileName, "HappyFace.png");
     t.true(pngImage.data.length > 0);
 

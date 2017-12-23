@@ -10,7 +10,8 @@
     {
       "size": 300,
       "directory": "./resized/small",
-      "prefix": "resized-"
+      "prefix": "resized-",
+      "changeExtension": true
     },
     {
       "size": 450,
