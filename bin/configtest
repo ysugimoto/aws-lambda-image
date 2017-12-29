@@ -43,13 +43,16 @@ var reset   = '\u001b[0m';
     }
 
     var jpegOptimizer = config.jpegOptimizer;
-    stdout.write(magenta + "Global Optimizer:     " + reset + (jpegOptimizer || "Not set") + "\r\n");
+    stdout.write(magenta + "Global Optimizer:       " + reset + (jpegOptimizer || "Not set") + "\r\n");
 
     var bucket = config.bucket;
-    stdout.write(magenta + "Destination bucket:   " + reset + (bucket || "[Same bucket]") + "\r\n");
+    stdout.write(magenta + "Destination bucket:     " + reset + (bucket || "[Same bucket]") + "\r\n");
 
     var acl = config.acl;
-    stdout.write(magenta + "Global S3 ACL:        " + reset + (acl || "Not set") + "\r\n");
+    stdout.write(magenta + "Global S3 ACL:          " + reset + (acl || "Not set") + "\r\n");
+
+    var cacheControl = config.cacheControl;
+    stdout.write(magenta + "Global S3 CacheControl: " + reset + (cacheControl || "Not set") + "\r\n");
 
     var optimizer = config.optimizers || {};
     stdout.write("\r\n");
@@ -68,6 +71,7 @@ var reset   = '\u001b[0m';
         validateDestination(stdout, bucket, backup.bucket, backup.directory, backup.template);
         validatePrefixAndSuffix(stdout, backup.prefix, backup.suffix);
         validateAcl(stdout, acl, backup.acl);
+        validateCacheControl(stdout, cacheControl, backup.cacheControl);
     } else {
         stdout.write("Backup option is not supplied, skip it.\r\n");
     }
@@ -82,6 +86,7 @@ var reset   = '\u001b[0m';
         validateDestination(stdout, bucket, reduce.bucket, reduce.directory, reduce.template);
         validatePrefixAndSuffix(stdout, reduce.prefix, reduce.suffix);
         validateAcl(stdout, acl, reduce.acl);
+        validateCacheControl(stdout, cacheControl, reduce.cacheControl);
     } else {
         stdout.write("Reduce option is not supplied, skip it.\r\n");
     }
@@ -102,6 +107,7 @@ var reset   = '\u001b[0m';
         validateDestination(stdout, bucket, resize.bucket, resize.directory, resize.template);
         validatePrefixAndSuffix(stdout, resize.prefix, resize.suffix);
         validateAcl(stdout, acl, resize.acl);
+        validateCacheControl(stdout, cacheControl, resize.cacheControl);
         stdout.write("\r\n");
     });
 
@@ -206,6 +212,12 @@ var reset   = '\u001b[0m';
     function validateAcl(stdout, globalAcl, acl) {
         stdout.write(magenta + "    S3 ACL:           " + reset);
         stdout.write(acl ? acl : globalAcl ? "[Global ACL]" : "[Source ACL]");
+        stdout.write("\r\n");
+    }
+
+    function validateCacheControl(stdout, globalCacheControl, cacheControl) {
+        stdout.write(magenta + "    S3 CacheControl:  " + reset);
+        stdout.write((cacheControl !== undefined) ? (cacheControl || "null") : globalCacheControl ? "[Global CacheControl]" : "[Source CacheControl]");
         stdout.write("\r\n");
     }
 
