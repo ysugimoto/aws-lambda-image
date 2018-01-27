@@ -108,3 +108,63 @@ test("[path-template] Build output path with template and suffix", t => {
 test("[path-template] Build output path with template, prefix and suffix", t => {
     t.is(image.combineWithDirectory({template: {pattern: "*", output: "d/e"}, prefix: "prefix-", suffix: "_suffix"}), "d/e/prefix-key_suffix.png");
 });
+
+test("[RegEx] Build output path when regex is undefined", t => {
+    t.is(image.combineWithDirectory({}), "a/b/c/key.png");
+});
+
+test("[RegEx] Build output path when regex is an empty map", t => {
+    t.is(image.combineWithDirectory({regex: {}}), "a/b/c/key.png");
+});
+
+test("[RegEx] Build output path when regex is an map with find and replace keys empty", t => {
+    t.is(image.combineWithDirectory({regex: {find: "", replace: ""}}), "a/b/c/key.png");
+});
+
+test("[RegEx] Build output path when regex is an map with replace keys is missing", t => {
+    t.is(image.combineWithDirectory({regex: {find: ""}}), "a/b/c/key.png");
+});
+
+test("[RegEx] Build output path when regex replace whole directory", t => {
+    t.is(image.combineWithDirectory({regex: {find: ".*", replace: ""}}), "key.png");
+});
+
+test("[RegEx] Build output path when regex adds subdirectory", t => {
+    t.is(image.combineWithDirectory({regex: {find: "$", replace: "/d"}}), "a/b/c/d/key.png");
+});
+
+test("[RegEx] Build output path when regex adds subdirectory - 2nd level", t => {
+    t.is(image.combineWithDirectory({regex: {find: "$", replace: "/d/e"}}), "a/b/c/d/e/key.png");
+});
+
+test("[RegEx] Build output path when regex removes top subdirectory", t => {
+    t.is(image.combineWithDirectory({regex: {find: "[a-zA-Z]+$", replace: ""}}), "a/b/key.png");
+});
+
+test("[RegEx] Build output path when regex replaces top subdirectory with new one", t => {
+    t.is(image.combineWithDirectory({regex: {find: "\/c", replace: "/d"}}), "a/b/d/key.png");
+});
+
+test("[RegEx] Build output path when regex replaces old path with new absolute one", t => {
+    t.is(image.combineWithDirectory({regex: {find: ".*", replace: "d"}}), "d/key.png");
+});
+
+test("[RegEx] Build output path when regex replaces old path with new absolute one - 2nd level", t => {
+    t.is(image.combineWithDirectory({regex: {find: ".*", replace: "d/e"}}), "d/e/key.png");
+});
+
+test("[RegEx] Build output path when regex didn't match base directory", t => {
+    t.is(image.combineWithDirectory({regex: {find: "x/.*", replace: "d/e"}}), "a/b/c/key.png");
+});
+
+test("[RegEx] Build output path with regex and prefix", t => {
+    t.is(image.combineWithDirectory({regex: {find: ".*", replace: "d/e"}, prefix: "prefix-"}), "d/e/prefix-key.png");
+});
+
+test("[RegEx] Build output path with regex and suffix", t => {
+    t.is(image.combineWithDirectory({regex: {find: ".*", replace: "d/e"}, suffix: "-suffix"}), "d/e/key-suffix.png");
+});
+
+test("[RegEx] Build output path with regex, prefix and suffix", t => {
+    t.is(image.combineWithDirectory({regex: {find: ".*", replace: "d/e"}, prefix: "prefix-", suffix: "_suffix"}), "d/e/prefix-key_suffix.png");
+});
