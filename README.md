@@ -79,55 +79,55 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 
 ### Configuration Parameters
 
-| name                  | field                 | type    | description                                                                                                                                      |
-|:---------------------:|:---------------------:|:-------:|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| bucket                | -                     | String  | Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.                                  |
-| jpegOptimizer         | -                     | String  | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                       |
-| acl                   | -                     | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
-| cacheControl          | -                     | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
-| keepOriginalExtension | -                     | Boolean | Global setting fo keeping original extension. If `true`, program keeps orignal file extension. otherwise use strict extension eg JPG,jpeg -> jpg |
-| backup                | -                     | Object  | Backup original file setting.                                                                                                                    |
-|                       | bucket                | String  | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                   |
-|                       | directory             | String  | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                          |
-|                       | template              | Object  | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                           |
-|                       | prefix                | String  | Prepend filename prefix if supplied.                                                                                                             |
-|                       | suffix                | String  | Append filename suffix if supplied.                                                                                                              |
-|                       | acl                   | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
-|                       | cacheControl          | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
-|                       | keepOriginalExtension | Boolean | If `true`, program keeps orignal file extension. otherwise, use strict extension eg JPG,jpeg -> jpg                                              |
-|                       | move                  | Boolean | If `true`, an original uploaded file will delete from Bucket after completion.                                                                   |
-| reduce                | -                     | Object  | Reduce setting following fields.                                                                                                                 |
-|                       | quality               | Number  | Determine reduced image quality ( only `JPG` ).                                                                                                  |
-|                       | jpegOptimizer         | String  | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                       |
-|                       | bucket                | String  | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                   |
-|                       | directory             | String  | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                          |
-|                       | template              | Object  | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                           |
-|                       | prefix                | String  | Prepend filename prefix if supplied.                                                                                                             |
-|                       | suffix                | String  | Append filename suffix if supplied.                                                                                                              |
-|                       | acl                   | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
-|                       | cacheControl          | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
-|                       | keepOriginalExtension | Boolean | If `true`, program keeps orignal file extension. otherwise, use strict extension eg JPG,jpeg -> jpg                                              |
-| resize                | -                     | Array   | Resize setting list of following fields.                                                                                                         |
-|                       | size                  | String  | Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).                  |
-|                       | format                | String  | Image format override. If not supplied, it will leave the image in original format.                                                              |
-|                       | crop                  | String  | Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop).                 |
-|                       | gravity               | String  | Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity).          |
-|                       | quality               | Number  | Determine reduced image quality ( forces format `JPG` ).                                                                                         |
-|                       | jpegOptimizer         | String  | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                       |
-|                       | orientation           | Boolean | Auto orientation if value is `true`.                                                                                                             |
-|                       | bucket                | String  | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                   |
-|                       | directory             | String  | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                          |
-|                       | template              | Object  | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                           |
-|                       | prefix                | String  | Prepend filename prefix if supplied.                                                                                                             |
-|                       | suffix                | String  | Append filename suffix if supplied.                                                                                                              |
-|                       | acl                   | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
-|                       | cacheControl          | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
-|                       | keepOriginalExtension | Boolean | If `true`, program keeps orignal file extension. otherwise, use strict extension eg JPG,jpeg -> jpg                                              |
-| optimizers            | -                     | Object  | Definitions for override the each Optimizers command arguments.                                                                                  |
-|                       | pngquant              | Array   | `Pngquant` command arguments. Default is `["--speed=1", "256"]`.                                                                                 |
-|                       | jpegoptim             | Array   | `Jpegoptim` command arguments. Default is `["-s", "--all-progressive"]`.                                                                         |
-|                       | mozjpeg               | Array   | `Mozjpeg` command arguments. Default is `["-optimize", "-progressive"]`.                                                                         |
-|                       | gifsicle              | Array   | `Gifsicle` command arguments. Default is `["--optimize"]`.                                                                                       |
+| name          | field         | type    | description                                                                                                                                      |
+|:-------------:|:-------------:|:-------:|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| bucket        | -             | String  | Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.                                  |
+| jpegOptimizer | -             | String  | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                       |
+| acl           | -             | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
+| cacheControl  | -             | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
+| keepExtension | -             | Boolean | Global setting fo keeping original extension. If `true`, program keeps orignal file extension. otherwise use strict extension eg JPG,jpeg -> jpg |
+| backup        | -             | Object  | Backup original file setting.                                                                                                                    |
+|               | bucket        | String  | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                   |
+|               | directory     | String  | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                          |
+|               | template      | Object  | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                           |
+|               | prefix        | String  | Prepend filename prefix if supplied.                                                                                                             |
+|               | suffix        | String  | Append filename suffix if supplied.                                                                                                              |
+|               | acl           | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
+|               | cacheControl  | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
+|               | keepExtension | Boolean | If `true`, program keeps orignal file extension. otherwise, use strict extension eg JPG,jpeg -> jpg                                              |
+|               | move          | Boolean | If `true`, an original uploaded file will delete from Bucket after completion.                                                                   |
+| reduce        | -             | Object  | Reduce setting following fields.                                                                                                                 |
+|               | quality       | Number  | Determine reduced image quality ( only `JPG` ).                                                                                                  |
+|               | jpegOptimizer | String  | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                       |
+|               | bucket        | String  | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                   |
+|               | directory     | String  | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                          |
+|               | template      | Object  | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                           |
+|               | prefix        | String  | Prepend filename prefix if supplied.                                                                                                             |
+|               | suffix        | String  | Append filename suffix if supplied.                                                                                                              |
+|               | acl           | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
+|               | cacheControl  | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
+|               | keepExtension | Boolean | If `true`, program keeps orignal file extension. otherwise, use strict extension eg JPG,jpeg -> jpg                                              |
+| resize        | -             | Array   | Resize setting list of following fields.                                                                                                         |
+|               | size          | String  | Image dimensions. [See ImageMagick geometry documentation](http://imagemagick.org/script/command-line-processing.php#geometry).                  |
+|               | format        | String  | Image format override. If not supplied, it will leave the image in original format.                                                              |
+|               | crop          | String  | Dimensions to crop the image. [See ImageMagick crop documentation](http://imagemagick.org/script/command-line-options.php#crop).                 |
+|               | gravity       | String  | Changes how `size` and `crop`. [See ImageMagick gravity documentation](http://imagemagick.org/script/command-line-options.php#gravity).          |
+|               | quality       | Number  | Determine reduced image quality ( forces format `JPG` ).                                                                                         |
+|               | jpegOptimizer | String  | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                       |
+|               | orientation   | Boolean | Auto orientation if value is `true`.                                                                                                             |
+|               | bucket        | String  | Destination bucket to override. If not supplied, it will use `bucket` setting.                                                                   |
+|               | directory     | String  | Image directory path. Supports relative and absolute paths. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#directory)                          |
+|               | template      | Object  | Map representing pattern substitution pair. Mode details in [DIRECTORY.md](doc/DIRECTORY.md/#template)                                           |
+|               | prefix        | String  | Prepend filename prefix if supplied.                                                                                                             |
+|               | suffix        | String  | Append filename suffix if supplied.                                                                                                              |
+|               | acl           | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
+|               | cacheControl  | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
+|               | keepExtension | Boolean | If `true`, program keeps orignal file extension. otherwise, use strict extension eg JPG,jpeg -> jpg                                              |
+| optimizers    | -             | Object  | Definitions for override the each Optimizers command arguments.                                                                                  |
+|               | pngquant      | Array   | `Pngquant` command arguments. Default is `["--speed=1", "256"]`.                                                                                 |
+|               | jpegoptim     | Array   | `Jpegoptim` command arguments. Default is `["-s", "--all-progressive"]`.                                                                         |
+|               | mozjpeg       | Array   | `Mozjpeg` command arguments. Default is `["-optimize", "-progressive"]`.                                                                         |
+|               | gifsicle      | Array   | `Gifsicle` command arguments. Default is `["--optimize"]`.                                                                                       |
 
 Note that the `optmizers` option will **force** override its command arguments, so if you define these configurations, we don't care any more about how optimizer works.
 

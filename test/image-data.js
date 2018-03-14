@@ -54,7 +54,7 @@ test("Build output path with prefix and suffix", t => {
 });
 
 test("Build output path with keep orignal extension", t => {
-    t.is(image.combineWithDirectory({directory: "d/e", keepOriginalExtension: true}), "d/e/key.png");
+    t.is(image.combineWithDirectory({directory: "d/e", keepExtension: true}), "d/e/key.png");
 });
 
 test("Build output path with suffix", t => {

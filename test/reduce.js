@@ -35,7 +35,7 @@ test("Reduce adds prefix and suffix to filename", async t => {
 });
 
 test("Reduce keeps original extension", async t => {
-    const reducer = new ImageReducer({keepOriginalExtension: true});
+    const reducer = new ImageReducer({keepExtension: true});
     const reduced = await reducer.exec(image);
 
     t.is(reduced.fileName, "fixture/fixture.jpeg");
