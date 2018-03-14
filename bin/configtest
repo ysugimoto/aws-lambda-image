@@ -54,8 +54,8 @@ var reset   = '\u001b[0m';
     var cacheControl = config.cacheControl;
     stdout.write(magenta + "Global S3 CacheControl:  " + reset + (cacheControl || "Not set") + "\r\n");
 
-    var keepOriginalExtension = config.keepOriginalExtension;
-    stdout.write(magenta + "Keep original extension: " + reset + (keepOriginalExtension ? "yes": "no") + "\r\n");
+    var keepExtension = config.keepExtension;
+    stdout.write(magenta + "Keep original extension: " + reset + (keepExtension ? "yes": "no") + "\r\n");
 
     var optimizer = config.optimizers || {};
     stdout.write("\r\n");
@@ -75,7 +75,7 @@ var reset   = '\u001b[0m';
         validatePrefixAndSuffix(stdout, backup.prefix, backup.suffix);
         validateAcl(stdout, acl, backup.acl);
         validateCacheControl(stdout, cacheControl, backup.cacheControl);
-        validateKeepOriginalExtension(stdout, keepOriginalExtension, backup.keepOriginalExtension);
+        validateKeepExtension(stdout, keepExtension, backup.keepExtension);
     } else {
         stdout.write("Backup option is not supplied, skip it.\r\n");
     }
@@ -91,7 +91,7 @@ var reset   = '\u001b[0m';
         validatePrefixAndSuffix(stdout, reduce.prefix, reduce.suffix);
         validateAcl(stdout, acl, reduce.acl);
         validateCacheControl(stdout, cacheControl, reduce.cacheControl);
-        validateKeepOriginalExtension(stdout, keepOriginalExtension, reduce.keepOriginalExtension);
+        validateKeepExtension(stdout, keepExtension, reduce.keepExtension);
     } else {
         stdout.write("Reduce option is not supplied, skip it.\r\n");
     }
@@ -113,7 +113,7 @@ var reset   = '\u001b[0m';
         validatePrefixAndSuffix(stdout, resize.prefix, resize.suffix);
         validateAcl(stdout, acl, resize.acl);
         validateCacheControl(stdout, cacheControl, resize.cacheControl);
-        validateKeepOriginalExtension(stdout, keepOriginalExtension, resize.keepOriginalExtension);
+        validateKeepExtension(stdout, keepExtension, resize.keepExtension);
         stdout.write("\r\n");
     });
 
@@ -227,8 +227,8 @@ var reset   = '\u001b[0m';
         stdout.write("\r\n");
     }
 
-    function validateKeepOriginalExtension(stdout, globalKeepOriginalExtension, keepOriginalExtension) {
-        var enable = keepOriginalExtension || globalKeepOriginalExtension || false;
+    function validateKeepExtension(stdout, globalKeepExtension, keepExtension) {
+        var enable = keepExtension || globalKeepExtension || false;
         stdout.write(magenta + "    Keep Extension:   " + reset);
         stdout.write(enable ? "yes" : "no");
         stdout.write("\r\n");
