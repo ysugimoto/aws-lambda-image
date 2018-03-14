@@ -53,6 +53,10 @@ test("Build output path with prefix and suffix", t => {
     t.is(image.combineWithDirectory({directory: "d/e", prefix: "prefix-", suffix: "_suffix"}), "d/e/prefix-key_suffix.png");
 });
 
+test("Build output path with keep orignal extension", t => {
+    t.is(image.combineWithDirectory({directory: "d/e", keepExtension: true}), "d/e/key.png");
+});
+
 test("[path-template] Build output path when template is an empty object", t => {
     t.is(image.combineWithDirectory({}), "a/b/c/key.png");
 });
