@@ -243,7 +243,7 @@ var reset   = '\u001b[0m';
         if ( ! cropSpec.test(cropOption) ) {
           fatals.push("Resize crop option is invalid for expected spec: " + cropOption);
         }
-        stdout.write(magenta + "    Crop:   " + reset);
+        stdout.write(magenta + "    Crop:             " + reset);
         stdout.write(cropOption);
         stdout.write("\r\n");
     }
