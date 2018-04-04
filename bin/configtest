@@ -108,6 +108,7 @@ var reset   = '\u001b[0m';
         validateSize(stdout, resize.size);
         validateFormat(stdout, resize.format);
         validateQuality(stdout, resize.quality);
+        validateCrop(stdout, resize.crop);
         validateOptimizer(stdout, resize.jpegOptimizer || jpegOptimizer);
         validateDestination(stdout, bucket, resize.bucket, resize.directory, resize.template);
         validatePrefixAndSuffix(stdout, resize.prefix, resize.suffix);
@@ -231,6 +232,19 @@ var reset   = '\u001b[0m';
         var enable = keepExtension || globalKeepExtension || false;
         stdout.write(magenta + "    Keep Extension:   " + reset);
         stdout.write(enable ? "yes" : "no");
+        stdout.write("\r\n");
+    }
+
+    function validateCrop(stdout, cropOption) {
+        if ( ! cropOption ) {
+            return;
+        }
+        const cropSpec = /(\d+)x(\d+)([+-]\d+)?([+-]\d+)?(%)?/;
+        if ( ! cropSpec.test(cropOption) ) {
+          fatals.push("Resize crop option is invalid for expected spec: " + cropOption);
+        }
+        stdout.write(magenta + "    Crop:   " + reset);
+        stdout.write(cropOption);
         stdout.write("\r\n");
     }
 
