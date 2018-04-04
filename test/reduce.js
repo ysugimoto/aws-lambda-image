@@ -9,8 +9,8 @@ const fs           = require("fs");
 let image;
 
 test.before(async t => {
-    const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpg`);
-    image = new ImageData("fixture/fixture.jpg", "fixture", fixture, {}, "private");
+    const fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpeg`);
+    image = new ImageData("fixture/fixture.jpeg", "fixture", fixture, {}, "private");
 });
 
 test("If ACL parameter is passed while reducing use original one", async t => {
@@ -32,4 +32,11 @@ test("Reduce adds prefix and suffix to filename", async t => {
     const reduced = await reducer.exec(image);
 
     t.is(reduced.fileName, "fixture/a_fixture_b.jpg");
+});
+
+test("Reduce keeps original extension", async t => {
+    const reducer = new ImageReducer({keepExtension: true});
+    const reduced = await reducer.exec(image);
+
+    t.is(reduced.fileName, "fixture/fixture.jpeg");
 });

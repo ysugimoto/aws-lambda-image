@@ -9,6 +9,7 @@ const fs             = require("fs");
 
 let fixture;
 let fileSystem;
+let uploadedObject;
 
 test.before(async t => {
     fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpg`);
@@ -26,6 +27,7 @@ test.before(async t => {
         }
     });
     AWS.mock( "S3", "putObject", (params, callback) => {
+        uploadedObject = params;
         switch ( params.Key ) {
             case "network-error.jpg":
                 return callback( "Simulated network error" );
@@ -87,13 +89,13 @@ test("Fail on creating ImageData because of network error", async t => {
 test("Push valid ImageData object to S3", async t => {
     const image = new ImageData("regular.jpg", "fixture", fixture, {}, "private");
 
-    fileSystem.putObject(image).then(() => t.pass());
+    fileSystem.putObject(image, {}).then(() => t.pass());
 });
 
 test("Fail on network error while pushing ImageData object to S3", async t => {
     const image = new ImageData("network-error.jpg", "fixture", fixture, {}, "private");
 
-    fileSystem.putObject(image).then((value) => {
+    fileSystem.putObject(image, {}).then((value) => {
         t.fail();
     }, (reason) => {
         t.is(reason, "Simulated network error")
@@ -114,4 +116,25 @@ test("Fail on network error while deleting ImageData object to S3", async t => {
     }, (reason) => {
         t.is(reason, "Simulated network error")
     })
+});
+
+test("Options don't contain cacheControl", async t => {
+    const image = new ImageData("regular.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
+
+    fileSystem.putObject(image, { "cacheControl": undefined });
+    t.is(uploadedObject.CacheControl, "original-cache-control");
+});
+
+test("Options contain cacheControl", async t => {
+    const image = new ImageData("regular.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
+
+    fileSystem.putObject(image, { "cacheControl": "options-cache-control" });
+    t.is(uploadedObject.CacheControl, "options-cache-control");
+});
+
+test("Options contain null cacheControl", async t => {
+    const image = new ImageData("regular.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
+
+    fileSystem.putObject(image, { "cacheControl": null });
+    t.is(uploadedObject.CacheControl, null);
 });
