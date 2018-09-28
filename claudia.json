@@ -1,0 +1,7 @@
+{
+  "lambda": {
+    "role": "aws-lambda-image-executor",
+    "name": "aws-lambda-image",
+    "region": "ap-northeast-1"
+  }
+}

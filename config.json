@@ -1,0 +1,21 @@
+{
+  "bucket": "asset.road-quest.bike",
+  "backup": {
+      "directory": "./original"
+  },
+  "reduce": {
+      "directory": "./reduced",
+      "prefix": "reduced-",
+      "quality": 90,
+      "acl": "public-read",
+      "cacheControl": "public, max-age=31536000"
+  },
+  "resizes": [
+    {
+      "size": 2500,
+      "directory": "./",
+      "prefix": "2500-",
+      "orientation": true
+    }
+  ]
+}
