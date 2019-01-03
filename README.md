@@ -154,7 +154,12 @@ npm config set aws-lambda-image:profile default
 npm config set aws-lambda-image:region eu-west-1
 npm config set aws-lambda-image:memory 1280
 npm config set aws-lambda-image:timeout 5
+npm config set aws-lambda-image:name lambda-function-name
+npm config set aws-lambda-image:role lambda-execution-role
 ```
+
+Note that `aws-lambda-image:name` and `aws-lambda-image:role` are optional.
+If you want to change lambda function name or execution role, type above commands before deploy.
 
 ### Deployment
 
