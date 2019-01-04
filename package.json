@@ -6,11 +6,13 @@
     "profile": "default",
     "region": "eu-west-1",
     "memory": "1280",
-    "timeout": "5"
+    "timeout": "5",
+    "name": "",
+    "role": ""
   },
   "scripts": {
     "postinstall": "[ -f config.json ] || cp config.json.sample config.json",
-    "deploy": "claudia create --profile $npm_package_config_profile --region $npm_package_config_region --version dev --handler index.handler --no-optional-dependencies --timeout $npm_package_config_timeout --memory $npm_package_config_memory --policies policies/*.json",
+    "deploy": "claudia create --profile $npm_package_config_profile $([ \"$npm_package_config_role\" != '' ] && echo \"--role $npm_package_config_role\" || echo \"\") $([ \"$npm_package_config_name\" != '' ] && echo \"--name $npm_package_config_name\" || echo \"\") --region $npm_package_config_region --version dev --handler index.handler --no-optional-dependencies --timeout $npm_package_config_timeout --memory $npm_package_config_memory --policies policies/*.json",
     "add-handler": "npm run add-s3-handler",
     "add-s3-handler": "claudia add-s3-event-source --profile $npm_package_config_profile --bucket $npm_config_s3_bucket --events s3:ObjectCreated:* --prefix $npm_config_s3_prefix --suffix $npm_config_s3_suffix",
     "add-sns-handler": "claudia add-sns-event-source --profile $npm_package_config_profile --topic $npm_config_sns_topic",
