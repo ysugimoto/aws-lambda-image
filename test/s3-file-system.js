@@ -6,7 +6,7 @@ const test            = require("ava");
 const AWS             = require("aws-sdk-mock");
 const pify            = require("pify");
 const fs              = require("fs");
-const uplodaedObjects = {};
+const uploadedObjects = {};
 
 let fixture;
 let fileSystem;
