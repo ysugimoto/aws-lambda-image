@@ -1,15 +1,15 @@
 "use strict";
 
-const S3FileSystem   = require("../lib/S3FileSystem");
-const ImageData      = require("../lib/ImageData");
-const test           = require("ava");
-const AWS            = require("aws-sdk-mock");
-const pify           = require("pify");
-const fs             = require("fs");
+const S3FileSystem    = require("../lib/S3FileSystem");
+const ImageData       = require("../lib/ImageData");
+const test            = require("ava");
+const AWS             = require("aws-sdk-mock");
+const pify            = require("pify");
+const fs              = require("fs");
+const uplodaedObjects = {};
 
 let fixture;
 let fileSystem;
-let uploadedObject;
 
 test.before(async t => {
     fixture = await pify(fs.readFile)(`${__dirname}/fixture/fixture.jpg`);
@@ -27,7 +27,7 @@ test.before(async t => {
         }
     });
     AWS.mock( "S3", "putObject", (params, callback) => {
-        uploadedObject = params;
+        uploadedObjects[params.Key] = params;
         switch ( params.Key ) {
             case "network-error.jpg":
                 return callback( "Simulated network error" );
@@ -36,6 +36,9 @@ test.before(async t => {
         }
     });
     AWS.mock( "S3", "deleteObject", (params, callback) => {
+        if ( uploadedObjects.hasOwnProperty(params.Key) ) {
+          delete( uploadedObjects[params.Key] );
+        }
         switch ( params.Key ) {
             case "network-error.jpg":
                 return callback( "Simulated network error" );
@@ -119,22 +122,25 @@ test("Fail on network error while deleting ImageData object to S3", async t => {
 });
 
 test("Options don't contain cacheControl", async t => {
-    const image = new ImageData("regular.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
+    const image = new ImageData("regular01.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
 
     fileSystem.putObject(image, { "cacheControl": undefined });
-    t.is(uploadedObject.CacheControl, "original-cache-control");
+    const obj = uploadedObjects["regular01.jpg"];
+    t.is(obj.CacheControl, "original-cache-control");
 });
 
 test("Options contain cacheControl", async t => {
-    const image = new ImageData("regular.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
+    const image = new ImageData("regular02.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
 
     fileSystem.putObject(image, { "cacheControl": "options-cache-control" });
-    t.is(uploadedObject.CacheControl, "options-cache-control");
+    const obj = uploadedObjects["regular02.jpg"];
+    t.is(obj.CacheControl, "options-cache-control");
 });
 
 test("Options contain null cacheControl", async t => {
-    const image = new ImageData("regular.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
+    const image = new ImageData("regular03.jpg", "fixture", fixture, { "CacheControl": "original-cache-control" }, "private");
 
     fileSystem.putObject(image, { "cacheControl": null });
-    t.is(uploadedObject.CacheControl, null);
+    const obj = uploadedObjects["regular03.jpg"];
+    t.is(obj.CacheControl, null);
 });
