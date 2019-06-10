@@ -65,59 +65,56 @@ test("Create ImageData from valid image file", async t => {
     t.is( image.headers.CacheControl, "cache-control" );
 });
 
-test("Fail on creating ImageData from image already processed", async t => {
-    fileSystem.getObject("bucket", "processed.jpg", "acl").then((value) => {
+test("Fail on creating ImageData from image already processed", t => {
+    return fileSystem.getObject("bucket", "processed.jpg", "acl").then((value) => {
         t.fail();
     }, (reason) => {
         t.is(reason, "Object was already processed.")
     });
 });
 
-test("Fail on creating ImageData from empty image or directory", async t => {
-    fileSystem.getObject("bucket", "empty-file.jpg", "acl").then((value) => {
+test("Fail on creating ImageData from empty image or directory", t => {
+    return fileSystem.getObject("bucket", "empty-file.jpg", "acl").then((value) => {
         t.fail();
     }, (reason) => {
         t.is(reason, "Empty file or directory.")
     });
 });
 
-// Currently skip
-test.skip("Fail on creating ImageData because of network error", async t => {
-    fileSystem.getObject("bucket", "network-error.jpg", "acl").then((value) => {
+test("Fail on creating ImageData because of network error", t => {
+    return fileSystem.getObject("bucket", "network-error.jpg", "acl").then((value) => {
         t.fail();
     }, (reason) => {
         t.is(reason, "S3 getObject failed: Simulated network error")
     })
 });
 
-test("Push valid ImageData object to S3", async t => {
+test("Push valid ImageData object to S3", t => {
     const image = new ImageData("regular.jpg", "fixture", fixture, {}, "private");
 
-    fileSystem.putObject(image, {}).then(() => t.pass());
+    return fileSystem.putObject(image, {}).then(() => t.pass());
 });
 
-// Currently skip
-test.skip("Fail on network error while pushing ImageData object to S3", async t => {
+test("Fail on network error while pushing ImageData object to S3", t => {
     const image = new ImageData("network-error.jpg", "fixture", fixture, {}, "private");
 
-    fileSystem.putObject(image, {}).then((value) => {
+    return fileSystem.putObject(image, {}).then((value) => {
         t.fail();
     }, (reason) => {
         t.is(reason, "Simulated network error")
     })
 });
 
-test("Delete valid ImageData object from S3", async t => {
+test("Delete valid ImageData object from S3", t => {
     const image = new ImageData("regular.jpg", "fixture", fixture, {}, "private");
 
-    fileSystem.deleteObject(image).then(() => t.pass());
+    return fileSystem.deleteObject(image).then(() => t.pass());
 });
 
-// Currently skip
-test.skip("Fail on network error while deleting ImageData object to S3", async t => {
+test("Fail on network error while deleting ImageData object to S3", t => {
     const image = new ImageData("network-error.jpg", "fixture", fixture, {}, "private");
 
-    fileSystem.deleteObject(image).then((value) => {
+    return fileSystem.deleteObject(image).then((value) => {
         t.fail();
     }, (reason) => {
         t.is(reason, "Simulated network error")
