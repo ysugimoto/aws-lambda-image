@@ -55,14 +55,14 @@
     "path-template": "0.0.0"
   },
   "devDependencies": {
-    "ava": "^0.18.2",
+    "ava": "^2.0.0",
     "aws-sdk-mock": "^1.6.1",
     "babel-eslint": "^7.2.1",
     "bind-all": "^1.0.0",
     "claudia": "^2.9.0",
     "coveralls": "^3.0.2",
     "eslint": "^3.18.0",
-    "nyc": "^13.1.0",
+    "nyc": "^14.1.1",
     "pify": "^2.3.0",
     "sinon": "^1.17.7"
   },
