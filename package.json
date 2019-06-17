@@ -59,7 +59,7 @@
     "aws-sdk-mock": "^1.6.1",
     "babel-eslint": "^7.2.1",
     "bind-all": "^1.0.0",
-    "claudia": "^2.9.0",
+    "claudia": "^5.0.1",
     "coveralls": "^3.0.2",
     "eslint": "^3.18.0",
     "nyc": "^14.1.1",
