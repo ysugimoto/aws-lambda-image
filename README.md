@@ -12,6 +12,7 @@ put on AWS S3 bucket, this package will resize/reduce it and put to S3.
 ## Requirements
 
 - Node.js ( AWS Lambda supports versions of **6.10** and **8.10** )
+- **OR** Docker
 
 ## Preparation
 
@@ -140,6 +141,19 @@ npm run test-config
 ```
 
 ## Installation
+
+### Docker
+
+To avoid installation you may run all the commands from a docker container that has all dependencies installed.
+
+The following command will build the docker image from the Dockerfile and tag it with `aws-lambda-image:latest`
+```bash
+docker build -t aws-lambda-image:latest .
+```
+The following command will run the docker image in a container called lambda-img and also mounts your user home to the containers ~/ so that you may reuse the aws credentials on your host in ~/.aws
+```bash
+docker run -v ~/:/root --name lambda-img -it aws-lambda-image:latest bash
+```
 
 ### Setup
 
