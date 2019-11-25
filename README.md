@@ -11,7 +11,16 @@ put on AWS S3 bucket, this package will resize/reduce it and put to S3.
 
 ## Requirements
 
-- Node.js ( AWS Lambda supports versions of **6.10** and **8.10** )
+- Node.js ( AWS Lambda supports versions of **8.10** or later )
+
+### Important Notice
+
+From `nodejs10.x`, AWS Lambda doesn't bundle `ImageMagick` and image related libraries.
+
+https://forums.aws.amazon.com/thread.jspa?messageID=906619&tstart=0
+
+Therefore, if you'd deploy with `nodejs10.x` runtime (but we prefer and default as it), you need to install AWS Lambda Layer with this function.
+See [LAYERS](https://github.com/ysugimoto/aws-lambda-image/blob/master/doc/LAYERS.md) for instructions.
 
 ## Preparation
 
@@ -160,6 +169,9 @@ npm config set aws-lambda-image:role lambda-execution-role
 
 Note that `aws-lambda-image:name` and `aws-lambda-image:role` are optional.
 If you want to change lambda function name or execution role, type above commands before deploy.
+
+And make sure AWS Lambda Layer has installed in your account/region.
+See [LAYERS](https://github.com/ysugimoto/aws-lambda-image/blob/master/doc/LAYERS.md) for instructions.
 
 ### Deployment
 
