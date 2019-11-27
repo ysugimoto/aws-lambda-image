@@ -40,9 +40,9 @@ const claudiaCommand = [
     `--layers ${createLambdaLayers(layer, region)}`
 ];
 if (role) {
-    claudiaArgs.push(`--role ${role}`);
+    claudiaCommand.push(`--role ${role}`);
 }
 if (name) {
-    claudiaArgs.push(`--name ${name}`);
+    claudiaCommand.push(`--name ${name}`);
 }
-process.stdout.write(claudiaArgs.join(" "));
+process.stdout.write(claudiaCommand.join(" "));
