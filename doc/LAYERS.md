@@ -28,7 +28,7 @@ Copy the _arn_ and put it to this project `package.json` config:
 {
     ...
     "config": {
-        "layers": "<put arn here>"
+        "layer": "<put arn here>"
     },
     ...
 }
