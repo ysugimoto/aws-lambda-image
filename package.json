@@ -9,8 +9,7 @@
     "timeout": "5",
     "name": "",
     "role": "",
-    "runtime": "nodejs10.x",
-    "layer": ""
+    "runtime": "nodejs10.x"
   },
   "scripts": {
     "postinstall": "[ -f config.json ] || cp config.json.sample config.json",
@@ -19,7 +18,7 @@
     "add-s3-handler": "claudia add-s3-event-source --profile $npm_package_config_profile --bucket $npm_config_s3_bucket --events s3:ObjectCreated:* --prefix $npm_config_s3_prefix --suffix $npm_config_s3_suffix",
     "add-sns-handler": "claudia add-sns-event-source --profile $npm_package_config_profile --topic $npm_config_sns_topic",
     "release": "claudia set-version --profile $npm_package_config_profile --version production",
-    "update": "$(node scripts/update-arguments.js)",
+    "update": "$(node scripts/update-command.js)",
     "test": "nyc ava",
     "test-config": "./bin/configtest",
     "test-lambda": "claudia test-lambda --profile $npm_package_config_profile --event $npm_config_event_file",
