@@ -1,9 +1,10 @@
 const {
     readPackageConfig,
-    dedicatedLayerArn
+    getDedicatedLayerArn,
+    getRuntimeVersion
 } = require('./common');
 
-const { runtime, profile } = readPackageConfig();
+const { runtime, profile, region } = readPackageConfig();
 
 const claudiaArgs = [
     "claudia",
@@ -11,10 +12,9 @@ const claudiaArgs = [
     `--profile ${profile}`
 ];
 
-
-// on runtime nodejs10.x, need ImageMagick Layer
-if (runtime.indexOf("nodejs10") !== -1) {
-    claudiaArgs.push(`--layers ${dedicatedLayerArn}`);
+// if runtime is upper than nodejs10.x, need Layer
+if (getRuntimeVersion(runtime) >= 10) {
+    claudiaArgs.push(`--layers ${getDedicatedLayerArn(region)}`);
 }
 
 process.stdout.write(claudiaArgs.join(" "));
