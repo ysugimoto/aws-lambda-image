@@ -9,11 +9,13 @@ const readPackageConfig = () => {
 const getDedicatedLayerArn = region => {
     const layerSettingFile = path.join(__dirname, './layers.json');
     if (!fs.existsSync(layerSettingFile)) {
-        throw new Error("Layer settings file is not found. Abort");
+        throw new Error("Layer settings file is not found. Please contact to us: https://github.com/ysugimoto/aws-lambda-image/issues/new");
     }
     const layerSetting = JSON.parse(fs.readFileSync(layerSettingFile));
     if (!(region in layerSetting)) {
-        throw new Error(`Layer is not found on region: ${region}`);
+        throw new Error(
+            `Layer is not found on your region: ${region}. To be enable it, please contact to us with an issue: https://github.com/ysugimoto/aws-lambda-image/issues/new`
+        );
     }
     return layerSetting[region];
 };
