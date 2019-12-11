@@ -28,14 +28,14 @@ const claudiaCommand = [
     `--runtime ${runtime}`
 ];
 if (role) {
-    claudiaArgs.push(`--role ${role}`);
+    claudiaCommand.push(`--role ${role}`);
 }
 if (name) {
-    claudiaArgs.push(`--name ${name}`);
+    claudiaCommand.push(`--name ${name}`);
 }
 // if runtime is upper than nodejs10.x, need Layer
 if (getRuntimeVersion(runtime) >= 10) {
-    claudiaArgs.push(`--layers ${getDedicatedLayerArn(region)}`);
+    claudiaCommand.push(`--layers ${getDedicatedLayerArn(region)}`);
 }
 
-process.stdout.write(claudiaArgs.join(" "));
+process.stdout.write(claudiaCommand.join(" "));
