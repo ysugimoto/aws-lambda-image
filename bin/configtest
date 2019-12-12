@@ -64,7 +64,7 @@ var reset   = '\u001b[0m';
     stdout.write(magenta + "    pngquant  :  " + reset + (optimizer.pngquant  ? formatArray(optimizer.pngquant)  : "Not set") + "\r\n");
     stdout.write(magenta + "    jpegoptim :  " + reset + (optimizer.jpegoptim ? formatArray(optimizer.jpegoptim) : "Not set") + "\r\n");
     stdout.write(magenta + "    mozjpeg   :  " + reset + (optimizer.mozjpeg   ? formatArray(optimizer.mozjpeg)   : "Not set") + "\r\n");
-    stdout.write(magenta + "    gifsicle  :  " + reset + (optimizer.gifsicle  ? formatArray(optimizer.gifsocle)  : "Not set") + "\r\n");
+    stdout.write(magenta + "    gifsicle  :  " + reset + (optimizer.gifsicle  ? formatArray(optimizer.gifsicle)  : "Not set") + "\r\n");
 
     stdout.write("\r\n");
     stdout.write("Backup image configuration\r\n");
