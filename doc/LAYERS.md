@@ -1,37 +1,44 @@
 # AWS Lambda Layer Configuration
 
-Since node10.x runtime, no longer `ImageMagick` is bundled on runtime. Therefore we can use it by using Lambda Layer.
+Since node10.x runtime, no longer `ImageMagick` is bundled on runtime. Therefore we need use Lambda Layer to enable it.
 
-To work this project as well, you need to install a couple of Layers:
+We provides dedicated Lambda Layer which is bundled binaries we need to run correctly,
+and enables it automatically with corresponds your region to deploy.
 
-- `ImageMagick` - https://github.com/serverlesspub/imagemagick-aws-lambda-2
-- `GraphicsMagick` - https://github.com/rpidanny/gm-lambda-layer
-
-ImageMagick Layer is purpose for resizing image, and GraphicsMagick is purpose for redusing image because this layer bundles some image related shared library (e.g libpng, libjpeg, ...).
-
-## Installation
-
-You can deploy ImageMagick Lambda Layer via `https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:145266761615:applications~image-magick-lambda-layer` which publicly used.
-
-[image]
-
-Press the `Deploy` button and deploy ImageMagick layer, then **make sure deployment region which you're going to deploy is the same as Lambda function**. For instance, if you're going to deploy function onto `eu-west-1`, then this layer also should be deployed on `eu-west-1`.
-
-After finished to deploy, you can see Layer arn of layer via `Layers` menu:
-
-[image]
-
-Copy the _arn_ and put it to this project `package.json` config:
+Then you need to define region to deploy function in `package.json`:
 
 ```json
 # package.json
 {
     ...
     "config": {
-        "layers": "<put arn here>"
+        "region": "<put region here>"
     },
     ...
 }
+```
 
-Thats' all. When you run `npm run deploy` or other deploy command, the installed layer will be applied. The GraphicsMagick layer has already in some developper's layer so we'll apply automatically correspond to your region.
+When you run `npm run deploy` or other deploy command, pre-deployed layer will be applied automatically with your regions.
 
+## Support regions
+
+Now we're supporting following regions:
+
+- ap-northeast-1
+- ap-northeast-2
+- ap-south-1
+- ap-southeast-1
+- ap-southeast-2
+- ca-central-1
+- eu-north-1
+- eu-central-1
+- eu-west-1
+- eu-west-2
+- eu-west-3
+- sa-east-1
+- us-east-1
+- us-east-2
+- us-west-1
+- us-west-2
+
+If you want to use in other regions, please contact us by creating an issue.

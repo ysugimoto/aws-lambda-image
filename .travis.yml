@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - '8.10'
   - '10.15'
+  - '12.13'
 addons:
   apt:
     packages:

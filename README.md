@@ -19,8 +19,8 @@ From `nodejs10.x`, AWS Lambda doesn't bundle `ImageMagick` and image related lib
 
 https://forums.aws.amazon.com/thread.jspa?messageID=906619&tstart=0
 
-Therefore, if you'd deploy with `nodejs10.x` runtime (but we prefer and default as it), you need to install AWS Lambda Layer with this function.
-See [LAYERS](https://github.com/ysugimoto/aws-lambda-image/blob/master/doc/LAYERS.md) for instructions.
+Therefore, if you'd deploy with `nodejs10.x` runtime (but we prefer and default as it), it needs to install AWS Lambda Layer with this function.
+This project can support it automatically, see [LAYERS](https://github.com/ysugimoto/aws-lambda-image/blob/master/doc/LAYERS.md) in detail.
 
 ## Preparation
 
