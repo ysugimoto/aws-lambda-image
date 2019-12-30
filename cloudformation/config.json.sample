@@ -1,0 +1,15 @@
+{
+  "bucket": "images.nemo.com",
+  "resizes": [
+    {
+      "size": 300,
+      "directory": "images/small",
+      "prefix": "resized-"
+    },
+    {
+      "size": 450,
+      "directory": "images/medium",
+      "suffix": "_medium"
+    }
+  ]
+}
