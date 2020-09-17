@@ -7,7 +7,7 @@
 [![Join the chat at https://gitter.im/aws-lambda-image](https://img.shields.io/badge/GITTER-join%20chat-green.svg)](https://gitter.im/aws-lambda-image?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 An AWS Lambda Function to resize/reduce images automatically. When an image is
-put on AWS S3 bucket, this package will resize/reduce it and put to S3.
+put on AWS S3 bucket, this package will resize/reduce it and upload it to S3.
 
 ## Requirements
 
@@ -32,13 +32,13 @@ cd aws-lambda-image
 npm install .
 ```
 
-When upload to AWS Lambda, the project will bundle only needed files - no dev
+When we upload to AWS Lambda, the project will bundle only needed files - no dev
 dependencies will be included.
 
 ## Configuration
 
-Configuration file you will find under the name `config.json` in project root.
-It's copy of our example file `config.json.sample`. More or less it looks like:
+The configuration file for this project is under the name `config.json` in project root path.
+It's a copy of our example file `config.json.sample`. More or less it looks like:
 
 ```json
 {
@@ -175,7 +175,7 @@ See [LAYERS](https://github.com/ysugimoto/aws-lambda-image/blob/master/doc/LAYER
 
 ### Deployment
 
-Command below will deploy the Lambda function on AWS, together with setting up
+The following command will deploy the Lambda function on AWS, together with setting up
 roles and policies.
 
 ```bash
@@ -190,7 +190,7 @@ support for custom policies.
 #### Custom policies
 
 Policies which should be installed together with our Lambda function are stored
-in `policies/` directory. We keep there policy that grants access to all
+in `policies/` directory. We keep a policy there that grants access to all
 buckets, which is preventing possible errors with `Access Denied` described
 above. If you have any security-related concerns, feel free to change the:
 
@@ -214,7 +214,7 @@ deployment.
 
 ### Adding S3 event handlers
 
-To complete installation process you will need to take one more action. It will
+To complete the installation process you will need to take one more action. It will
 allow you to install S3 Bucket event handler, which will send information about
 all uploaded images directly to your Lambda function.
 
@@ -240,8 +240,8 @@ npm run add-sns-handler --sns_topic="arn:of:SNS:topic"
 
 ### Updating
 
-To update Lambda with you latest code just use command below. Script will build
-new package and automatically publish it on AWS.
+To update Lambda with you latest code just use the following command. This script will build
+new packages and automatically publish it on AWS.
 
 ```bash
 npm run update
