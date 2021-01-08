@@ -19,8 +19,23 @@ From `nodejs10.x`, AWS Lambda doesn't bundle `ImageMagick` and image related lib
 
 https://forums.aws.amazon.com/thread.jspa?messageID=906619&tstart=0   
 
-If you need a compiled image-magick.zip layer   
-https://connorb-share.s3.eu-west-2.amazonaws.com/image-magick.zip   
+# Layers
+  "ap-northeast-1": "arn:aws:lambda:ap-northeast-1:251217462751:layer:aws-lambda-image-layer:8",
+  "ap-northeast-2": "arn:aws:lambda:ap-northeast-2:251217462751:layer:aws-lambda-image-layer:2",
+  "ap-south-1": "arn:aws:lambda:ap-south-1:251217462751:layer:aws-lambda-image-layer:2",
+  "ap-southeast-1": "arn:aws:lambda:ap-southeast-1:251217462751:layer:aws-lambda-image-layer:2",
+  "ap-southeast-2": "arn:aws:lambda:ap-southeast-2:251217462751:layer:aws-lambda-image-layer:1",
+  "ca-central-1": "arn:aws:lambda:ca-central-1:251217462751:layer:aws-lambda-image-layer:1",
+  "eu-north-1": "arn:aws:lambda:eu-north-1:251217462751:layer:aws-lambda-image-layer:1",
+  "eu-central-1": "arn:aws:lambda:eu-central-1:251217462751:layer:aws-lambda-image-layer:1",
+  "eu-west-1": "arn:aws:lambda:eu-west-1:251217462751:layer:aws-lambda-image-layer:1",
+  "eu-west-2": "arn:aws:lambda:eu-west-2:251217462751:layer:aws-lambda-image-layer:1",
+  "eu-west-3": "arn:aws:lambda:eu-west-3:251217462751:layer:aws-lambda-image-layer:1",
+  "sa-east-1": "arn:aws:lambda:sa-east-1:251217462751:layer:aws-lambda-image-layer:1",
+  "us-east-1": "arn:aws:lambda:us-east-1:251217462751:layer:aws-lambda-image-layer:1",
+  "us-east-2": "arn:aws:lambda:us-east-2:251217462751:layer:aws-lambda-image-layer:1",
+  "us-west-1": "arn:aws:lambda:us-west-1:251217462751:layer:aws-lambda-image-layer:1",
+  "us-west-2": "arn:aws:lambda:us-west-2:251217462751:layer:aws-lambda-image-layer:1"
    
    
 Therefore, if you'd deploy with `nodejs10.x` runtime (but we prefer and default as it), it needs to install AWS Lambda Layer with this function.
