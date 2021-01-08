@@ -138,7 +138,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               | mozjpeg       | Array   | `Mozjpeg` command arguments. Default is `["-optimize", "-progressive"]`.                                                                         |
 |               | gifsicle      | Array   | `Gifsicle` command arguments. Default is `["--optimize"]`.                                                                                       |
 
-Note that the `optmizers` option will **force** override its command arguments, so if you define these configurations, we don't care any more about how optimizer works.
+Note that the `optimizers` option will **force** override its command arguments, so if you define these configurations, we don't care any more about how optimizer works.
 
 ### Testing Configuration
 
