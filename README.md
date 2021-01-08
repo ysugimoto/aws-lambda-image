@@ -17,8 +17,12 @@ put on AWS S3 bucket, this package will resize/reduce it and put to S3.
 
 From `nodejs10.x`, AWS Lambda doesn't bundle `ImageMagick` and image related libraries.
 
-https://forums.aws.amazon.com/thread.jspa?messageID=906619&tstart=0
+https://forums.aws.amazon.com/thread.jspa?messageID=906619&tstart=0   
 
+If you need a compiled image-magick.zip layer   
+https://connorb-share.s3.eu-west-2.amazonaws.com/image-magick.zip   
+   
+   
 Therefore, if you'd deploy with `nodejs10.x` runtime (but we prefer and default as it), it needs to install AWS Lambda Layer with this function.
 This project can support it automatically, see [LAYERS](https://github.com/ysugimoto/aws-lambda-image/blob/master/doc/LAYERS.md) in detail.
 
