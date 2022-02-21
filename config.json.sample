@@ -15,6 +15,7 @@
       "size": 300,
       "directory": "./resized/small",
       "prefix": "resized-",
+      "alpha": "off",
       "cacheControl": null
     },
     {

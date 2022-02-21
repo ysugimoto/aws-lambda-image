@@ -58,7 +58,8 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
       "size": 300,
       "directory": "./resized/small",
       "prefix": "resized-",
-      "cacheControl": null
+      "cacheControl": null,
+      "alpha": "off"
     },
     {
       "size": 450,
@@ -88,7 +89,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 
 ### Configuration Parameters
 
-| name          | field         | type    | description                                                                                                                                      |
+| name          |     field     | type    | description                                                                                                                                      |
 |:-------------:|:-------------:|:-------:|--------------------------------------------------------------------------------------------------------------------------------------------------|
 | bucket        | -             | String  | Destination bucket name at S3 to put processed image. If not supplied, it will use same bucket of event source.                                  |
 | jpegOptimizer | -             | String  | Determine optimiser that should be used `mozjpeg` (default) or `jpegoptim` ( only `JPG` ).                                                       |
@@ -132,6 +133,7 @@ It's copy of our example file `config.json.sample`. More or less it looks like:
 |               | acl           | String  | Permission of S3 object. [See AWS ACL documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#putObject-property).         |
 |               | cacheControl  | String  | Cache-Control of S3 object. If not specified, defaults to original image's Cache-Control.                                                        |
 |               | keepExtension | Boolean | If `true`, program keeps orignal file extension. otherwise, use strict extension eg JPG,jpeg -> jpg                                              |
+|               | alpha     | String  | Alpha/matte channel of an image. [See ImageMagick geometry documentation](https://imagemagick.org/script/command-line-options.php#alpha).        |
 | optimizers    | -             | Object  | Definitions for override the each Optimizers command arguments.                                                                                  |
 |               | pngquant      | Array   | `Pngquant` command arguments. Default is `["--speed=1", "256"]`.                                                                                 |
 |               | jpegoptim     | Array   | `Jpegoptim` command arguments. Default is `["-s", "--all-progressive"]`.                                                                         |
