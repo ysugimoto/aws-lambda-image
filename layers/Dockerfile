@@ -16,7 +16,7 @@ RUN yum install -y \
     libbz-devel \
     gcc
 
-RUN curl -L https://github.com/ImageMagick/ImageMagick/archive/${IMAGICK_VERSION}.tar.gz -o ImageMagick-${IMAGICK_VERSION}.tar.gz && \
+RUN curl -L https://github.com/ImageMagick/ImageMagick/archive/refs/tags/${IMAGICK_VERSION}.tar.gz -o ImageMagick-${IMAGICK_VERSION}.tar.gz && \
     tar xfz ImageMagick-${IMAGICK_VERSION}.tar.gz && \
     cd ImageMagick-${IMAGICK_VERSION} && \
     ./configure \
@@ -34,7 +34,8 @@ RUN curl -L https://github.com/ImageMagick/ImageMagick/archive/${IMAGICK_VERSION
     make all && \
     make install
 
-RUN curl https://versaweb.dl.sourceforge.net/project/graphicsmagick/graphicsmagick/${GM_VERSION}/GraphicsMagick-${GM_VERSION}.tar.xz | tar -xJ && \
+RUN curl -L https://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/${GM_VERSION}/GraphicsMagick-${GM_VERSION}.tar.xz > GraphicsMagick-${GM_VERSION}.tar.xz
+RUN tar -xf GraphicsMagick-${GM_VERSION}.tar.xz && \
   cd GraphicsMagick-${GM_VERSION} && \
   ./configure --prefix=/opt --enable-shared=no --enable-static=yes --with-gs-font-dir=/opt/share/fonts/default/Type1 && \
   make && \
