@@ -5,7 +5,7 @@ const {
 } = require('./common');
 
 const {
-    region = "eu-west-1",
+    region = "ap-south-1",
     memory = "1280",
     timeout = "5",
     runtime = "nodejs10.x",

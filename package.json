@@ -4,11 +4,11 @@
   "description": "An AWS Lambda Function to resize/reduce images automatically",
   "config": {
     "profile": "default",
-    "region": "ap-northeast-1",
+    "region": "ap-south-1",
     "memory": "1280",
     "timeout": "5",
     "name": "aws-lambda-image-with-dedicated-layer",
-    "role": "lambda_basic_execution",
+    "role": "lambdawiths3service",
     "runtime": "nodejs10.x"
   },
   "scripts": {
@@ -59,7 +59,7 @@
     "aws-sdk-mock": "^1.6.1",
     "babel-eslint": "^7.2.1",
     "bind-all": "^1.0.0",
-    "claudia": "^5.0.1",
+    "claudia": "^5.12.0",
     "coveralls": "^3.0.2",
     "eslint": "^4.18.2",
     "nyc": "^14.1.1",
